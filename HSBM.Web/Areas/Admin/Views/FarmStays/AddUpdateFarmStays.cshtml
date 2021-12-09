@@ -1,0 +1,1028 @@
+﻿@{
+    //if (Model.Id > 0)
+    //{
+    //    ViewBag.Title = "Update Farm/Home Stays";
+    //}
+    //else
+    //{
+    //    ViewBag.Title = "Add  Farm/Home Stays";
+    //}
+
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+}
+
+<link href="~/Content/isteven-multi-select.css" rel="stylesheet" />
+<script src='https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBLxdK0Jtez3dx2Myo-78HcEsX0BuOeoms&libraries=places'></script>
+<script>
+    var FarmStayId = @ViewBag.FarmStayId;
+    //$(document).ready(function () {
+    //    $('#CheckInTime').change(function () {
+    //        alert("dfrg")
+    //    })
+
+    //    $('#CheckInTime').keyup(function (e) {
+    //        alert("dfrfgfgg")
+    //        var code = e.keyCode // and 13 is the keyCode for Enter
+    //    });
+    //})
+</script>
+<div class="main-wrapper">
+    <div ng-controller="AddUpdateFarmStaysController">
+        @*<h3>@ViewBag.Title</h3>*@
+        <div class="title-block">
+            <h3>@ViewBag.Title</h3>
+            <div class="buttongroup">
+                @Html.ActionLink("Back", "Index", null, new { @class = "btn black-btn" })                
+            </div>
+        </div>
+
+        @Html.AntiForgeryToken()
+        <div class="inner-content">
+            <div class="ui-tab-container ui-tab-info" ng-cloak>
+                <div class="tabs-btns">
+                    <div id="BasicDetail">
+                        <a class="active" ng-class="{active: Status == 'BasicDetail'}" ng-click="Status='BasicDetail'"> Basic Information</a>
+                    </div>
+                    <div id="Amenity">
+                        <a ng-class="{active: Status == 'Amenity'}" ng-click="Status=BasicDetailFarmStays.Id>0?'Amenity':'BasicDetail'">Amenities</a>
+                    </div>
+                    <div id="Room">
+                        <a ng-class="{active: (Status == 'Room'||Status == 'Season') }" ng-click="Status=BasicDetailFarmStays.Id>0?'Room':'BasicDetail'">Room Information</a>
+                    </div>
+                    @*<div id="Season">
+                            <a ng-class="{active: Status == 'Season' }" ng-click="Status=BasicDetailFarmStays.Id>0?'Season':'BasicDetail'">Season</a>
+                        </div>*@
+                    <div id="Discount">
+                        <a ng-class="{active: Status == 'Discount'}" ng-click="Status=BasicDetailFarmStays.Id>0?'Discount':'BasicDetail'">Early Bird Discount</a>
+                    </div>
+                    <div id="Policy">
+                        <a ng-class="{active: Status == 'Policy'}" ng-click="Status=BasicDetailFarmStays.Id>0?'Policy':'BasicDetail'">Policies</a>
+                    </div>
+                    <div id="Images">
+                        <a ng-class="{active: Status == 'Images' }" ng-click="Status=BasicDetailFarmStays.Id>0?'Images':'BasicDetail'">Images</a>
+                    </div>
+                </div>
+                <div class="reset-padding">
+                    <section class="tile panel panel-default margin-bottom0" ui-view fullscreen="isFullscreen03">
+                        <div class="panel-body">
+                            <div ng-show="Status=='BasicDetail'">
+                                <form role="form" name="Form.BasicDetailForm" novalidate>
+                                    @Html.AntiForgeryToken()
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <div class="form-group">
+                                                <label>Title:<span class="color-danger font-bold"> *</span></label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="BasicDetailFarmStays.Name" name="Name" maxlength="100" required />
+                                                    <p class="help-block">
+                                                        <span ng-show="Form.BasicDetailForm.Name.$invalid && !Form.BasicDetailForm.Name.$pristine">The Name field is required.</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                   
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <div class="form-group">
+                                                <label>Category:<span class="color-danger font-bold"> *</span></label>
+                                                <div isteven-multi-select
+                                                     output-model="BasicDetailFarmStays.CategoryIdList"
+                                                     input-model="ListofCategories"
+                                                     button-label="Text"
+                                                     item-label="Text"
+                                                     tick-property="Selected">
+                                                </div>
+                                                <input type="text" ng-model="BasicDetailFarmStays.CategoryIdList" name="CategoryIdList" style="display:none" required />
+                                                <p class="help-block">
+                                                    <span ng-show="Form.BasicDetailForm.CategoryIdList.$invalid && !Form.BasicDetailForm.CategoryIdList.$pristine">The Category field is required.</span>
+                                                </p>
+                                                @* <div>
+
+                      <select multiple="multiple" id="Category"
+                                name="Category"
+                                ng-model="BasicDetailFarmStays.CategoryId"
+                                required>
+                            <option ng-repeat="Category in ListofCategories" value="{{Category.Value}}" ng-selected="Category.Value==BasicDetailFarmStays.CategoryId">{{Category.Text}}</option>
+                        </select>
+                        <p class="help-block">
+                            <span ng-show="Form.BasicDetailForm.Category.$invalid && !Form.BasicDetailForm.Category.$pristine">The Category field is required.</span>
+                        </p>
+                    </div>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <div class="row">
+
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                                <div class="form-group">
+                                                    <label>The Story:<span class="color-danger font-bold"> *</span></label>
+                                                    <div>
+                                                        <textarea ui-tinymce="tinymceOptions" class="form-control" ng-model="BasicDetailFarmStays.Description" id="Description" name="Description" required></textarea>
+                                                        <p class="help-block">
+                                                            <span ng-show="Form.BasicDetailForm.Description.$invalid && !Form.BasicDetailForm.Description.$pristine">The Story field is required.</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Telephone:</label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="BasicDetailFarmStays.Telephone" name="Telephone" numbers-only ng-minlength="10" maxlength="15" ng-pattern="/^[0-9]*$/" ng-blur="IsTelephoneValidation=1" />
+                                                    <p class="help-block">
+                                                        <span ng-show="Form.BasicDetailForm.Telephone.$invalid && !Form.BasicDetailForm.Telephone.$pristine && IsTelephoneValidation">The Telephone should be 10 digit.</span>
+                                                        @*<span ng-show="Form.BasicDetailForm.Telephone.$invalid && !Form.BasicDetailForm.Telephone.$pristine">The Telephone field is required.</span>*@
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Mobile:</label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="BasicDetailFarmStays.Mobile" name="Mobile" numbers-only ng-minlength="10" maxlength="15" ng-blur="IsMobileValidation=1" />
+                                                    <p class="help-block">
+                                                        <span ng-show="Form.BasicDetailForm.Mobile.$invalid && !Form.BasicDetailForm.Mobile.$pristine && IsMobileValidation">The Mobile should be 10 digit.</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Email:</label>
+                                                <div>
+                                                    <input type="email" class="form-control" ng-model="BasicDetailFarmStays.Email" name="Email" maxlength="50" />
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                        <div class="row">
+
+                                    
+
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label>Check-In Time:<span class="color-danger font-bold"> *</span></label>
+                                                    <div class="input-group date">
+                                                        <input type="text" class="form-control netto-input" ng-model="BasicDetailFarmStays.CheckInTime" id="CheckInTime" name="CheckInTime" required maxlength="100" />
+                                                        <span class="input-group-addon" ng-click="OpenCalender('CheckInTime')">
+                                                            <span class="glyphicon glyphicon-time"></span>
+                                                        </span>
+
+                                                    </div>
+                                                    <p class="help-block">
+                                                        <span ng-show="Form.BasicDetailForm.CheckInTime.$invalid && !Form.BasicDetailForm.CheckInTime.$pristine">The Check-In Time field is required.</span>
+                                                    </p>
+                                                  
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label>Check-Out Time:<span class="color-danger font-bold"> *</span></label>
+                                                    <div class="input-group date">
+                                                        <input type="text" class="form-control" ng-model="BasicDetailFarmStays.CheckOutTime" id="CheckOutTime" required name="CheckOutTime" maxlength="100" />
+                                                        <span class="input-group-addon" ng-click="OpenCalender('CheckOutTime')">
+                                                            <span class="glyphicon glyphicon-time"></span>
+                                                        </span>
+
+                                                    </div>
+                                                    <p class="help-block">
+                                                        <span ng-show="Form.BasicDetailForm.CheckOutTime.$invalid && !Form.BasicDetailForm.CheckOutTime.$pristine">The Check-Out Time field is required.</span>
+                                                    </p>
+                                                  
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-sm-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label>No. of Bedrooms:<span class="color-danger font-bold"> *</span></label>
+                                                    <div>
+                                                        <input type="text" class="form-control" ng-model="BasicDetailFarmStays.Bedrooms" name="Bedrooms" numbers-only maxlength="2" min="1" required ng-change="(BasicDetailFarmStays.Bedrooms==0?BasicDetailFarmStays.Bedrooms=1:BasicDetailFarmStays.Bedrooms)" />
+                                                        <p class="help-block">
+                                                            <span ng-show="Form.BasicDetailForm.Bedrooms.$invalid && !Form.BasicDetailForm.Bedrooms.$pristine">The No. of Bedrooms field is required.</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-sm-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label>No. of Bathrooms:<span class="color-danger font-bold"> *</span></label>
+                                                    <div>
+                                                        <input type="text" class="form-control" ng-model="BasicDetailFarmStays.Bathrooms" name="Bathrooms" numbers-only required maxlength="100" />
+                                                        <p class="help-block">
+                                                            <span ng-show="Form.BasicDetailForm.Bathrooms.$invalid && !Form.BasicDetailForm.Bathrooms.$pristine">The No. of Bathrooms field is required.</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+
+
+                                    <div class="row">
+
+
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>USP Tags:@*<span class="color-danger font-bold"> *</span>*@</label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="BasicDetailFarmStays.USPTags" name="USPTags" maxlength="30" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Persuasions:@*<span class="color-danger font-bold"> *</span>*@</label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="BasicDetailFarmStays.Persuasions" name="Persuasions" maxlength="30" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Languages Spoken:@*<span class="color-danger font-bold"> *</span>*@</label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="BasicDetailFarmStays.LanguagesSpoken" name="LanguagesSpoken" maxlength="100" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Type of Food:@*<span class="color-danger font-bold"> *</span>*@</label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="BasicDetailFarmStays.TypeofFood" name="TypeofFood" maxlength="100" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Location:<span class="color-danger font-bold"> *</span></label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="BasicDetailFarmStays.Location" name="Location" maxlength="100" required />
+                                                    <p class="help-block">
+                                                        <span ng-show="Form.BasicDetailForm.Location.$invalid && !Form.BasicDetailForm.Location.$pristine">The Location field is required.</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Neighborhood:</label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="BasicDetailFarmStays.Neighborhood" name="Neighborhood" maxlength="100"  />
+                                                    @*<p class="help-block">
+                                                        <span ng-show="Form.BasicDetailForm.Neighborhood.$invalid && !Form.BasicDetailForm.Neighborhood.$pristine">The Neighborhood field is required.</span>
+                                                    </p>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <div class="row">
+
+                                        
+                                            @*<div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        <label>Cleaning Fee:<span class="color-danger font-bold"> *</span></label>
+                        <div>
+                            <input type="text" class="form-control" ng-model="BasicDetailFarmStays.CleaningFee" name="CleaningFee" />
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        <label>Convenience Fee:<span class="color-danger font-bold"> *</span></label>
+                        <div>
+                            <input type="text" class="form-control" ng-model="BasicDetailFarmStays.ConvenienceFee" name="ConvenienceFee" />
+
+                        </div>
+                    </div>
+                </div>*@
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label>Markup(%):<span class="color-danger font-bold"> *</span></label>
+                                                    <div>
+                                                        <input type="text" class="form-control" ng-model="BasicDetailFarmStays.MarkupPercentage" name="MarkupPercentage" required percentage-only />
+                                                        <p class="help-block">
+                                                            <span ng-show="Form.BasicDetailForm.MarkupPercentage.$invalid && !Form.BasicDetailForm.MarkupPercentage.$pristine">The Markup field is required.</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label>Order Index:<span class="color-danger font-bold"> *</span></label>
+                                                    <div>
+                                                        <input type="text" class="form-control" ng-model="BasicDetailFarmStays.OrderIndex" name="OrderIndex" required numbers-only />
+                                                        <p class="help-block">
+                                                            <span ng-show="Form.BasicDetailForm.OrderIndex.$invalid && !Form.BasicDetailForm.OrderIndex.$pristine">The Order Index field is required.</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label>Extra Bed Price:</label>
+                                                    <div class="input-group date">
+                                                        <span class="input-group-addon">
+                                                            <span class="fa fa-inr"></span>
+                                                        </span>
+                                                        <input type="text" class="form-control" ng-model="BasicDetailFarmStays.ExtraBedPrice" name="ExtraBedPrice" price-only maxlength="5" />
+
+                                                    </div>
+                                                    @*<p class="help-block">
+                    <span ng-show="Form.BasicDetailForm.ExtraBedPrice.$invalid && !Form.BasicDetailForm.ExtraBedPrice.$pristine">Maximum 4 digits allowed.</span>
+                </p>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                                <div class="form-group">
+                                                    <label>Address:<span class="color-danger font-bold"> *</span></label>
+                                                    <div>
+                                                        <input type="text" class="form-control" ng-model="BasicDetailFarmStays.Address" name="Address" required maxlength="100" />
+                                                        <p class="help-block">
+                                                            <span ng-show="Form.BasicDetailForm.Address.$invalid && !Form.BasicDetailForm.Address.$pristine">The Address field is required.</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label>Latitude:<span class="color-danger font-bold"> *</span></label>
+                                                    <div>
+                                                        <input type="number" class="form-control" ng-model="BasicDetailFarmStays.Latitude" id="Latitude" name="Latitude" required ng-blur="SetLocation(BasicDetailFarmStays.Latitude,BasicDetailFarmStays.Longitude)" />
+
+                                                    </div>
+                                                    <p class="help-block">
+                                                        <span ng-show="Form.BasicDetailForm.Latitude.$invalid && !Form.BasicDetailForm.Latitude.$pristine">The Latitude field is required.</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label>Longitude:<span class="color-danger font-bold"> *</span></label>
+                                                    <div>
+                                                        <input type="number" class="form-control" ng-model="BasicDetailFarmStays.Longitude" id="Longitude" name="Longitude" ng-blur="SetLocation(BasicDetailFarmStays.Latitude,BasicDetailFarmStays.Longitude)" required />
+
+                                                    </div>
+                                                    <p class="help-block">
+                                                        <span ng-show="Form.BasicDetailForm.Longitude.$invalid && !Form.BasicDetailForm.Longitude.$pristine">The Longitude field is required.</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group checkbox ">
+
+                                                    <input type="checkbox" ng-model="BasicDetailFarmStays.IsPackage" id="IsPackage" />
+                                                    <label for="IsPackage">Is Package:<span></span></label>
+
+                                                </div>
+                                            </div>
+                                            @*<div class="filter-button-set">
+                    <div class="button-group">
+                        <button type="button" class="btn save-btn" ng-click="SetLocation(BasicDetailFarmStays.Latitude,BasicDetailFarmStays.Longitude)" ng-disabled="Form.BasicDetailForm.Longitude.$invalid || Form.BasicDetailForm.Latitude.$invalid">Set</button>
+                    </div>
+                </div>*@
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                                <div class="form-group">
+                                                    <div id="map" class="map-block"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <div class="buttongroup ">
+                                                <input type="button" value="Save" class="btn green-btn" ng-disabled="Form.BasicDetailForm.$invalid" ng-click="SaveFarmStayBasicDetail()" />
+                                                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn black-btn" })
+                                            </div>
+                                        </div>
+</form>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div ng-show="Status=='Amenity'">
+                                <form role="form" name="Form.AmenityForm" class="amenities-checkbox" novalidate>
+                                    @*<div ng-repeat="Amenity in ListofAmenities" class="col-xs-4">
+                                            <input type="checkbox" ng-model="Amenity.Selected" value="Amenity.Value" />  {{Amenity.Text}}
+                                        </div>*@
+                                    <div class="form-group checkbox col-xs-6 col-sm-3" ng-repeat="Amenity in ListofAmenities">
+                                        <input type="checkbox" ng-model="Amenity.Selected" id="Amenity.Value_{{$index}}" value="Amenity.Value" />
+                                        <label for="Amenity.Value_{{$index}}"><span></span>{{Amenity.Text}}</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="buttongroup">
+                                            <input type="button" value="Save" class="btn green-btn" ng-disabled="(ListofAmenities| filter: { Selected:true }).length<=0" ng-click="SaveFarmStayAmenities()" />
+                                            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn black-btn" })
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="row" ng-show="Status=='Room'">
+                                <form class="col-xs-12" role="form" name="Form.RoomForm" novalidate>
+                                    <div class="">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Room Name:<span class="color-danger font-bold"> *</span></label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="Room.Name" id="Name" name="Name" required />
+                                                    <p class="help-block">
+                                                        <span ng-show="Form.RoomForm.Name.$invalid && !Form.RoomForm.Name.$pristine">The Name field is required.</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Room Type:<span class="color-danger font-bold"> *</span></label>
+                                                <div>
+                                                    <select id="Type" name="Type" ng-model="Room.Type" required>
+                                                        <option value="">Select</option>
+                                                        <option value="{{RoomType.Value}}" ng-selected="RoomType.Value==Room.Type" ng-repeat="RoomType in ListofRoomType">{{RoomType.Text}}</option>
+                                                    </select>
+                                                    <p class="help-block">
+                                                        <span ng-show="Form.RoomForm.Type.$invalid && !Form.RoomForm.Type.$pristine">The Type field is required.</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Max Person:<span class="color-danger font-bold"> *</span></label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="Room.MaxPerson" id="MaxPerson" name="MaxPerson" required maxlength="2" numbers-only />
+                                                    <p class="help-block">
+                                                        <span ng-show="Form.RoomForm.MaxPerson.$invalid && !Form.RoomForm.MaxPerson.$pristine">The Max Person field is required.</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+
+                                            <label>Occupancy:<span class="color-danger font-bold"> *</span></label>
+                                            <div class="form-group redio-btn no-margin">
+
+                                                <input type="radio" id="Solo" ng-model="Room.IsSolo" ng-value="true" required name="SoloExclusive" />
+                                                <label for="Solo"><span></span>Solo</label>
+                                                <input type="radio" id="Exclusive" ng-model="Room.IsSolo" ng-value="false" required name="SoloExclusive" />
+                                                <label for="Exclusive"><span></span>Exclusive</label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="col-xs-4 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <label>Extra Bed:</label>
+                    <div>
+                        <select id="ExtraBed" name="ExtraBed" ng-model="Room.ExtraBed">
+                            <option value="{{i}}" ng-repeat="i in [1,2,3,4,5]">{{i}}</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>*@
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="buttongroup">
+                                            <input type="button" value="Save" class="btn green-btn" ng-disabled="Form.RoomForm.$invalid" ng-click="SaveFarmStayRoom()" />
+                                            <input type="button" value="Clear" class="btn black-btn" ng-click="ClearRoom()" />
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="ln_solid"></div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 responsive-grid">
+                                        <table ng-show="FarmStaysRooms.length>0" id="Room" class="table table-bordered table-striped table-responsive row-border hover bordered" style="margin-bottom:15px !important;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Room Name</th>
+                                                    <th>Occupancy</th>
+                                                    <th>Max Person</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="Room in FarmStaysRooms">
+                                                    <td>{{Room.Name}}</td>
+                                                    <td ng-if="Room.IsSolo">Solo</td>
+                                                    <td ng-if="!Room.IsSolo">Exclusive</td>
+                                                    <td>{{Room.MaxPerson}}</td>
+                                                    <td><a href="javascript:;" title="Edit" class='glyphicon glyphicon-pencil' ng-click="EditRoom(Room)"></a> <a href="javascript:;" title="Add Season" class='glyphicon glyphicon-list-alt' ng-click="RoomSeason(Room.Id,Room.Name,Room.IsSolo)"></a> <a href="javascript:;" title='Delete' class='glyphicon glyphicon-trash' ng-click="DeleteFarmStayRoom(Room.Id)"></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div ng-show="FarmStaysRooms.length<=0" class="empty-grid">No records found</div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="buttongroup">
+                                            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn black-btn" })
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="row" ng-show="Status=='Season'">
+                                <form class="col-xs-12" role="form" name="Form.SeasonForm" novalidate>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <h3 class="mb-20" style="padding-top:5px;">Room: {{Season.RoomName}}</h3>
+                                    </div>
+                                    <div>
+
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <div class="form-group roominfo-hed">
+                                                @*<label>Start Date:<span class="color-danger font-bold"> *</span></label>*@
+                                                <div class="roominfo-hed-in">
+                                                    <div class="buttongroup previous-btn pre-next-btn">
+                                                        <input type="button" value="" class="btn black-btn" ng-click="PreviousClick(Testing.Date)" />
+                                                    </div>
+                                                    <div class="input-group date">
+                                                        <input type="text" class="form-control" ng-model="Testing.Date" id="TestingDatePicker" name="TestingDatePicker" required />
+                                                        <span class="input-group-addon" ng-click="OpenCalender('TestingDatePicker')">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                    <div class="buttongroup next-btn pre-next-btn">
+                                                        <input type="button" value="" class="btn black-btn" ng-click="NextClick(LastDayOfArrayforNext)" />
+                                                    </div>
+                                                </div>
+                                                <div class="buttongroup">
+                                                    <input type="button" value="Add Season" class="btn green-btn" ng-click="AddSeason()" />
+                                                </div>
+                                                @*<p class="help-block">
+                                                    <span ng-show="Form.Testing.Date.$invalid && !Form.Testing.Date.$pristine">The Start Date field is required.</span>
+                                                </p>*@
+                                            </div>
+                                        </div>
+                                        <table class="pricetable" border="1" cellpadding="1" cellspacing="1" style="margin:10px !important;width:98%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th ng-repeat="date in DateArray" class="pricetableDate"><p>{{date.MMM}}</p> <span>{{date.DD}}</span> <p>{{date.YYYY}}</p></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat-start="item in Arrayyyyys.ListOfRatePlan" class="pricetablemain-heading">
+                                                    <td colspan="8"><span ng-bind="item.RatePlanName"></span></td>
+
+                                                </tr>
+                                                <tr ng-repeat-end ng-repeat="enditem in item.ListOfPlans">
+                                                    <td class="pricetable-planName">{{enditem.PlanName}}</td>
+                                                    <td ng-repeat="priceDate in enditem.ListOfPriceDates">
+                                                        <span ng-if="Season.IsSolo">
+                                                            <input type="text" ng-model="priceDate.Price" required price-only maxlength="5" style="width: 100% !important;text-align: center;" ng-disabled="enditem.PlanName != 'Single'" />
+                                                        </span>
+                                                        <span ng-if="!Season.IsSolo">
+                                                            <input type="text" ng-model="priceDate.Price" required price-only maxlength="5" style="width: 100% !important;text-align: center;" />
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <div class="buttongroup">
+                                                <input type="button" value="Update" class="btn green-btn" ng-click="UpdateSeason()" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Start Date:<span class="color-danger font-bold"> *</span></label>
+                                                <div class="input-group date">
+                                                    <input type="text" class="form-control" ng-model="Season.StartDate" id="StartDate" name="StartDate" required />
+                                                    <span class="input-group-addon" ng-click="OpenCalender('StartDate')">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                                <p class="help-block">
+                                                    <span ng-show="Form.SeasonForm.StartDate.$invalid && !Form.SeasonForm.StartDate.$pristine">The Start Date field is required.</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>End Date:<span class="color-danger font-bold"> *</span></label>
+                                                <div class="input-group date">
+                                                    <input type="text" class="form-control" ng-model="Season.EndDate" id="EndDate" name="EndDate" required />
+                                                    <span class="input-group-addon" ng-click="OpenCalender('EndDate')">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                                <p class="help-block">
+                                                    <span ng-show="Form.SeasonForm.EndDate.$invalid && !Form.SeasonForm.EndDate.$pristine">The End Date field is required.</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Price per night:<span class="color-danger font-bold"> *</span></label>
+                                                <div class="input-group date">
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-inr"></span>
+                                                    </span>
+                                                    <input type="text" class="form-control" ng-model="Season.Price" id="Price" name="Price" required price-only maxlength="5" />
+
+                                                </div>
+                                                <p class="help-block">
+                                                    <span ng-show="Form.SeasonForm.Price.$invalid && !Form.SeasonForm.Price.$pristine">The Price field is required.</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="buttongroup">
+                                            <input type="button" value="Save" class="btn green-btn" ng-disabled="Form.SeasonForm.$invalid" ng-click="SaveFarmStaySeason()" />
+                                            <input type="button" value="Clear" class="btn black-btn" ng-click="ClearSeason(Season.RoomId,Season.RoomName)" />
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="ln_solid"></div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 responsive-grid">
+                                        <table ng-show="FarmStaysSeasons.length>0" id="Season" class="table table-bordered table-striped table-responsive row-border hover bordered" style="margin-bottom:15px !important;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
+                                                    <th>Price</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="Seasons in FarmStaysSeasons">
+                                                    <td>{{Seasons.StartDate  | date:'MM/dd/yyyy'}}</td>
+                                                    <td>{{Seasons.EndDate }}</td>
+                                                    <td>₹{{Seasons.Price }}</td>
+                                                    <td><a href="javascript:;" title="Edit" class='glyphicon glyphicon-pencil' ng-click="EditSeason(Seasons,Season.RoomId,Season.RoomName)"></a> <a href="javascript:;" title='Delete' class='glyphicon glyphicon-trash' ng-click="DeleteFarmStaySeason(Seasons.GroupId)"></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div ng-show="FarmStaysSeasons.length<=0" class="empty-grid">No records found</div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="buttongroup">
+                                            <input type="button" value="Cancel" class="btn black-btn" ng-click="CancelSeason()" />
+                                        </div>
+                                    </div>*@
+                                </form>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="row" ng-show="Status=='Discount'">
+                                <form class="col-xs-12" role="form" name="Form.DiscountForm" novalidate class="filter-button-set">
+                                    <div class="">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Start Date:<span class="color-danger font-bold"> *</span></label>
+                                                <div class="input-group date">
+                                                    <input type="text" class="form-control" ng-model="Discount.StartDate" id="DiscountStartDate" name="DiscountStartDate" required />
+                                                    <span class="input-group-addon" ng-click="OpenCalender('DiscountStartDate')">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                                <p class="help-block">
+                                                    <span ng-show="Form.DiscountForm.DiscountStartDate.$invalid && !Form.DiscountForm.DiscountStartDate.$pristine">The Start Date field is required.</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>End Date:<span class="color-danger font-bold"> *</span></label>
+                                                <div class="input-group date">
+                                                    <input type="text" class="form-control" ng-model="Discount.EndDate" id="DiscountEndDate" name="DiscountEndDate" required />
+                                                    <span class="input-group-addon" ng-click="OpenCalender('DiscountEndDate')">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                                <p class="help-block">
+                                                    <span ng-show="Form.DiscountForm.DiscountEndDate.$invalid && !Form.DiscountForm.DiscountEndDate.$pristine">The End Date field is required.</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Book by Date:<span class="color-danger font-bold"> *</span></label>
+                                                <div class="input-group date">
+                                                    <input type="text" class="form-control" ng-model="Discount.BookbyDate" id="BookbyDate" name="BookbyDate" required />
+                                                    <span class="input-group-addon" ng-click="OpenCalender('BookbyDate')">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+
+                                                </div>
+                                                <p class="help-block">
+                                                    <span ng-show="Form.DiscountForm.BookbyDate.$invalid && !Form.DiscountForm.BookbyDate.$pristine">The Book by Date field is required.</span>
+                                                </p>
+                                            </div>
+                                        </div>*@
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>Days Before Booking:<span class="color-danger font-bold"> *</span></label>
+                                                <div>
+                                                    <input type="text" class="form-control" ng-model="Discount.DaysBeforeBooking" id="DaysBeforeBooking" numbers-only name="DaysBeforeBooking" required />
+                                                    @*<span class="input-group-addon" ng-click="OpenCalender('BookbyDate')">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>*@
+                                                </div>
+                                                <p class="help-block">
+                                                    <span ng-show="Form.DiscountForm.DaysBeforeBooking.$invalid && !Form.DiscountForm.DaysBeforeBooking.$pristine">The Days Before Booking field is required.</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                        <div class="form-group">
+                                            <label>Discount(%):<span class="color-danger font-bold"> *</span></label>
+                                            <div>
+                                                <input type="text" class="form-control" ng-model="Discount.DiscountValue" id="DiscountValue" name="DiscountValue" required maxlength="100" percentage-only />
+                                                <p class="help-block">
+                                                    <span ng-show="Form.DiscountForm.DiscountValue.$invalid && !Form.DiscountForm.DiscountValue.$pristine">The Discount Value field is required.</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="buttongroup discountbuttongroup">
+                                        <input type="button" value="Save" class="btn green-btn" ng-disabled="Form.DiscountForm.$invalid" ng-click="SaveFarmStayDiscount()" />
+                                        <input type="button" value="Clear" class="btn black-btn" ng-click="ClearDiscount()" />
+                                    </div>
+                                    @*<div class="">
+
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+
+            </div>*@
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="ln_solid"></div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 responsive-grid">
+                                        <table ng-show="FarmStaysDiscounts.length>0" id="Discount" class="table table-bordered table-striped table-responsive row-border hover bordered" style="margin-bottom:15px !important;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
+                                                    <th>Days Before Booking</th>
+                                                    <th>Discount(%)</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="Discount in FarmStaysDiscounts">
+                                                    <td>{{Discount.StartDate}}</td>
+                                                    <td>{{Discount.EndDate}}</td>
+                                                    <td>{{Discount.DaysBeforeBooking}}</td>
+                                                    <td>{{Discount.DiscountValue}}</td>
+                                                    <td><a href="javascript:;" class='glyphicon glyphicon-pencil' ng-click="EditDiscount(Discount)"></a> <a href="javascript:;" title='Delete' class='glyphicon glyphicon-trash' ng-click="DeleteFarmStayDiscount(Discount.Id)"></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div ng-show="FarmStaysDiscounts.length<=0" class="empty-grid">No records found</div>
+                                    <br />
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="buttongroup" style=" margin: 0px;">
+                                            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn black-btn" })
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div ng-show="Status=='Policy'">
+                                <form role="form" name="Form.PolicyForm" novalidate>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="form-group">
+                                            <label>House Rules:</label>
+                                            <div>
+                                                <textarea ui-tinymce="tinymceOptions" class="form-control" ng-model="BasicDetailFarmStays.HouseRules" name="HouseRules"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="form-group">
+                                            <label>Stay Policy:</label>
+                                            <div>
+                                                <textarea ui-tinymce="tinymceOptions" class="form-control" ng-model="BasicDetailFarmStays.StayPolicy" name="StayPolicy"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="ln_solid"></div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <h3 class="no-border mb-0 pb-0" style="padding-top:0px;">Cancellation Policy</h3>
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="form-group checkbox" style="margin:15px 0;">
+                                            <input type="checkbox" ng-model="BasicDetailFarmStays.CancellationPolicyIsNonRefundable" id="BasicDetailFarmStays.CancellationPolicyIsNonRefundable" />
+                                            <label for="BasicDetailFarmStays.CancellationPolicyIsNonRefundable"><span></span>Non Refundable</label>
+                                        </div>
+                                        <div ng-show="!BasicDetailFarmStays.CancellationPolicyIsNonRefundable">
+                                            <label style="float:left; line-height:35px; margin-right:10px;">Standard Policy</label>
+                                            <div class="clearfix"></div>
+                                            <div class="form-group col-xs-12 col-sm-6">
+                                                <div class="row">
+                                                    <div class="col-xs-6"><input type="text" class="form-control" min="1" max="100" ng-model="BasicDetailFarmStays.RefundablePercentage" percentage-only maxlength="50" ng-change="(BasicDetailFarmStays.RefundablePercentage<=0?BasicDetailFarmStays.RefundablePercentage=1:BasicDetailFarmStays.RefundablePercentage)" ng-required="!BasicDetailFarmStays.CancellationPolicyIsNonRefundable"></div>
+                                                    <div class="col-xs-6"><p>% refund if cancelled</p></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-xs-12 col-sm-6">
+                                                <div class="row">
+                                                    <div class="col-xs-6"><input type="text" prefix="Days" class="form-control" min="1" ng-model="BasicDetailFarmStays.RefundableBeforDays" maxlength="4" numbers-only ng-change="(BasicDetailFarmStays.RefundableBeforDays<=0?BasicDetailFarmStays.RefundableBeforDays=1:BasicDetailFarmStays.RefundableBeforDays)" ng-required="!BasicDetailFarmStays.CancellationPolicyIsNonRefundable"></div>
+                                                    <div class="col-xs-6"><p>day/s prior to arrival</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="buttongroup">
+                                            <input type="button" value="Save" class="btn green-btn" ng-disabled="Form.PolicyForm.$invalid" ng-click="SaveFarmStayPolicy()" />
+                                            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn black-btn" })
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div ng-show="Status=='Images'" class="inner-content" style="padding:10px;">
+                                <form role="form" name="Form.ImagesForm" novalidate>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="upload-btn">
+                                                <input id="isAddMore" type="file" ngf-select ngf-multiple="true" ng-model="files" ngf-keep="false" name="file" accept="image/*" ngf-change="UploadPicImage($files)" title=" ">
+                                                <button class="btn btn-default">Choose Images</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-55 hbImg" ng-repeat="Image in FarmStaysImages|filter:{IsDeleted:false}">
+                                            <div class="thumbnail">
+                                                <div class="image view view-first">
+                                                    <img src="@MvcApplication.FarmStayImagePath{{Image.ImageName}}" alt="Image" />
+                                                    <div class="mask no-caption">
+                                                        <div class="tools tools-bottom">
+                                                            <a href="javascript:;" ng-click="ViewImage((FarmStaysImages| filter: { IsDeleted:false }),$index)"><i class="fa fa-eye"></i></a>
+                                                            <a href="javascript:;" ng-click="DeleteImage(Image)"><i class="fa fa-trash cursorclass"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="buttongroup">
+                                        <input type="button" value="Save" class="btn green-btn" ng-if="(FarmStaysImages).length>0" ng-disabled="(FarmStaysImages| filter: { IsDeleted:false }).length<=0" ng-click="SaveFarmStayImages()" />
+                                        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn black-btn" })
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <div id="ImagePopup" class="modal fade room-thumb-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <a href="javascript:;">X</a>
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <a href="javascript:;" data-dismiss="modal"  class="close-btn">X</a>
+                        <div class="">
+                            <img alt="Hotel" src="@MvcApplication.FarmStayImagePath{{Images[ImageIndex].ImageName}}" class="large-img" />
+                        </div>
+                        <a class="controls prev" href="javascript:;" ng-click="((ImageIndex==0)?(ImageIndex=Images.length-1):(ImageIndex=ImageIndex-1) )"><</a>
+                        <a class="controls next" href="javascript:;" ng-click="((ImageIndex==Images.length-1)?(ImageIndex=0): (ImageIndex=ImageIndex+1))">></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+<script type="text/ng-template" id="AddSeason.html">
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="AddSeasonForm" novalidate>
+                    <div class="modal-header">
+                        <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Add Season</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="popup-table">
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Start Date</label>
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" ng-model="RatePlansArray.SeasonStartDate" id="StartDatePicker" name="StartDatePicker" required />
+                                        <span class="input-group-addon" ng-click="OpenCalender('StartDatePicker')">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>End Date</label>
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" ng-model="RatePlansArray.SeasonEndDate" id="EndDatePicker" name="EndDatePicker" required />
+                                        <span class="input-group-addon" ng-click="OpenCalender('EndDatePicker')">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
+                            
+                            <div>
+                                <table class="pricetable" border="1" cellpadding="1" cellspacing="1">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th ng-repeat="item in RatePlansArray.ListOfPlan"><span ng-bind="item.PlanName"></span></th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="rateitem in RatePlansArray.ListOfRatePlan">
+                                            <td class="pricetable-planName"><span ng-bind="rateitem.RatePlanName"></span></td>
+                                            <td ng-repeat="item in rateitem.ListOfPlans">
+                                                <span ng-if="IsSolo">
+                                                    <input type="text" ng-model="item.Price" required price-only maxlength="5" style="width: 100% !important;text-align: center;" ng-disabled="item.PlanName != 'Single'" />
+                                                </span>
+                                                <span ng-if="!IsSolo">
+                                                    <input type="text" ng-model="item.Price" required price-only maxlength="5" style="width: 100% !important;text-align: center;" />
+                                                </span>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer buttongroup Season-popup">
+                        <button type="button" ng-click="close(true)" class="btn green-btn" data-dismiss="modal" ng-disabled="AddSeasonForm.$invalid">Add</button>
+                        <button type="button" ng-click="close(false)" class="btn black-btn" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>
+
+@*<div id="myModalSeason" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Season</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Extra Bed:</label>
+                    <div>
+                        <select id="ExtraBed" name="ExtraBed" ng-model="Room.ExtraBed">
+                            <option value="{{i}}" ng-repeat="i in [1,2,3,4,5]">{{i}}</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="AddSeason()">Add</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>*@
+

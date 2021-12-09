@@ -1,0 +1,272 @@
+﻿@model HSBM.EntityModel.Front.FrontOrdersMaster
+@{
+    ViewBag.Title = "View Order Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.AntiForgeryToken()
+<script>
+    angular.module('FrontApp').controller('CustomerViewController', ['$scope', '$compile', 'CustomerFactory', '$filter', '$timeout', '$rootScope',
+    function ($scope, $compile, CustomerFactory, $filter, $timeout,$rootScope) {
+        //Order Cancelltion
+
+        $scope.CancelBooking = function () {
+            if ($('#CancellationReason').val() != null && $('#CancellationReason').val() != "") {
+                $('#ReasonError').next(".ReviewError").hide();
+                var confirmVal = window.confirm("Are you sure you want to cancel the order?");
+                if (confirmVal == true) {
+                    $.ajax({
+                        url: '/FarmStaysBooking/OrderCancel',
+                        type: 'Post',
+                        data: {
+                            Id: $('#Id').val(),
+                            RefundAmount: $('#RefundAmount').val(),
+                            CancellationReason: $('#CancellationReason').val()
+                        },
+                        success: function (result) {
+                            window.alert("Your Order has been cancelled successfully.");
+                            if ($('#IsGuestUser').val()==false) 
+                                window.location.href = "/Orders";
+                            else
+                                window.location.href = "/";
+                        },
+                        error: function (ex) {
+                            window.alert("Error in Cancellation order");
+                        }
+                    });
+                }
+            }
+            else {
+                $('#ReasonError').show();
+                $('#ReasonError').after('<div class="text-danger ReviewError">Cancellation reason is required.</div>');
+            }
+        }
+
+        //End
+    }]);
+</script>
+<div class="container">
+    <div ng-controller="CustomerViewController" class="inner-content inner-detail-page">
+    <div class="row">
+       <div class="title-block">
+            <h4>Order Detail</h4>
+       </div>
+    </div>
+    @*<h4>Customer Detail</h4>
+        <hr />*@
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.RefundAmount)
+    @Html.HiddenFor(model => model.IsGuestUser)
+        <div class="row">
+            @*<div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group order-detail">
+                        @Html.LabelFor(model => model.UserName, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(model => model.UserName, new { @readonly = "true" })
+                    </div>
+                </div>*@
+
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.OrderNo, new { @class = "control-label" })
+                    <span>@Model.OrderNo</span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.OrderDate, new { @class = "control-label" })
+                    <span>@Model.strCreatedDate</span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                    <span>@Model.Name (@Model.TypeName)</span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.FarmStaysName, new { @class = "control-label" })
+                    <span>@Model.FarmStaysName</span>
+                </div>
+            </div>
+            @*<div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Telephone, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Telephone, new { @readonly = "true" })
+                    </div>
+                </div>*@
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.CheckInDate, new { @class = "control-label" })
+                    <span>@Model.strCheckInDate</span>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.CheckOutDate, new { @class = "control-label"})
+                    <span>@Model.strCheckOutDate</span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.NoOfPeople, new { @class = "control-label"})
+                    <span>@Model.NoOfPeople</span>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.ExclusiveOrSolo, new { @class = "control-label"})
+                    <span>@Model.ExclusiveOrSolo</span>
+                </div>
+            </div>
+             @*<div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group">
+                   @Html.LabelFor(model => model., new { @class = "control-label", title = "Address" })
+                        @Html.TextBoxFor(model => model.NoOfPeople, new { @readonly = "true" })
+                </div>
+            </div>*@
+            <div class="col-xs-12 col-sm-3 col-md-3">
+            <div class="form-group order-detail">
+                @Html.LabelFor(model => model.Amount, new { @class = "control-label" }) 
+                <span> @*<i ng-bind="Currencysymbols"></i>*@ ₹ @Model.Amount</span>
+            </div>
+        </div>
+        @if (Model.EBDAmount != null)
+        {
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.EBDAmount, new { @class = "control-label"}) 
+                    <span> @*<i ng-bind="Currencysymbols"></i>*@ ₹ @Model.EBDAmount</span>
+                </div>
+            </div>
+        }
+        @if (Model.DiscountAmount != null)
+        {
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.DiscountAmount, new { @class = "control-label"}) 
+                    <span> @*<i ng-bind="Currencysymbols"></i>*@ ₹ @Model.DiscountAmount</span>
+                </div>
+            </div>
+        }
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <div class="form-group order-detail">
+                @Html.LabelFor(model => model.NetAmount, new { @class = "control-label"}) 
+                <span> @*<i ng-bind="Currencysymbols"></i>*@ ₹ @Model.NetAmount</span>
+            </div>
+        </div>
+        <div class="AllTexesIncluded">*All Taxes Included</div>
+    </div>
+
+    <div class="row">
+       <div class="title-block">
+            <h4>Cancellation Policy</h4>
+       </div>
+    </div>
+        @if (Model.RefundAmount > 0 &&Model.Status == (int)HSBM.Common.Enums.BookingStatus.Cancel)
+        {
+            <div class="row">
+                <div class="col-xs-12 col-sm-10 col-md-10">
+                    <div class="form-group">
+                        @*@Html.LabelFor(model => model.CancellationPolicyIsNonRefundable, new { @class = "control-label", title = "Address" })*@
+                        <br /><label>₹ @Math.Round(Model.RefundAmount, 2) Refundable</label>
+                    </div>
+                </div>
+            </div>
+              <div class="col-xs-12 col-sm-10 col-md-10">
+                    <div class="form-group order-detail">
+                        @Html.LabelFor(model => model.CancellationReason, new { @class = "control-label"})
+                        @Html.TextAreaFor(m => m.CancellationReason, new { @Value = @Model.CancellationReason,@readonly=true, @class = "form-control", @maxlength = 1000, @rows = 7 })
+                    </div>
+                </div>
+          
+        }
+        else { 
+            if (Model.IsApplyCancellationPolicy)
+            {
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-10">
+                        <div class="form-group">
+                            @*@Html.LabelFor(model => model.CancellationPolicyIsNonRefundable, new { @class = "control-label", title = "Address" })*@
+                            <br /><label>₹ @Math.Round(Model.RefundAmount, 2) Refundable(@Model.RefundablePercentage% Refund if Cancelled Before @Model.RefundableBeforDays Days)</label>
+                        </div>
+                    </div>
+
+                </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-10 col-md-10">
+                    <div class="form-group">
+                      <label>Cancellation Reason</label>
+                        @Html.TextAreaFor(m => m.CancellationReason, new { @Value = @Model.CancellationReason, @class = "form-control", @maxlength = 1000, @rows = 7 })
+                    </div>
+                    <div id="ReasonError"></div>
+                </div>
+            </div>
+
+            }
+            else
+            {
+                <div class="NoRefundPolicy">Non-Refundable</div>
+            }
+        }
+
+        
+        <div class="row">
+           <div class="title-block">
+                <h4>Contact Details</h4>
+           </div>
+        </div>
+        <div class="row">
+            @*<div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Telephone, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Telephone, new { @readonly = "true" })
+                    </div>
+                </div>*@
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
+                    <span>@Model.GuestFirstName  @Model.GuestLastName</span>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.GuestAddress, new { @class = "control-label"})
+                    <span>@Model.GuestAddress</span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.GuestMobile, new { @class = "control-label"})
+                    <span>@Model.GuestMobile</span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group order-detail">
+                    @Html.LabelFor(model => model.GuestEmail, new { @class = "control-label"})
+                    <span>@Model.GuestEmail</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttongroup">
+             @if (!Model.IsGuestUser)
+            {
+               @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-primary btn-lg grey-btn" })
+           }
+             else
+             {
+                <a href="/" class="btn btn-primary btn-lg grey-btn" >Back</a>
+             }
+            @if (Model.IsApplyCancellationPolicy && Model.Status != (int)HSBM.Common.Enums.BookingStatus.Cancel)
+            {
+                <button class="btn btn-primary btn-lg grey-btn" ng-click="CancelBooking()">Cancel Order</button>
+            }
+        </div>
+
+    </div>
+</div>

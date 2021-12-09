@@ -1,0 +1,159 @@
+﻿@model HSBM.EntityModel.SystemUsers.SystemUsers
+@{
+    ViewBag.Title = "Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#CountryMasterID").change(function () {
+            $.post('/Customer/GetRegionList', { Id: $('#CountryMasterID').val() }, function (data) {
+                var options = $("#RegionMasterID");
+                options.find('option').remove();
+
+                $("#CityMasterID").find('option').remove();
+                $("#CityMasterID").append($("<option />").val('0').text('Select'));
+
+                $.each(data, function () {
+                    options.append($("<option />").val(this.Value).text(this.Text));
+                });
+            })
+        });
+
+        $("#RegionMasterID").change(function () {
+            $.post('/Customer/GetCityList', { Id: $('#RegionMasterID').val() }, function (data) {
+                var options = $("#CityMasterID");
+                options.find('option').remove();
+                $.each(data, function () {
+                    options.append($("<option />").val(this.Value).text(this.Text));
+                });
+            })
+        });
+
+    });
+</script>
+
+@*<div style="margin-top:100px;">*@
+<section class="login-page-demo" id="loginForm">
+    <div class="awe-overlay"></div>
+    <div class="container">
+        <div class="customer-login-box">
+            <h2>Customer Registration</h2>
+
+            @using (Html.BeginForm("CustomerRegister", "Customer", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true)
+                    <label>@ViewBag.ToastrMSG</label>
+                    <div class="row form-group">
+                        @*<div class="col-sm-4 col-xs-12">
+                            @Html.LabelFor(model => model.UserName, new { @class = "control-label", title="gg" })
+                            @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.UserName)
+                        </div>*@                       
+
+                        <div class="col-sm-4 col-xs-12">
+                            @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.FirstName)
+                        </div>                       
+
+
+                        @*<div class="col-sm-4 col-xs-12">
+                            @Html.LabelFor(model => model.MiddleName, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.MiddleName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.MiddleName)
+                        </div>*@
+
+                        <div class="col-sm-4 col-xs-12">
+                            @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.LastName)
+                        </div>
+
+                        <div class="col-sm-4 col-xs-12">
+                            @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Email)
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-sm-4 col-xs-12">
+                            @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+                            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Password)
+                        </div>
+                        @*<div class="clearfix"></div>*@
+
+
+                        @*<div class="col-sm-4 col-xs-12">
+                            @Html.LabelFor(model => model.Telephone, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Telephone, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Telephone)
+                        </div>*@
+
+                        <div class="col-sm-4 col-xs-12">
+                            @Html.LabelFor(model => model.Mobile, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Mobile)
+                        </div>
+
+                        @*<div class="col-sm-4 col-xs-12">
+                            @Html.LabelFor(model => model.Gender, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.Gender, ViewBag.GenderDropDown as List<SelectListItem>, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Gender)
+                        </div>*@
+                        <div class="clearfix"></div>
+
+
+                        @*<div class="col-sm-4 col-xs-12">
+                            @Html.LabelFor(model => model.Address, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Address)
+                        </div>
+
+                        <div class="col-sm-4 col-xs-12">
+                            @Html.LabelFor(model => model.Address2, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Address2, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Address2)
+                        </div>
+
+                        <div class="col-sm-4 col-xs-12">
+                            <label class="control-label">Country</label>
+                                @Html.DropDownListFor(model => model.CountryMasterID, ViewBag.CountryDropDown as List<SelectListItem>, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CountryMasterID)
+                        </div>
+                        <div class="clearfix"></div>
+
+
+                        <div class="col-sm-4 col-xs-12">
+                            <label class="control-label">Region</label>
+                                @Html.DropDownListFor(model => model.RegionMasterID, ViewBag.RegionDropDown as List<SelectListItem>, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.RegionMasterID)
+                        </div>
+
+                        <div class="col-sm-4 col-xs-12">
+                            <label class="control-label">City</label>
+                                @Html.DropDownListFor(model => model.CityMasterID, ViewBag.CityDropDown as List<SelectListItem>, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CityMasterID)
+                        </div>*@
+                        <div class="clearfix"></div>
+
+                        <div class="col-xs-12 text-center mt-30">
+                            <input type="submit" value="Save" class="btn btn-primary btn-lg" />
+                            @Html.ActionLink("Cancel", "Login", null, new { @class = "btn btn-default btn-lg" })
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+

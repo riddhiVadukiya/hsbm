@@ -1,0 +1,90 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Account Statement";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    angular.module('app').controller('AccountStatementController', ['$scope', '$compile', '$rootScope', function ($scope, $compile, $rootScope) {
+        var TableName = "AccountStatement";
+
+        $scope.SetSearchFromLocalStorage = function (localdata) {
+            if (typeof (localdata) != 'undefined') { }
+        }
+
+        $scope.Search = {}
+
+        $scope.SearchData = function () {
+            BindAccountStatementGrid();
+        };
+        $scope.ResetData = function () {
+            $scope.Search = {};
+            BindAccountStatementGrid();
+        };
+
+        function BindAccountStatementGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+
+            var Columns = [
+                        { data: 'Farmstaysid', bVisible: false },
+                        { data: 'FarmstaysName' },
+                        { data: 'TotalBooking' },
+                        //{ data: 'TotalEarning' },
+                        {
+                            mRender: function (data, type, row, full) {
+                                return $rootScope.Currencysymbols + convertToPrice(row.TotalEarning);
+                            }
+                        },
+                        {
+                            bSortable: false,
+                            sClass: "action-cell",
+                            mRender: function (data, type, row, full) {
+                                return "<a target='_blank' href='/Admin/Orders?farmstaysid=" + row.Farmstaysid + "' title='View' class='glyphicon glyphicon-eye-open'></a>";
+                            }
+                        }
+            ];
+            BindSearchGridData('AccountStatement', Columns, '/Admin/AccountStatement/GetAccountStatementBySearchRequest', $scope.Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+        }
+
+        var localdata = GettLocalStorageData(TableName);
+        if (localdata != null) {
+            BindAccountStatementGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+        } else {
+            BindAccountStatementGrid();
+        }
+
+        $scope.SetLocalStorage = function (url) {
+            SetLocalStorageData($scope.Search, TableName);
+            window.location = url;
+        }
+
+    }]);
+</script>
+
+
+
+<div class="main-wrapper">
+    <h3>Account Statement</h3>
+    <div ng-controller="AccountStatementController" class="inner-content">
+
+        <div class="buttongroup pos-rel">
+            <h4>1st @DateTime.Now.ToString("MMM") to Till Date</h4>
+        </div>
+        <div class="grid-btn-set">
+            <table id="AccountStatement" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Farm/Home Stays</th>
+                        <th>Total Bookings</th>
+                        <th>Total Earning</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="AccountStatement_NoRecordFound" class="empty-grid">No records found</div>
+        </div>
+    </div>
+</div>
+

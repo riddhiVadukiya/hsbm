@@ -1,0 +1,360 @@
+﻿@model HSBM.EntityModel.SystemUsers.LoginUser
+@*<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBLxdK0Jtez3dx2Myo-78HcEsX0BuOeoms"></script>*@
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://apis.google.com/js/api:client.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$('#loginModal').modal({
+        //    backdrop: 'static',
+        //    keyboard: true,
+        //    show: true
+        //});
+    });
+</script>
+
+<div id="mdllogin" class="modal-dialog">
+    <div class="center-box">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" onclick="ClearModal()"><img src="~/Images/modal-close.png" alt="" /></button>
+                <h4 class="modal-title">We are <span>Himalayan Farmstays</span></h4>
+                <p>
+                    Please Login to your Account to book Farmstays <br> Don’t have an Account?
+                    <a href="#" onclick="javascript: return ShowSignupPopup();">Sign up</a>
+                </p>
+            </div>
+            <div class="modal-body">
+                @*@using (Html.BeginForm("JsonPartialLogin", "Customer", FormMethod.Post, new { id = "frmLogin", @class = "form-horizontal", role = "form" }))
+            {*@
+                <form id="frmLogin" class="form-horizontal">
+                    <div class="form-group ">
+                        <h6> @ViewBag.Message</h6>
+                        <div id="dvLoginErrorMsg" class="error-message"></div>
+                    </div>
+                    <div class="social-link-box">
+                        <div id="FBloginBtn" class="fb-btn">
+                            <a class="fb-button social-button social-regi register-fb" href="JavaScript:;"><span>Login with Facebook</span></a>
+                        </div>
+                        <div id="customBtn" class="google-btn">
+                            <a class="gplus-button social-button social-regi register-gl" href="JavaScript:;"><span>Login with Google</span></a>
+                        </div>
+                    </div>
+                    <div class="divider-or">
+                        <span>OR</span>
+                    </div>
+                    <div class="form-group">
+                        @*<label>Email</label>*@
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Email" })
+                        @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "color-red" })
+                    </div>
+                    <div class="form-group">
+                        @*@Html.LabelFor(model => model.Password)*@
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                        @Html.ValidationMessageFor(model => model.Password, null, new { @class = "color-red" })
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="custom-form">
+                        <div class="checkbox">
+                            <input type="checkbox" id="RememberMe" name="cc" />
+                            @*@Html.CheckBoxFor(m => m.RememberMe, new { name = "cc" })*@
+                            <label for="RememberMe"><span></span>Remember me</label>
+                        </div>
+                        <a class="ml-20" href="#" onclick="javascript: return ShowForgotPassPopup();">Forgot Password?</a>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 text-center">
+                            <input type="submit" value="Log in" onclick="javascript:return validateLoginPopup()" class="btn btn-primary btn-lg" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            @*}*@
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var _email, _password, _rememberMe, _firstName, _lastName, _gender, _IsLogin;
+
+    function ClearModal() {
+        $('#frmLogin #UserName').val('');
+        $('#frmLogin #Password').val('');
+    }
+
+    function validateLoginPopup(IsSocial) {
+        _IsLogin = true;
+        var isValid = true;
+        isValid = $("#frmLogin").valid();
+        if (isValid) {
+            var _data;
+            if (IsSocial)
+                _data = { email: _email, password: _password, rememberMe:false, isSocialMedia: true };
+            else
+                _data = { email: $("#mdllogin #UserName").val(), password: $("#mdllogin #Password").val(), rememberMe: $("#mdllogin #RememberMe").is(":checked") };
+
+            $.ajax({
+                url: '/Customer/JsonPartialLogin',
+                type: 'GET',
+                cache: false,
+                datatype: "json",
+                data: _data,
+                //data: { email: $("#UserName").val(), password: $("#Password").val() },
+                success: function (data) {
+                    
+                    if (data.Success) {                    
+                        $("#dvLoginErrorMsg").html("");
+                        $("#dvLoginErrorMsg").hide();
+                        $('#loginModal').modal('hide');
+                        
+                        //window.location.reload();
+                        //if (window.location.pathname == '/Blogs/Detail') {
+                        //    alert("1");
+                        //    //$("#btncommit").trigger('click');
+                        //}
+                        //else {
+                        //    window.location.reload();
+                        //}
+
+                        if (window.location.pathname == '/Blogs/Detail' &&  $("#txtComment").val()!='') {
+                          
+                            $.ajax({
+                                url: '/Blogs/AddBlogComment',
+                                type: 'POST',
+                                cache: false,
+                                data: { BlogId: $("#hdnBlogId").val(), Comment: $("#txtComment").val() },
+                                success: function (data) {
+                                    
+                                    if (data.Data == null) {
+                                        window.location.reload();
+                                    }
+                                    else {
+                                        return false;
+                                    }
+                                },
+                                error: function (xhr, ajaxOptions, thrownError) {
+                                    return false;
+                                }
+                            });
+                        }
+                        else {
+                            window.location.reload();
+                        }
+                    }
+                    else {
+                        
+                        $("#dvLoginErrorMsg").html(data.Message);
+                        $("#dvLoginErrorMsg").show();
+                        return false;
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    return false;
+                }
+            });
+
+        }
+        else {
+            return false;
+        }
+    }
+    function validateSignupPopup(IsSocial) {
+        _IsLogin = false;
+        var isValid = true;
+        isValid = $("#frmSignUpPopup").valid();
+        if (isValid || IsSocial) {
+            var _data;
+            if (IsSocial)
+                _data = { FirstName: _firstName, LastName: _lastName, Email: _email, Password: _password, Mobile: null, IsSocialMedia: true };
+            else
+                _data = { FirstName: $("#mdlSignup #FirstName").val(), LastName: $("#mdlSignup #LastName").val(), Email: $("#mdlSignup #Email").val(), Password: $("#mdlSignup #Password").val(), Mobile: $("#mdlSignup #Mobile").val() };
+
+            $.ajax({
+                url: '/Customer/JsonSaveSignUp',
+                type: 'GET',
+                cache: false,
+                datatype: "json",
+                data: _data,
+                success: function (data) {
+                    if (data.Success) {
+                        $('#SignupModal').modal('hide');
+                        $("#Email").val();
+                        if (IsSocial)
+                            window.location = "/Customer/ThankYou?UserId=" + data.Data;
+                        else
+                        window.location = "/Customer/ThankYou";
+                    }
+                    else {
+                        
+                        $("#dvSignUpSuccessMsg").html('');
+                        $("#dvSignUpSuccessMsg").hide();
+                        $("#dvSignUpErrorMsg").html(data.Message);
+                        $("#dvSignUpErrorMsg").show();
+                        return false;
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    
+                    $("#dvSignUpSuccessMsg").html('');
+                    $("#dvSignUpSuccessMsg").hide();
+                    $("#dvSignUpErrorMsg").html(data.Message);
+                    $("#dvSignUpErrorMsg").show();
+                    return false;
+                }
+            });
+
+        }
+        else {
+            return false;
+        }
+    }
+
+    function ShowSignupPopup() {
+        $('#loginModal').modal('hide');
+        $('#ForgotPassword').modal('hide');
+        $(document.body).addClass('modal-open');
+        setTimeout(function () {
+            $('#SignupModal').modal('show');
+        }, 400);
+    }
+
+    function ShowLoginPopup() {
+        $('#SignupModal').modal('hide');
+        $('#ForgotPassword').modal('hide');
+        $(document.body).addClass('modal-open');
+        setTimeout(function () {
+            $('#loginModal').modal('show');
+        }, 400);
+    }
+    function ShowForgotPassPopup() {
+        
+        $('#SignupModal').modal('hide');
+        $('#loginModal').modal('hide');
+        $(document.body).addClass('modal-open');
+        setTimeout(function () {
+            $('#ForgotPassword').modal('show');
+        }, 400);
+    }
+
+
+    //Social Media
+    function statusChangeCallback(response) {
+        if (response.status === 'connected') {
+            GetUserDetailFromFB();
+        }
+    }
+
+    function checkLoginState() {
+        FB.getLoginStatus(function (response) {
+            statusChangeCallback(response);
+        });
+    }
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=2027977923936866";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function GetUserDetailFromFB() {
+        FB.api('/me', { fields: 'last_name,first_name,email,gender' }, function (response) {
+
+            _email = response.email;
+            _password = response.id;
+            _firstName = response.first_name;
+            _lastName = response.last_name;
+            _gender = response.gender;
+            // $scope.LogInModel.IsSocialMedia = true;
+            if (_IsLogin)
+                validateLoginPopup(true);
+            else
+                validateSignupPopup(true);
+        });
+    }
+
+    document.getElementById('FBloginBtn_Signup').addEventListener('click', function () {
+        _IsLogin = false;
+        FB.login(function (response) {
+            if (response.authResponse) {
+                // ShowLoadingPanel();
+                checkLoginState();
+            }
+            else {
+                // HideLoadingPanel();
+            }
+        }, { scope: 'email,public_profile', return_scopes: true });
+    }, false);
+
+
+    document.getElementById('FBloginBtn').addEventListener('click', function () {
+        _IsLogin = true;
+        FB.login(function (response) {
+            if (response.authResponse) {
+                // ShowLoadingPanel();
+                checkLoginState();
+            }
+            else {
+                // HideLoadingPanel();
+            }
+        }, { scope: 'email,public_profile', return_scopes: true });
+    }, false);
+
+    function onSuccess(googleUser) {
+        debugger;
+        var profile = googleUser.getBasicProfile();
+        _email = profile.U3;
+        _password = profile.Eea;
+        _firstName = profile.ofa;
+        _lastName = profile.wea;
+        if (_IsLogin)
+            validateLoginPopup(true);
+        else
+            validateSignupPopup(true);
+    }
+    var startApp = function () {
+        gapi.load('auth2', function () {
+            // Retrieve the singleton for the GoogleAuth library and set up the client.
+            auth2 = gapi.auth2.init({
+                client_id: '179380182113-ip8vcqoscaru6l35so614e7e0rkf5o8d.apps.googleusercontent.com',
+                cookiepolicy: 'single_host_origin',
+                // Request scopes in addition to 'profile' and 'email'
+                //scope: 'additional_scope'
+            });
+            attachSignin(document.getElementById('customBtn_Signup'));
+        });
+    };
+    var startAppSignIn = function () {
+        gapi.load('auth2', function () {
+            // Retrieve the singleton for the GoogleAuth library and set up the client.
+            auth2 = gapi.auth2.init({
+                client_id: '179380182113-ip8vcqoscaru6l35so614e7e0rkf5o8d.apps.googleusercontent.com',
+                cookiepolicy: 'single_host_origin',
+                // Request scopes in addition to 'profile' and 'email'
+                //scope: 'additional_scope'
+            });
+            attachSignin(document.getElementById('customBtn'),true);
+        });
+    };
+
+    function attachSignin(element, isLogin) {
+        auth2.attachClickHandler(element, {},
+            function (googleUser) {
+                _IsLogin = isLogin;
+                // ShowLoadingPanel()
+                onSuccess(googleUser)
+            }, function (error) {
+                alert("Error in login please try again.");
+            });
+    }
+
+    startApp();
+    startAppSignIn();
+
+    //End Social Media
+</script>
+
+

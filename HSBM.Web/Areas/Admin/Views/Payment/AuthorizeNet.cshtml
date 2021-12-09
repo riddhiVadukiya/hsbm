@@ -1,0 +1,25 @@
+﻿@model HSBM.EntityModel.PaymentGetWay.AuthorizeNetRequest
+@{
+    ViewBag.Title = "AuthorizeNet";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutFrontEnd.cshtml";
+}
+
+<h2>AuthorizeNet</h2>
+
+<form id="nonseamless" method="post" name="redirect" action="@Model.FormUrl">
+    <input type="hidden" id="x_fp_hash" name="x_fp_hash" value="@Model.FingerPrint" />
+    <input type="hidden" id="x_fp_sequence" name="x_fp_sequence" value="@Model.Seq">
+    <input type="hidden" id="x_fp_timestamp" name="x_fp_timestamp" value="@Model.Stamp">
+    <input type="hidden" id="x_login" name="x_login" value="@Model.ApiLogin" />
+    <input type="hidden" id="x_amount" name="x_amount" value="@Model.Amount" />
+    <input type="hidden" id="x_show_form" name="x_show_form" value='PAYMENT_FORM' />
+    <input type="hidden" id="x_relay_url" name="x_relay_url" value="@Model.ReturnUrl" />
+    <input type="hidden" id="x_relay_response" name="x_relay_response" value="@Model.RelayResponse" />
+    <input type="hidden" id="cm" name="cm" value="@Model.OrderID" />
+
+    <input id="btnSubmit" type="image" name="submit" class="display-none" />
+</form>
+
+<script type="text/javascript">
+    document.getElementById("btnSubmit").click()
+</script>

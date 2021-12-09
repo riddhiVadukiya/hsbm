@@ -1,0 +1,290 @@
+﻿@*@model HSBM.EntityModel.Front.FarmStaysBookingDetail*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+}
+<!-- this meta viewport is required for BOLT //-->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<!-- BOLT Sandbox/test //-->
+<script id="bolt" src="https://sboxcheckout-static.citruspay.com/bolt/run/bolt.min.js" bolt-color="e34524" bolt-logo="@System.Configuration.ConfigurationManager.AppSettings["LogoPath"].ToString()"></script>
+<!-- BOLT Production/Live //-->
+<!--// script id="bolt" src="https://checkout-static.citruspay.com/bolt/run/bolt.min.js" bolt-color="e34524" bolt-logo="@System.Configuration.ConfigurationManager.AppSettings["LogoPath"].ToString()"></script //-->
+
+<script>
+    var FarmStayId = '',RoomId = '', CheckIn = '', CheckOut = '', Guests = '', IsSolo = ''
+    @if (ViewBag.FarmStayId!=null)
+    {
+        @:FarmStayId = @ViewBag.FarmStayId;
+        }
+    @if (ViewBag.RoomId != null)
+     {
+         @:RoomId = @ViewBag.RoomId;
+         }
+    @if (ViewBag.CheckIn != null)
+   {
+       @:CheckIn = '@ViewBag.CheckIn';
+       }
+    @if (ViewBag.CheckOut != null)
+    {
+        @:CheckOut = '@ViewBag.CheckOut';
+        }
+    @if (ViewBag.Guests != null)
+    {
+        @:Guests = @ViewBag.Guests;
+        }
+   @if (ViewBag.Child != null)
+   {
+       @:Child = @ViewBag.Child;
+   }
+   @if (ViewBag.RatePlanId != null)
+   {
+       @:RatePlanId = @ViewBag.RatePlanId;
+   }
+    @if (ViewBag.IsSolo != null)
+    {
+        @:IsSolo = '@ViewBag.IsSolo';
+        }
+        
+</script>
+
+<div ng-controller="FarmStaysBookingController" ng-cloak>
+    <input type="hidden" id="udf5" name="udf5" value="BOLT_KIT_ASP.NET" />
+    @*<input type="hidden" id="surl" name="surl" value="<%= Session["surl"]%>" />*@
+    <div class="booking-process-top">
+        <form name="BookingForm">
+            <div class="row">
+                <div class="title-block blogdetail-title">
+                    <h3>Reservation Confirmation</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md">
+                    <div class="info-main-box">
+                        <h6>Farmstay Information</h6>
+                        <div class="info-box">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="info-text">
+                                        <h5>FarmStay Name</h5>
+                                        <p ng-bind="BookingDetail.FarmStayName"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="info-text">
+                                        <h5>Address</h5>
+                                        <p ng-bind="BookingDetail.Address"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="info-text">
+                                        <h5>CheckIn Date</h5>
+                                        <p ng-bind="BookingDetail.CheckIn"></p>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="info-text">
+                                        <h5>CheckOut Date</h5>
+                                        <p ng-bind="BookingDetail.CheckOut"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-main-box">
+                        <h6>Room Information</h6>
+                        <div class="info-box">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="info-text">
+                                        <h5>Name</h5>
+                                        <p ng-bind="BookingDetail.Name"></p>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="info-text">
+                                        <h5>Type</h5>
+                                        <p ng-bind="BookingDetail.TypeName"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="info-text">
+                                        <h5>No. of People</h5>
+                                        <p ng-bind="BookingDetail.Guests"></p>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="info-text">
+                                        <h5>Rate Plan</h5>
+                                        <p ng-bind="BookingDetail.RatePlanName"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="info-text">
+                                        <div class="terms-check custom-form themed">
+                                            <input id="bed" name="bed" type="checkbox" ng-model="BookingDetail.ExtraBed">
+                                            <label for="bed"><span></span>Extra Bed</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-main-box">
+                        <h6>Payment Details</h6>
+                        <div class="info-box">
+                            <div ng-if="BookingDetail.DiscountPrice>0" class="payment-box">
+                                <p>Price<span ng-bind="Currencysymbols + (BookingDetail.Price | currency:'')"> </span></p>
+                                <p ng-if="BookingDetail.DiscountPrice>0 && DisplayDiscount>0">Discount <b ng-bind="'('+BookingDetail.FarmStayDiscount+')'"></b><span ng-bind="'-'+ Currencysymbols + (DisplayDiscount| currency:'')"></span></p>
+                            </div>
+                            <div class="payment-box">
+                                <p>Total Payable Price<span ng-bind="Currencysymbols+(BookingDetail.DiscountPrice>0 ? (BookingDetail.DiscountPrice| currency:'') : (BookingDetail.Price| currency:''))"></span></p>
+                            </div>
+                            All Taxes Included
+                        </div>
+                    </div>
+                    <div class="info-main-box">
+                        <h6>Cancellation Policy:</h6>
+                        <div class="info-box">
+                           <div class="row">
+                                <div class="col-sm">
+                                    <div class="info-text">
+                                        <span ng-if="BookingDetail.IsApplyCancellationPolicy"> <u ng-bind="BookingDetail.RefundablePercentage+'%'"></u>&nbsp;Refund before &nbsp;<u ng-bind="BookingDetail.RefundableBeforDays+' Days'"></u></span>
+                                        <span ng-if="!BookingDetail.IsApplyCancellationPolicy"> Non Refundable</span>
+
+                                        @*<span ng-if="(!BookingDetail.CancellationPolicyIsNonRefundable || BookingDetail.CancellationPolicyIsNonRefundable==false) && BookingDetail.RefundableBeforDays>0"> <u ng-bind="BookingDetail.RefundablePercentage+'%'"></u>&nbsp;Refund before &nbsp;<u ng-bind="BookingDetail.RefundableBeforDays+' Days'"></u></span>
+                                        <span ng-if="BookingDetail.CancellationPolicyIsNonRefundable || BookingDetail.RefundableBeforDays<=0"> Non Refundable</span>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="info-main-box">
+                        <h6>Lead Traveler Information</h6>
+                        <div class="info-box lead-info">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <label>First Name<span class="color-danger font-bold"> *</span></label>                                    
+                                    <input type="text" name="GuestFirstName" ng-model="BookingDetail.LeadTraveler.GuestFirstName" required>
+                                    <p class="field-validation-error">
+                                        <span ng-show="BookingForm.GuestFirstName.$invalid && !BookingForm.GuestFirstName.$pristine">Please enter First Name </span>
+                                    </p>
+                                </div>
+                                <div class="col-sm">
+                                    <label>Last Name<span class="color-danger font-bold"> *</span></label>
+                                    <input type="text" name="GuestLastName" ng-model="BookingDetail.LeadTraveler.GuestLastName" required>
+                                    <p class="field-validation-error">
+                                        <span ng-show="BookingForm.GuestLastName.$invalid && !BookingForm.GuestLastName.$pristine">Please enter Last Name </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <label>Email<span class="color-danger font-bold"> *</span></label>
+                                    <input type="email" name="GuestEmail" ng-model="BookingDetail.LeadTraveler.GuestEmail" required>
+                                    <p class="field-validation-error">
+                                        <span ng-show="BookingForm.GuestEmail.$invalid && !BookingForm.GuestEmail.$pristine">Please enter Email </span>
+                                    </p>
+                                </div>
+                                <div class="col-sm">
+                                    <label>Gender<span class="color-danger font-bold"> *</span></label>
+                                    <div class="selectWrapper">
+                                        <select name="Gender" ng-model="BookingDetail.LeadTraveler.IsMale" required ng-disabled="BookingDetail.IsGenderReadOnly">
+                                            <option value="">Select</option>
+                                            <option value="true">Male</option>
+                                            <option value="false">Female</option>
+                                        </select>                                        
+                                    </div>
+                                    <p class="field-validation-error">
+                                        <span ng-show="BookingForm.Gender.$invalid && !BookingForm.Gender.$pristine">Please enter Gender </span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm">
+                                    <label>Country<span class="color-danger font-bold"> *</span></label>
+                                    <div class="selectWrapper">
+                                        <select id="Country" name="Country" ng-model="BookingDetail.LeadTraveler.GuestCountryId" required>
+                                            <option ng-repeat="Country in ListofCountry" value="{{Country.Value}}">{{Country.Text}}</option>
+                                        </select>                                       
+                                    </div>
+                                    <p class="field-validation-error">
+                                        <span ng-show="(BookingForm.Country.$invalid || BookingDetail.LeadTraveler.GuestCountryId=='0' ) && !BookingForm.Country.$pristine ">Please enter Country </span>
+                                    </p>
+                                </div>
+
+                                <div class="col-sm">
+                                    <label>City<span class="color-danger font-bold"> *</span></label>
+                                    <input type="text" name="City" ng-model="BookingDetail.LeadTraveler.GuestCity" maxlength="25" required>
+                                    <p class="field-validation-error">
+                                        <span ng-show="BookingForm.City.$invalid && !BookingForm.City.$pristine">Please enter City </span>                                        
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                @*<div class="col-sm">
+                                        <label>Zip Code</label>
+                                        <input type="text" name="" ng-model="BookingDetail.LeadTraveler.ZipCode">
+                                    </div>*@
+                                <div class="col-sm">
+                                    <label>Mobile Number<span class="color-danger font-bold"> *</span></label>
+                                    <input type="text" name="Mobile" ng-model="BookingDetail.LeadTraveler.GuestMobile" maxlength="15" required>
+                                    <p class="field-validation-error">
+                                        <span ng-show="BookingForm.Mobile.$invalid && !BookingForm.Mobile.$pristine">Please enter Mobile Number</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <label>Address</label>
+                                    <input type="text" name="" ng-model="BookingDetail.LeadTraveler.GuestAddress" maxlength="150">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row booking-pross">
+                <div class="booking-btn">
+                    <div class="terms-check custom-form">
+                        <input id="a8" name="cd" type="checkbox" ng-model="BookingDetail.LeadTraveler.IsTerms" required>
+                        <label for="a8"><span></span>I have read and accepted Farmstay’s <a href="javascript:;" data-toggle="modal" data-target="#TermsPopup">Terms and Conditions.</a></label>
+                    </div>
+                    <div class="booking-btn-box">
+                        <button class="btn btn-primary btn-block btn-lg" ng-disabled="BookingForm.$invalid ||  BookingDetail.LeadTraveler.GuestCountryId=='0'" ng-click="BookRoom()">Confirm</button>
+                        @*<div><button  value="Pay" ng-click="launchBOLT();" />Pay</div>*@
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="clearfix"></div>
+    <div id="TermsPopup" class="modal fade room-thumb-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ><img src="/Images/modal-close.png" alt=""></button>
+                    <h4 class="modal-title"><span>TERMS AND CONDITIONS</span></h4>
+                </div>
+                <div class="modal-body">
+                    <div ng-bind-html="ConvertHTML(BookingDetail.TermsAndConditions)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="Payment"></div>
+</div>
+

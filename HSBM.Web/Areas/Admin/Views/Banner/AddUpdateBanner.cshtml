@@ -1,0 +1,136 @@
+﻿@model HSBM.EntityModel.BannerMaster.BannerMaster
+
+@{
+    if (Model.Id > 0)
+    {
+        ViewBag.Title = "Update Banner";
+    }
+    else
+    {
+        ViewBag.Title = "Add Banner";
+    }
+
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-wrapper">
+
+    <h3>@ViewBag.Title</h3>
+
+    <script>
+
+        $(document).ready(function () {
+            if (@Model.Id <= 0)
+            {
+                $('#ImageDiv').hide();
+            }
+            $("#file").change(function () {
+                readURL(this);
+            });
+        });
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#ImageDiv').show()
+                    $('#blah').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+    </script>
+    <div class="inner-content">
+        @using (Html.BeginForm("AddUpdateBanner", "Banner", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                @*<h4>BannerMaster</h4>
+                    <hr />*@
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.ImageName)
+                @Html.HiddenFor(model => model.ImageOrignalName)
+                @Html.HiddenFor(model => model.CreatedBy)
+                @Html.HiddenFor(model => model.CreatedDate)
+                @Html.HiddenFor(model => model.UpdatedBy)
+                @Html.HiddenFor(model => model.UpdateDate)
+
+                @*<div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Alt, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Alt, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Alt)
+                        </div>
+                    </div>*@
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Title)
+                    </div>
+                </div>
+                @*<div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Description)
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.OrderIndex, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.OrderIndex, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.OrderIndex)
+                        </div>
+                    </div>*@
+            </div>
+            @* <div class="col-xs-12 col-sm-4 col-md-4">
+               <div class="form-group checkbox">
+                        @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.IsActive, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IsActive)
+                    </div>
+              
+            </div>
+*@
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="form-group">
+                <label class="control-label" for="Longitude">Image</label>
+                <div>
+                    <input type="file" name="file" id="file" />
+                    @if (ViewBag.ImageError != null)
+                    {
+                        <div class="color-red">@ViewBag.ImageError</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @*@if (Model.ImageName != null)
+            {*@
+        <div class="full-width" id="ImageDiv">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="form-group">
+
+                    <img id="blah" src="@MvcApplication.BannerImagePath@Model.ImageName" onerror="@MvcApplication.DefaultImageLocation" alt="your image" class="imgstyle" />
+                </div>
+            </div>
+        </div>
+    </div>
+            @*}*@
+
+            <div class="buttongroup">
+                <input type="submit" value="Save" class="btn green-btn" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn black-btn" })
+            </div>
+
+        }
+    </div>
+</div>

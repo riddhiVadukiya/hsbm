@@ -1,0 +1,93 @@
+.drawer
+{
+	font-family: 'Roboto', sans-serif;
+	width:100%;
+	/*border-top:1px solid #366a43;*/
+	border-radius:3px;
+}
+.accordion-item h1
+{
+	background-color:#191b24;
+	color:#fafafa;
+}
+.accordion-item.accordion-item-active h1 { background-color:transparent; }
+.accordion-item-active .accordion-header
+{
+	transition:.25s;
+	/*background:#3f764e;*/
+}
+.accordion-item-active .accordion-header-icon
+{
+	color:#fff;
+}
+.accordion-item-active .accordion-header h1
+{
+	color:#fff;
+}
+.accordion-header
+{
+	/*background:#2e643d;*/
+	padding:0 ;
+	cursor:pointer;
+	min-height:20px;
+	transition:.25s;
+}
+.accordion-header h1
+{
+	display:block;
+	margin:0;
+	line-height:45px;
+}
+.accordion-content
+{
+	/*border-left:1px solid #E0E0E0;
+	border-right:1px solid #E0E0E0;
+	border-top:1px solid #E0E0E0;*/
+	display:none;
+	padding:12px;
+	color:#212121;
+	background:#FFF;
+	font-size:15px;
+	line-height:1.45em;
+}
+.accordion-content p
+{
+	margin:0;
+	margin-bottom: 3px;
+}
+.accordion-header-icon
+{
+	float:right;color:#888;
+	font-size: 15px;
+	vertical-align: middle;
+}
+.accordion-header-icon.accordion-header-icon-active
+{
+	-webkit-transform:rotate(180deg);
+	-ms-transform:rotate(180deg);
+	transform:rotate(180deg);
+	color:#fff;
+}
+
+
+
+.accordion-header-icon.accordion-header-icon-active, .accordion-header-icon { display:none; }
+aside#sidebar ul li a:hover { text-decoration:none; }
+aside#sidebar ul li h1 { margin:0; padding:0; padding:0 12px; line-height:45px; /*border-top:1px solid #366a43; border-bottom:1px solid #497e55;*/ }
+aside#sidebar ul li h1.current { background:#31c0be; color:#fff; }
+aside#sidebar ul li h1.current:hover { background:#31c0be; color:#fff; }
+aside#sidebar ul li h1:hover { background:#191b24; color:#fafafa; }
+aside#sidebar ul li.accordion  h1 { border:none; }
+aside#sidebar ul li i, aside#sidebar ul li h1 span { vertical-align:middle; }
+aside#sidebar ul li i { margin-right:5px;}
+aside#sidebar ul li i.fa.fa-caret-right { font-size:14px; position:absolute; right:10px; top:15px; }
+aside#sidebar ul li ul li i.fa.fa-caret-right { font-size:14px; position:static; margin:-2px 10px 0 10px; }
+.accordion { min-width:100%; }
+aside#sidebar ul li h1 { font-size:13px; color:#767676; }
+aside#sidebar ul li h1 i { font-size:15px; }
+
+/*#sidebar.aside-fixed ul li ul li { background:#346b43; }*/
+#sidebar.aside-fixed ul li ul li a { font-weight:normal; color:#767676; font-size:13px; display:block; padding:8px 15px; }
+#sidebar.aside-fixed ul li ul li a:hover { background-color:transparent; text-decoration:none; color:#31c0be; }
+#sidebar.aside-fixed ul li ul li a i { margin-right:5px; }
+#sidebar.aside-fixed ul li { position:relative; }

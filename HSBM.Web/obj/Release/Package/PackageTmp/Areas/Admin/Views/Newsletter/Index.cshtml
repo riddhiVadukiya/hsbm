@@ -1,0 +1,111 @@
+﻿@model HSBM.EntityModel.Common.Newsletter
+@{
+    ViewBag.Title = "Send Newsletter";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Send Newsletter</h2>
+<script>
+
+    $(document).ready(function () {
+
+        $("#dvTemplateHtml").hide();
+
+        $("#EmailTemplateId").change(function () {
+
+            $("#Subject").val("");
+            $("#TemplateHtml").val("");
+            $("#dvTemplateHtml").hide();
+
+            $.post('/Newsletter/GetEmailTemplate', { Id: $('#EmailTemplateId').val() }, function (data) {
+                if (data != null && data != '') {
+                    tinymce.remove();
+                    $("#Subject").val(data.Subject);
+                    $("#TemplateHtml").val(data.TemplatesHtml);
+                    $("#dvTemplateHtml").show();
+                    tinymce.init({ selector: '#TemplateHtml', height: 500, plugins: "code" });
+                    
+                    
+                }
+
+            })
+        });
+    });
+</script>
+@using (Html.BeginForm("SendNewsLetter", "Newsletter", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal x_panel">
+        @*<h4>CountryMaster</h4>
+        <hr />*@
+        @Html.ValidationSummary(true)
+
+
+        <div class="form-group mt10">
+            <label class="control-label col-md-2 col-sm-2 col-xs-12">Email Template</label>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.EmailTemplateId, ViewBag.EmailTemplatesDropDownDropDown as List<SelectListItem>, new { @class = "select2_single form-control" })
+                @Html.ValidationMessageFor(model => model.EmailTemplateId)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Subject, new { @class = "control-label col-md-2 col-sm-2 col-xs-12" })
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.Subject, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Subject)
+            </div>
+        </div>
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Name
+                </th>
+            </tr>
+
+
+            @for (int i = 0; i < Model.Users.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.HiddenFor(t => Model.Users[i].Id)
+                        @Html.HiddenFor(t => Model.Users[i].Email)
+                        @Html.HiddenFor(t => Model.Users[i].FirstName)
+                        @Html.HiddenFor(t => Model.Users[i].LastName)
+                        @Html.HiddenFor(t => Model.Users[i].IsActive)
+                        @Html.HiddenFor(t => Model.Users[i].CreatedDate)
+                        @Html.HiddenFor(t => Model.Users[i].UpdateDate)
+                        @Html.EditorFor(modelItem => Model.Users[i].IsChecked)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Users[i].Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Users[i].FirstName)&nbsp;@Html.DisplayFor(modelItem => Model.Users[i].LastName)
+                    </td>
+                </tr>
+            }
+
+
+
+        </table>
+        <div id="dvTemplateHtml" class="form-group">
+            @Html.LabelFor(model => model.TemplateHtml, new { @class = "control-label col-md-2 col-sm-2 col-xs-12" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.TemplateHtml, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TemplateHtml)
+            </div>
+        </div>
+
+        <div class="ln_solid"></div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Send" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,196 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div ng-controller="CustomerController">
+
+    <section class="checkout-section-demo">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="checkout-page__top">
+                        <div class="title">
+                            <h1 class="text-uppercase">Booking History</h1>
+                        </div>
+                        @*<span class="phone">Support Call: +1-888-8765-1234</span>*@
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="checkout-page__sidebar">
+                        <ul>
+                            <li ng-class="{'current':Search.ActiveTab == 2}"><a href="javascript:;" ng-click="ChangeTab(2)">Hotel Bookings</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="product-tabs__content">
+                        <div ng-show="Search.ActiveTab == 2">
+                            <div class="checkout-page__content">
+                                <div class="yourcart-content">
+
+                                    <table id="HotelBookings" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Hotel</th>
+                                                <th>No of Rooms</th>
+                                                <th>Nights</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                    <div ng-if="!FlightBookingsList.length" class="empty-grid">No records found</div>                                    
+
+                                </div>
+                            </div>
+                            <div id="divHotelDetail" class="modal fade " role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content checkout-page__content">
+                                        <div class="yourcart-content">                                            
+                                            <div class="initiative">
+                                                <!-- ITEM -->
+                                                <div class="initiative__item">
+                                                    <div class="col-md-12">
+                                                        <h2 ng-bind="HotelDetailData.HotelBookingMaster.HotelDetails.HotelName"></h2>
+                                                        <div class="hotel-star">                                                            
+                                                            <i class="fa fa-star" ng-repeat="star in range(HotelDetailData.HotelBookingMaster.HotelDetails.Stars) track by $index"></i>
+                                                        </div>
+                                                        <div class="col-md-6 product-address pl0 greyborder">
+                                                            <span ng-bind="HotelDetailData.HotelBookingMaster.HotelDetails.AddressLine1" ng-if="HotelDetailData.HotelBookingMaster.HotelDetails.AddressLine1 != null"></span>
+                                                            <span ng-bind="HotelDetailData.HotelBookingMaster.HotelDetails.AddressLine2" ng-if="HotelDetailData.HotelBookingMaster.HotelDetails.AddressLine2 != null"></span>
+                                                            <span ng-bind="HotelDetailData.HotelBookingMaster.HotelDetails.AddressLine3" ng-if="HotelDetailData.HotelBookingMaster.HotelDetails.AddressLine3 != null"></span>
+                                                            <div><span ng-bind="HotelDetailData.HotelBookingMaster.HotelDetails.City" ng-if="HotelDetailData.HotelBookingMaster.HotelDetails.City != null"></span></div>
+                                                        </div>
+                                                        <div class="col-md-6 product-address">
+                                                            @*<div ng-if="HotelDetailData.HotelBookingMaster.HotelDetails.Phone != ''">
+                                                                <i class="fa fa-fax"></i>
+                                                                <a href="javascript:;" ng-bind="HotelDetailData.HotelBookingMaster.HotelDetails.Phone"></a>
+                                                            </div>*@       
+                                                            <div class="product-email" ng-bind="HotelDetailData.HotelBookingMaster.HotelDetails.Phone" ng-if="HotelDetailData.HotelBookingMaster.HotelDetails.Phone!=null && HotelDetailData.HotelBookingMaster.HotelDetails.Phone!=''">
+                                                                <i class="fa fa-phone"></i>
+                                                                <a href="javascript:;" ng-bind="HotelDetailData.HotelBookingMaster.HotelDetails.Phone"></a>
+                                                            </div>
+
+                                                            <div class="product-email" ng-bind="HotelDetailData.HotelBookingMaster.HotelDetails.Fax" ng-if="HotelDetailData.HotelBookingMaster.HotelDetails.Fax!=null && HotelDetailData.HotelBookingMaster.HotelDetails.Fax!=''">
+                                                                <i class="fa fa-fax"></i>
+                                                                <a href="javascript:;" ng-bind="HotelDetailData.HotelBookingMaster.HotelDetails.Fax"></a>
+                                                            </div>                                                     
+                                                        </div>
+                                                        <div class="clearfix"></div>
+
+                                                        
+                                                        <hr />
+                                                        <div class="col-md-4 mt5">
+                                                            <div><b>Room Type</b></div>
+                                                            <div><span ng-bind="HotelDetailData.HotelBookingMaster.HotelBookingDetail[0].RoomType"></span></div>
+                                                        </div>
+                                                        <div class="col-md-4 mt5">
+                                                            <b>Meal Type</b>
+                                                            <div><span ng-bind="HotelDetailData.HotelBookingMaster.HotelBookingDetail[0].MealType"></span></div>
+                                                        </div>
+                                                        @*<div class="clearfix"></div>*@
+
+                                                        @*<hr />*@
+                                                        <div class="col-md-2 mt5">
+                                                            <div><b>Check In</b></div>
+                                                            <div><span ng-bind="HotelDetailData.HotelBookingMaster.CheckIn"></span></div>
+                                                        </div>
+                                                        <div class="col-md-2 mt5 text-right">
+                                                            <b>Check Out</b>
+                                                            <div><span ng-bind="HotelDetailData.HotelBookingMaster.CheckOut"></span></div>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        <hr />
+                                                        <div class="mt5"></div>
+                                                        <div class="col-md-2 mt10" ng-repeat="room in HotelDetailData.HotelBookingMaster.HotelBookingDetail" ng-class="{'greyborder': $index < HotelDetailData.HotelBookingMaster.HotelBookingDetail.length-1, 'pl0' : $index == 0}">
+                                                            <div><b>Room {{$index + 1}}:</b></div>
+                                                            <div>{{room.Adults}} Adult</div>
+                                                            <div ng-if="room.Childs > 0">{{room.Childs}} Child</div>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>                                                                                                        
+                                                </div>                           
+                                                <div class="clearfix"></div>
+                                                <!-- END ITEM -->
+                                                <div class="col-md-3 mt10 tblheading">
+                                                    <b class="ng-binding">Occupant Details</b>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <table class="table table-bordered table-striped table-responsive row-border hover bordered mt10">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Contact No</th>
+                                                            <th>DOB</th>
+                                                            <th>Adult / Child</th>
+                                                            <th>Email</th>
+                                                            <th>Room No</th>                                                            
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="passenger in HotelDetailData.BookingPassengerDetail">
+                                                            <td>{{passenger.FirstName}} {{passenger.LastName}}</td>
+                                                            <td>{{passenger.ContactNumber}}</td>
+                                                            <td>{{passenger.DOB}}</td>
+                                                            <td>{{passenger.AdultChild == 'A' ? 'Adult' : 'Child'}}</td>
+                                                            <td>{{passenger.Email}}</td>
+                                                            <td>{{passenger.RoomNo}}</td>                                                            
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                        <button title="Close" ng-click="CloseHotelDetailPopup()" class="mfp-close">Cancel <i class="awe-icon awe-icon-close-o"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        var dateFormat = "mm/dd/yy",
+              from = $("#DepartureDate")
+                .datepicker({
+                    changeMonth: true,
+                    numberOfMonths: 2,
+                    format: 'yyyy-mm-dd'
+                })
+                .on("change", function () {
+                    to.datepicker("option", "minDate", getDate(this));
+                }),
+              to = $("#ReturnDate").datepicker({
+                  changeMonth: true,
+                  numberOfMonths: 2,
+                  format: 'yyyy-mm-dd'
+              })
+              .on("change", function () {
+                  from.datepicker("option", "maxDate", getDate(this));
+              });
+
+        function getDate(element) {
+            var date;
+            try {
+                date = $.datepicker.parseDate(dateFormat, element.value);
+            } catch (error) {
+                date = null;
+            }
+
+            return date;
+        }
+    });
+
+</script>
+

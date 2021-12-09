@@ -1,0 +1,165 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    var Selected = ViewContext.RouteData.Values["controller"].ToString();
+    var actname = ViewContext.RouteData.Values["action"].ToString();
+}
+
+@helper IsMenuSelected(string actionName, string controllerName, string className)
+{
+    var conname = ViewContext.RouteData.Values["controller"].ToString().ToLower();
+    var actname = ViewContext.RouteData.Values["action"].ToString().ToLower();
+
+    if (conname == controllerName.ToLower() && actname == actionName.ToLower())
+    {
+        @className;
+    }
+    else if (conname == controllerName.ToLower())
+    {
+        @className;
+    }
+}
+
+<aside id="sidebar" class="aside-fixed">
+    <div class="custom-scroll nav-scroll">
+        <ul>
+            <li class="raised ripple">
+                <a href="@Url.Action("Index", "Home")"><h1 class="@IsMenuSelected("Index", "Home", "current")"><i class="fa fa-tachometer"></i><span>Dashboard </span></h1></a>
+            </li>
+
+            @if (SessionProxy.CheckAssingedModule(Module.Roles) || SessionProxy.CheckAssingedModule(Module.SystemUsers))
+            {
+                <li class="accordion raised ripple">
+                    <h1 id="Roleh1Id"><i class="fa fa-user"></i><span>User Management</span><i class="fa fa-caret-right"></i></h1>
+                    <ul id="RoleId">
+                        @if (SessionProxy.CheckAssingedModule(Module.Roles))
+                        {
+                            <li><a href="@Url.Action("Index", "RoleManagement")" class="@IsMenuSelected("Index", "RoleManagement", "select-list-menu")"><i class="fa fa-caret-right"></i><span>Role</span></a></li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.SystemUsers))
+                        {
+                            <li><a href="@Url.Action("Subuser", "Account")" id="SubUserId"><i class="fa fa-caret-right"></i><span>Sub Users</span></a></li>
+                        }
+
+                    </ul>
+                </li>
+            }
+            <li class="accordion raised ripple" data-activates="MasterId">
+                <h1 id="Masterh1Id"><i class="fa fa-magic"></i><span>Master</span><i class="fa fa-caret-right"></i></h1>
+                <ul id="MasterId" class="display-block">
+
+                    @if (SessionProxy.CheckAssingedModule(Module.Location))
+                    {
+
+                        <li class="dropdown dropdown-submenu">
+                            <a tabindex="-1" href="#" class="dropdown-toggle && @IsMenuSelected("Country", "Locations", "select-list-menu") || @IsMenuSelected("Region", "Locations", "select-list-menu") || @IsMenuSelected("City", "Locations", "select-list-menu")" data-toggle="dropdown"><i class="fa fa-caret-right"></i><span>Locations</span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="@Url.Action("Country", "Locations")" class="@IsMenuSelected("Country", "Locations", "select-list-menu")"><i class="fa fa-caret-right"></i><span>Country</span></a></li>
+                                <li><a href="@Url.Action("Region", "Locations")" class="@IsMenuSelected("Region", "Locations", "select-list-menu")"><i class="fa fa-caret-right"></i><span>Region</span></a></li>
+                                <li><a href="@Url.Action("City", "Locations")" class="@IsMenuSelected("City", "Locations", "select-list-menu")"><i class="fa fa-caret-right"></i><span>City</span></a></li>
+                            </ul>
+                        </li>
+
+
+
+                    }
+                    @if (SessionProxy.CheckAssingedModule(Module.Banners))
+                    {
+                        <li><a href="@Url.Action("Index", "Banner")" class="@IsMenuSelected("Index", "Banner", "select-list-menu")"><i class="fa fa-caret-right"></i><span>Banner</span></a></li>
+                    }
+                    @if (SessionProxy.CheckAssingedModule(Module.CMSPages))
+                    {
+                        <li><a href="@Url.Action("Index", "CMSPage")" class="@IsMenuSelected("Index", "CMSPage", "select-list-menu")"><i class="fa fa-caret-right"></i><span>CMSPage</span></a></li>
+                    }
+                    @if (SessionProxy.CheckAssingedModule(Module.SiteSettings))
+                    {
+                        <li><a href="@Url.Action("Index", "SiteSettings")" class="@IsMenuSelected("Index", "SiteSettings", "select-list-menu")"><i class="fa fa-caret-right"></i><span>SiteSettings</span></a></li>
+                    }
+                    @if (SessionProxy.CheckAssingedModule(Module.SystemUsers))
+                    {
+                        <li><a href="@Url.Action("Index", "Customer")" class="@IsMenuSelected("Index", "Customer", "select-list-menu")"><i class="fa fa-caret-right"></i><span>Customer</span></a></li>
+                    }
+                    @if (SessionProxy.CheckAssingedModule(Module.LanguageMaster))
+                    {
+                        <li><a href="@Url.Action("Index", "Language")" class="@IsMenuSelected("Index", "Language", "select-list-menu")"><i class="fa fa-caret-right"></i><span>Language</span></a></li>
+                    }
+                    <li><a href="@Url.Action("Index", "Currency")" class="@IsMenuSelected("Index", "Currency", "select-list-menu")"><i class="fa fa-caret-right"></i><span>Currency</span></a></li>
+                    <li><a href="@Url.Action("Index", "Subscription")" class="@IsMenuSelected("Index", "Subscription", "select-list-menu")"><i class="fa fa-caret-right"></i><span>Subscription</span></a></li>
+                    <li><a href="@Url.Action("Index", "EmailTemplates")" class="@IsMenuSelected("Index", "EmailTemplates", "select-list-menu")"><i class="fa fa-caret-right"></i><span>Email Templates</span></a></li>
+                    <li><a href="@Url.Action("List", "NotificationMaster")" class="@IsMenuSelected("List", "NotificationMaster", "select-list-menu")"><i class="fa fa-caret-right"></i><span>Notification</span></a></li>
+                </ul>
+            </li>
+            <li class="raised ripple">
+                <a href="@Url.Action("Index", "Tour")"><h1 class="@IsMenuSelected("Index", "Tour", "current")"><i class="fa fa-location-arrow"></i><span>Tour</span></h1></a>
+            </li>
+            <li class="raised ripple">
+                <a href="@Url.Action("Index", "POI")"><h1 class="@IsMenuSelected("Index", "POI", "current")"><i class="fa fa-map-marker"></i><span>POI</span></h1></a>
+            </li>
+            <li class="raised ripple">
+                <a href="@Url.Action("Index", "Email")"><h1 class="@IsMenuSelected("Index", "Email", "current")"><i class="fa fa-envelope-o"></i><span>Email</span></h1></a>
+            </li>
+            <li class="raised ripple">
+                <a href="@Url.Action("Index", "Blogs")"><h1 class="@IsMenuSelected("Index", "Blogs", "current")"><i class="fa fa-rss"></i><span>Blogs</span></h1></a>
+            </li>
+            <li class="raised ripple">
+                <a href="@Url.Action("Index", "Newsletter")"><h1 class="@IsMenuSelected("Index", "Newsletter", "current")"><i class="fa fa-newspaper-o"></i><span>Newsletter</span></h1></a>
+            </li>
+            <li class="accordion raised ripple">
+                <h1 class="@IsMenuSelected("FAQGroupList", "FAQ", "current") @IsMenuSelected("FAQsMasterList", "FAQ", "current")"><i class="fa fa-magic"></i><span>FAQ</span><i class="fa fa-caret-right"></i></h1>
+                <ul id="FAQId">
+
+                    <li><a href="@Url.Action("FAQGroupList", "FAQ")" id="FAQGroupId"><i class="fa fa-caret-right"></i><span>FAQGroup</span></a></li>
+                    <li><a href="@Url.Action("FAQsMasterList", "FAQ")" id="FAQMasterId"><i class="fa fa-caret-right"></i><span>FAQsMaster</span></a></li>
+
+                </ul>
+            </li>
+            <li class="accordion raised ripple">
+                <h1 class="@IsMenuSelected("ImportData", "RoomsXML", "current") @IsMenuSelected("MissingData", "RoomsXML", "current")"><i class="fa fa-magic"></i><span>RoomsXML</span><i class="fa fa-caret-right"></i></h1>
+                <ul id="RoomId">
+
+                    <li><a href="@Url.Action("ImportData", "RoomsXML")" id="ImportDataId"><i class="fa fa-caret-right"></i><span>Import Data</span></a></li>
+                    <li><a href="@Url.Action("MissingData", "RoomsXML")" id="MissingDataId"><i class="fa fa-caret-right"></i><span>Missing Data</span></a></li>
+
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        $(".accordion").accordion();
+        $(document).ready(function () {
+            if ('@Selected' == 'NotificationMaster' || '@Selected' == 'EmailTemplates' || '@Selected' == 'Subscription' || '@Selected' == 'Currency' || '@Selected' == 'Language' || '@Selected' == 'Customer' || '@Selected' == 'SiteSettings' || '@Selected' == 'CMSPage' || '@Selected' == 'Banner' || '@Selected' == 'Category' || '@Selected' == 'Locations') {
+                $("#MasterId").css("display", "block");
+                $("#Masterh1Id").addClass("current");
+            }
+            if ('@Selected' == 'RoleManagement') {
+                $("#RoleId").css("display", "block");
+                $("#Roleh1Id").addClass("current");
+            }
+            if ('@Selected' == 'Account') {
+                if ('@actname' != 'ChangePassword') {
+                    $("#RoleId").css("display", "block");
+                    $("#SubUserId").addClass("select-list-menu");
+                    $("#Roleh1Id").addClass("current");
+                }
+            }
+            if ('@Selected' == 'RoomsXML') {
+                if ('@actname' == 'ImportData') {
+                    $("#ImportDataId").addClass("select-list-menu")
+                }
+                else {
+                    $("#MissingDataId").addClass("select-list-menu")
+                }
+                $("#RoomId").css("display", "block");
+            }
+            if ('@Selected' == 'FAQ') {
+                if ('@actname' == 'FAQGroupList' || '@actname' == 'UpdateFAQGroup' || '@actname' == 'AddFAQGroup') {
+                    $("#FAQGroupId").addClass("select-list-menu")
+                }
+                else {
+                    $("#FAQMasterId").addClass("select-list-menu")
+                }
+                $("#FAQId").css("display", "block");
+            }
+        });
+    </script>
+</aside>

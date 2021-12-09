@@ -1,0 +1,85 @@
+﻿@model string
+@{
+    ViewBag.Title = "HotelCheckOut";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div ng-controller="HotelBookingController" ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model))">
+    <section class="checkout-section-demo">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="checkout-page__top">
+                        <div class="title">
+                            <h1 class="text-uppercase">HOTEL CHECKOUT</h1>
+                        </div>
+                        <span class="phone">Call: +1-888-8765-1234</span>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="checkout-page__content">
+                        <div class="customer-content">
+                            <div class="woocommerce-info">
+                                Returning customer?
+                                <a href="#" class="showlogin">Click here to login</a>
+                            </div>
+
+                            <div class="woocommerce-billing-fields">
+                                <h3>Billing info</h3>
+                                <div class="form-row" id="billing_first_name_field">
+                                    <label>First name</label>
+                                    <input type="text">
+                                </div>
+                                <div class="form-row" id="billing_last_name_field">
+                                    <label>Last name</label>
+                                    <input type="text">
+                                </div>
+                                <div class="form-row" id="billing_email">
+                                    <label>Email</label>
+                                    <input type="text">
+                                </div>
+                                <div class="form-row" id="billing_company_field">
+                                    <label>Company Name</label>
+                                    <input type="text">
+                                </div>
+                                <div class="form-row" id="billing_country_field">
+                                    <label>Country</label>
+                                    <div class="country_select">
+                                        <a href="#">
+                                            <span>United Kingdom (UK)</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="form-row" id="billing_city_field">
+                                    <label>Town / city</label>
+                                    <input type="text">
+                                </div>
+                                <div class="form-row" id="billing_state_field">
+                                    <label>State / county</label>
+                                    <input type="text">
+                                </div>
+                                <div class="form-row" id="billing_address_1_field">
+                                    <label>Address</label>
+                                    <input type="text">
+                                </div>
+                                <div class="form-row" id="billing_postcode_field">
+                                    <label>Postcode / zip</label>
+                                    <input type="text">
+                                </div>
+                                <div class="form-row" id="billing_phone_field">
+                                    <label>Phone</label>
+                                    <input type="text">
+                                </div>
+                                <div class="form-row form-row-wide create-account">
+                                    <input id="createaccount" type="checkbox"> <label for="createaccount">Create an account?</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+    
+

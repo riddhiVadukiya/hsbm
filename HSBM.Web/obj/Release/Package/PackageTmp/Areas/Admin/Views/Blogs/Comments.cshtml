@@ -1,0 +1,117 @@
+﻿@model IEnumerable<HSBM.EntityModel.Blogs.BlogComment>
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Blog Comment";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-wrapper">
+    <h3>Blog Comments</h3>
+    <div ng-controller="BlogCommentController" class="inner-content">
+        <script>
+
+            function GetShortString(string, len) {
+                var shortText = string;
+                if (jQuery.trim(shortText).length > len) {
+                    shortText = jQuery.trim(shortText).substring(0, len).split("")
+                .slice(0, -1).join("") + "...";
+                }
+                return shortText;
+            }
+
+            function BindBlogCommentGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+                var Columns = [
+                            { data: 'Id', bVisible: false },
+                            //{ data: 'Title', bVisible: false },
+                            { data: 'strCreatedDate' },
+                            //{ data: 'Comment', bSortable: false },
+                            {
+                                bSortable: false,
+                                mRender: function (data, type, row, full) {
+                                    
+                                    //return $('[ng-controller="BlogCommentController"]').scope().GetShortString(row.Comment, 35);
+                                    var str = GetShortString(row.Comment, 35);
+                                    return str;
+                                }
+                            },
+                            { data: 'CommentBy' },
+                            //{
+                            //    bSortable: false,
+                            //    sClass: "action-cell",
+                            //    mRender: function (data, type, row, full) {
+                            //        if (!row.IsApproved) {
+                            //            return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>UNAPPROVED</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>APPROVED</button></div>";
+                            //        }
+                            //        else {
+                            //            return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>UNAPPROVED</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>APPROVED</button></div>";
+                            //        }
+                            //    }
+                            //},
+                            {
+                                @if (SessionProxy.CheckModuleAccess(Module.BlogsComment, ModuleAccess.CanUpdate) ||
+                             SessionProxy.CheckModuleAccess(Module.BlogsComment, ModuleAccess.CanDelete) ||
+                             SessionProxy.CheckModuleAccess(Module.BlogsComment, ModuleAccess.CanView))
+                        {
+                        @: bVisible: true,
+                                                                                                                        }
+                        else
+                        {
+                        @: bVisible: false,
+                                                                                                                        }
+                                bSortable: false,
+                                sClass: "action-cell",
+                                mRender: function (data, type, row, full) {
+
+
+                                    var btn = '';
+                                    @if (SessionProxy.CheckModuleAccess(Module.BlogsComment, ModuleAccess.CanView))
+                                    {
+                                    @: btn += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/Blogs/GetBlogCommentsById/" + row.Id + "')\" href='javascript:void(0);' title='View' class='glyphicon glyphicon-eye-open'></a>"
+                                                                                                                                                }
+                                    @if (SessionProxy.CheckModuleAccess(Module.BlogsComment, ModuleAccess.CanUpdate))
+                                    {
+                                    @: if (!row.IsApproved) { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',true)\" href='javascript:void(0);' title='Approve' class='glyphicon glyphicon-ok grayColor'></a> " } else { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',false)\" href='javascript:void(0);' title='Unapprove' class='glyphicon glyphicon-ok'></a> " }
+                                                                                                                                                }
+                                    @if (SessionProxy.CheckModuleAccess(Module.BlogsComment, ModuleAccess.CanDelete))
+                                    {
+                                    @: btn += "<a onclick=\"angular.element(this).scope().Delete('/Admin/Blogs/DeleteBlogComment?CommentId=" + row.Id + "&BlogId=" + row.BlogId + "')\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a> "
+                                                                                                                                                }
+                                    return btn;
+                                }
+                            }
+                ];
+                
+                BindSearchGridData('BlogComment', Columns, '/Admin/Blogs/GetAllBlogCommentBySearchRequest', $('[ng-controller="BlogCommentController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () {
+                    
+                    if (angular.copy($("#BlogComment").dataTable()._fnGetDataMaster()).length > 0) {
+                        $("#BlogTitle").html(angular.copy($("#BlogComment").dataTable()._fnGetDataMaster()[parseInt(0)]).Title)
+                    }
+                });
+
+            }
+        </script>
+        <div class="col-xs-12 col-sm-12 col-md-12 pd-blog">
+            <div class="buttongroup">
+                @Html.ActionLink("Back to Blog List", "Index", null, new { @class = "btn black-btn" })
+            </div>
+        </div>
+        <h4 id="BlogTitle"></h4>
+        <table id="BlogComment" class="table table-bordered table-striped table-responsive row-border hover bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    @*<th>Blog Title</th>*@
+                    <th>Comment Date</th>
+                    <th class="width50">Comment</th>
+                    <th>Comment By</th>
+                    @*<th>Is Approved</th>*@
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="BlogComment_NoRecordFound" class="empty-grid">No records found</div>
+    </div>
+
+</div>

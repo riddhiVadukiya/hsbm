@@ -1,0 +1,202 @@
+﻿@using HSBM.EntityModel.Blogs;
+@{
+    ViewBag.Title = "index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    List<FrontBlogResponse> _FrontBlogResponse = (List<FrontBlogResponse>)(ViewBag.FrontBlogResponse);
+    List<BlogCategory> _CategoryList = (List<BlogCategory>)(ViewBag.CategoryList);
+    List<FrontBlogResponse> _PopularBlogList = (List<FrontBlogResponse>)(ViewBag.PopularBlogList);
+    List<FrontBlogArchivesResponse> _BlogArchivesList = (List<FrontBlogArchivesResponse>)(ViewBag.BlogArchivesList);
+}
+<div class="blogs-main blog-listing" ng-controller="BlogsController">
+    <input type="hidden" id="hdnModelBlog" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_FrontBlogResponse)" />
+    <input type="hidden" id="hdnModelCategoryList" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_CategoryList)" />
+    <input type="hidden" id="hdnModelPopularBlogList" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_PopularBlogList)" />
+    <input type="hidden" id="hdnModelBlogArchivesList" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_BlogArchivesList)" />
+    
+        <div class="row">
+            <div class="title-block">
+                <h3>Blogs</h3>
+            </div>
+        </div>
+    <div class="row">
+        <div class="rgt-blogs col-sm" id="divBlogList">
+
+            <div class="row">
+                <div class="col-md-4" ng-repeat="blog in FrontBlogResponse">
+                    <div class="blog-block">
+                        <figure>
+                            <a target="_blank" href="/Blogs/Detail?Id={{blog.Id}}">
+                                <img ng-src="@MvcApplication.BlogImagePath{{blog.Image}}" alt="" onerror="this.src='/images/no_image.jpg'">
+                            </a>
+                        </figure>
+                        <figcaption>
+                            @*<h5>{{blog.CreatedDate | date : 'MMMM dd, yyyy'}}</h5>*@
+                            <h5 ng-bind="blog.strCreatedDate"></h5>
+                            <a target="_blank" href="/Blogs/Detail?Id={{blog.Id}}">
+                                <h3>{{blog.Title}}</h3>
+                            </a>
+                            <p ng-bind-html="blog.Description"></p>
+                            <a target="_blank" href="/Blogs/Detail?Id={{blog.Id}}" class="read-more-lnk">Read More</a>
+                        </figcaption>
+                    </div>
+                </div>
+                <div class="col-md-12 ">
+                    <div ng-if="FrontBlogResponse==null ||FrontBlogResponse.length<=0" class="noData">
+                        <p>
+                            No records found
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            </div>
+            @*<div class="loadmore-btn">
+                    <a href="#" class="btn btn-default">Load more</a>
+                </div>*@
+            <!-- PAGINATION -->            
+            <div class="page__pagination blog-pagination" ng-if="blocks.length > 0">
+                <span class="pagination-prev" ng-click="Previous()" id="btnPrevious"><i class="fa fa-caret-left"></i></span>
+                <a ng-repeat="block in blocks" ng-class="block.IsSelected ? 'current' : ''" ng-click="FrontBlogRequest.PageIndex = $index + 1; GoToSpecificPage()">{{block.PageIndex}}</a>
+
+                <a class="pagination-next" ng-click="Next()" id="btnNext"><i class="fa fa-caret-right"></i></a>
+            </div>
+            <!-- END / PAGINATION -->
+        </div>
+
+        @*<div class="rgt-blogs col-sm blogs-main blog-listing" id="divBlogDetail">
+                <div class="row">
+                    <div class="title-block blogdetail-title">
+                        <h3>{{blog.Title}}</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="rgt-blogs col-sm">
+                        <div class="blog-detail">
+                            <div class="blog-img">
+                                <img src="{{'/Uploaded/' + blog.Image}}" alt="" onerror="this.src='/images/no_image.jpg'" class="blogdtlimg heightAuto">
+                            </div>
+                            <div class="blogetail-text">
+                                <div class="date">{{blog.CreatedDate | date : 'MMM dd, yyyy'}}</div>
+                                <p ng-bind-html="blog.Description"></p>
+                            </div>
+                            <div class="comment-list">
+                                <div class="comment-title">
+                                    <h4>Comments List</h4>
+                                    <div class="total-comments"> {{blog.CommentCount}} Comments </div>
+                                </div>
+                                <div class="single-comment" ng-repeat="comment in BlogComments">
+                                    <div class="user-img">
+                                        <img src="images/user-placeholder.png" alt="User Image">
+                                    </div>
+                                    <div class="comment-text">
+                                        <p>{{comment.Comment}}</p>
+                                        <div class="reply-btn">
+                                            <img src="images/reply-ic.png" alt="">
+                                        </div>
+                                        <div class="user-name">
+                                            <h5>{{comment.CommentBy}}</h5>
+                                            <div class="date">{{comment.CreatedDate}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comment-box">
+                                <div class="comment-title">
+                                    <h4>Leave Your Comment</h4>
+                                </div>
+                                <form action="">
+                                    <div class="form-group">
+                                        <label for="">Message</label>
+                                        <textarea id="txtComment" ng-model="UserComment" placeholder="Comment" class="col-md-12"></textarea>
+                                        <div class="clearfix"></div>
+                                        <div class="mt-20 resultmsg display-none" id="divResultmsg">
+                                            {{res_msg}} <span class="close_btn" onclick="document.getElementById('divResultmsg').style.display='none';">X</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" ng-click="SaveComment()">Comment</button>
+                                    <button class="btn btn-primary" ng-click="HideDetail()">Back To List</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="left-cnt col-sm">
+            <div class="right-sidebar">
+                <div class="search-bar">
+                    <h3>Search</h3>
+                    <div class="form-group">
+                        @*<input type="text" ng-model="FrontBlogRequest.keyword" placeholder="Search and hit enter" ng-keypress="searchkeypress($event)" id="txtSearchbyKeyword">*@
+                        <input type="text" placeholder="Blogs to search" value="@ViewBag.SearchKeyword" id="txtSearchbyKeyword">
+                        @*<span ng-click="SearchbyKeyword(true);"><i class="awe-icon awe-icon-search blogsearchic"></i></span>*@
+                        <a href="#">
+                        <img src="../images/search-ic.png" onclick="searchkeypress(event)" alt="">
+                        </a>
+                        @*<div class="mt-10 mb-10">
+                                <button type="button" class="simplebtn" ng-click="ResetSearch()">Reset</button>
+                            </div>*@
+                    </div>
+                </div>
+                <div class="archives-listing">
+                    <h3>Archives</h3>
+                    <ul>
+                        @foreach (var item in _BlogArchivesList)
+                        {
+                        <li><a href="/Blogs/Index?ArchivesData=@item.ArchivesData">@item.ArchivesData</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="archives-listing popular-post">
+                    <h3>Popular Posts</h3>
+                    <ul>
+                        @*<li ng-repeat="popularpost in PopularBlogList">
+                                <div class="content">
+                                    <a href="javascript:;" ng-click="ShowDetail(popularpost)">{{popularpost.Title}}</a>
+                                </div>
+                            </li>*@
+                        @foreach (var item in _PopularBlogList)
+                        {
+                        <li>
+                            <a target="_blank" href="/Blogs/Detail?Id=@item.Id">@item.Title</a>
+                        </li>
+                        @*<li><a href="javascript:;" ng-click="SearchbyArchives('@item.ArchivesData')">@item.ArchivesData</a></li>*@
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    function searchkeypress(keyEvent) {
+        var name2 = getUrlVars()["Search"];
+        //if (keyEvent.keyCode === 13) {
+        if ($("#txtSearchbyKeyword").val() != '' || name2 !='')
+           {
+             SearchbyKeyword();
+           }
+        //}
+    }
+    function SearchbyKeyword() {
+        
+        window.location.href = "/Blogs/Index?Search=" + $("#txtSearchbyKeyword").val();
+    }
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+    $(document).ready(function() {
+
+        $('#Blogs').addClass('active');
+    })
+</script>

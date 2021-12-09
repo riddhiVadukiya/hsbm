@@ -1,0 +1,93 @@
+﻿@model IEnumerable<HSBM.EntityModel.AmenityMaster.AmenityMaster>
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Amenities (Master)";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-wrapper">
+    <h3>Amenities</h3>
+    <div ng-controller="AmenityMasterController" class="inner-content filter-button-set">
+        <script>
+            function BindAmenityMasterGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+
+                var Columns = [
+                            { data: 'Id', bVisible: false },
+                            { data: 'AmenityName' },
+                            {
+                                @if (SessionProxy.CheckModuleAccess(Module.Amenity, ModuleAccess.CanUpdate) || SessionProxy.CheckModuleAccess(Module.Amenity, ModuleAccess.CanDelete))
+                        {
+                        @: bVisible: true,
+                                                                                        }
+                        else
+                        {
+                        @: bVisible: false,
+                                                                                        }
+                                bSortable: false,
+                                sClass: "action-cell",
+                                mRender: function (data, type, row, full) {
+
+                                    var btn = "";
+                                    @if (SessionProxy.CheckModuleAccess(Module.Amenity, ModuleAccess.CanUpdate))
+                            {
+                                @:btn += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/AmenityMaster/UpdateAmenityMaster/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-pencil'> </a> &nbsp;";
+                                                                                                    }
+                                    @if (SessionProxy.CheckModuleAccess(Module.Amenity, ModuleAccess.CanDelete))
+                            {
+                                @:if (!row.IsActive) { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',true)\" href='javascript:void(0);' title='Restore' class='glyphicon glyphicon-refresh'></a>"; } else { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',false)\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>"; }
+                                                                                                    }
+                                    return btn;
+                                }
+                            }
+                ];
+                BindSearchGridData('AmenityMaster', Columns, '/Admin/AmenityMaster/GetAllAmenityMastersBySearchRequest', $('[ng-controller="AmenityMasterController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+            }
+        </script>
+
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Amenity</label>
+                    <input type="text" ng-model="Search.AmenityName" class="form-control" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="Search.IncludeIsDeleted" name="cc" ng-model="Search.IncludeIsDeleted" />
+                    <label for="Search.IncludeIsDeleted"><span></span>Include Deleted</label>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="buttongroup">
+                    <input type="button" ng-click="SearchData()" value="Search" class="btn green-btn" />
+                    <input type="button" ng-click="ResetData()" value="Reset" class="btn black-btn" />
+                </div>
+            </div>
+        </div>
+
+        <div class="ln_solid"></div>
+
+        @if (SessionProxy.CheckModuleAccess(Module.Amenity, ModuleAccess.CanAdd))
+        {
+            <div class="buttongroup pos-rel">
+                @Html.ActionLink("Add Amenity", "AddAmenityMaster", null, new { @class = "btn green-btn" })
+            </div>
+        }
+        <div class="grid-btn-set">
+            <table id="AmenityMaster" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Amenity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="AmenityMaster_NoRecordFound" class="empty-grid">No records found</div>
+        </div>
+
+    </div>
+</div>

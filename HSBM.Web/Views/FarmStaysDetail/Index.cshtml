@@ -1,0 +1,570 @@
+﻿@*@using HSBM.EntityModel.Front.FarmStaysDetail;*@
+@model HSBM.EntityModel.Front.FarmStaysDetail
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+
+}
+<link href="~/Content/NewTheme/css/flexslider.css" rel="stylesheet" />
+
+@*<script src='https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBLxdK0Jtez3dx2Myo-78HcEsX0BuOeoms&libraries=places'></script>*@
+<script src="~/Scripts/NewTheme/jquery.flexslider.js"></script>
+@*<script src="~/Areas/Admin/Content/JS/bootstrap.min.js"></script>
+    <link href="~/Areas/Admin/Content/CSS/bootstrap.min.css" rel="stylesheet" />*@
+@*<link href="~/Content/NewTheme/css/style.css" rel="stylesheet" />*@
+<script src="~/Scripts/NewTheme/star-rating.js"></script>
+<link href="~/Content/NewTheme/css/star-rating.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+
+    $(document).ready(function() {
+
+        $('#Farmstays').addClass('active');
+
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+
+        $('#CheckIn').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            container: container,
+            minDate: new Date(),
+            onSelect: function (date) {
+                var dt2 = $('#CheckOut');
+                var CheckIn = $(this).datepicker('getDate');
+                var minDate = $(this).datepicker('getDate');
+                minDate.setDate(minDate.getDate() + 1);
+
+                dt2.datepicker('setDate', minDate);
+                CheckIn.setDate(CheckIn.getDate() + 30);
+                dt2.datepicker('option', 'minDate', minDate);
+            }
+        });
+
+        $('#CheckOut').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            minDate: $('#CheckOut').val(),
+            container: container
+        });
+
+        var latlng = new google.maps.LatLng(@Html.Raw(Model.Latitude), @Html.Raw(Model.Longitude));
+
+        var map = new google.maps.Map(document.getElementById('googleMap'), {
+            center: latlng,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        var marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            title: /"@Html.Raw(Model.Name)"/,
+            draggable: false
+        });
+
+        $('#Guests').change(function(){
+            if ($('#Guests').val() == 1) {
+                $('#IsSolo').val("True");
+                $('#IsSolo').attr("disabled", false);
+            }
+            else {
+                $('#IsSolo').val("False");
+                $('#IsSolo').attr("disabled", true);
+            }
+        })
+        
+        
+        //var $star_rating = $('.star-rating .fa');
+        //var count = $('.star-rating').size();
+
+        //var SetRatingStar = function () {
+            
+        //    return $star_rating.each(function () {
+                
+        //        $('.star-rating .fa').siblings('input.rating-value').val($("#item_Ratings").val());
+        //        if (parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))) {
+        //            return $(this).removeClass('fa-star-o').addClass('fa-star');
+        //        } else {
+        //            return $(this).removeClass('fa-star').addClass('fa-star-o');
+        //        }
+        //    });
+        //};
+        $('#rating-input').rating({
+            value: 0,
+            min: 0,
+            max: 5,
+            step: 1,
+            size: 'sm',
+            showClear: false,
+        });
+
+
+        //var SetRatingStar = function () {
+        //    debugger;
+        //    return $star_rating.each(function () {
+        //        debugger;
+        //        $('.star-rating .fa').siblings('input.rating-value').val($("#item_Ratings").val());
+        //        if (parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))) {
+        //            return $(this).removeClass('fa-star-o').addClass('fa-star');
+        //        } else {
+        //            return $(this).removeClass('fa-star').addClass('fa-star-o');
+        //        }
+        //    });
+        //};
+        //$star_rating.on('click', function () {
+        //    $star_rating.siblings('input.rating-value').val($(this).data('rating'));
+        //    return SetRatingStar();
+        //});
+        //var itemLimit = 2;
+        //$(".star-rating .fa").find(".rating-value:lt("+itemLimit+")")
+        //{
+        //    debugger;
+            //SetRatingStar();    
+        //}
+    })
+
+
+
+    $(window).load(function() {
+
+        if($('#IsSolo').val()=="False")
+            $('#IsSolo').attr("disabled", true);
+
+        // The slider being synced must be initialized first
+        $('#carousel').flexslider({
+            animation: "slide",
+            controlNav: false,
+            animationLoop: false,
+            slideshow: false,
+            itemWidth: 95,
+            itemMargin:20,
+            asNavFor: '#slider'
+        });
+
+        $('#slider').flexslider({
+            animation: "slide",
+            controlNav: false,
+            animationLoop: false,
+            slideshow: false,
+            sync: "#carousel"
+        });
+    });
+
+    @*  var FarmStayId = '', CheckIn = '', CheckOut = '', Guests = '', IsSolo = ''
+    @if (ViewBag.FarmStayId!=null)
+    {
+        @:FarmStayId = @ViewBag.FarmStayId;
+                  }
+   @if (ViewBag.CheckIn != null)
+    {
+        @:CheckIn = '@ViewBag.CheckIn';
+                 }
+    @if (ViewBag.CheckOut != null)
+    {
+        @:CheckOut = '@ViewBag.CheckOut';
+              }
+    @if (ViewBag.Guests != null)
+    {
+        @:Guests = @ViewBag.Guests;
+             }
+    @if (ViewBag.IsSolo)
+    {
+        @:IsSolo = @ViewBag.IsSolo;
+        }*@
+
+</script>
+<div ng-controller="FarmStaysDetailController">
+
+    
+    
+
+    <div class="blogs-main blog-listing">
+        <div class="row farmstay-title">
+            <div class="title-block">
+                <div class="farmstay-title-left">
+                    @Html.HiddenFor(model => model.FarmStayId)                    
+                    <h3>@Model.Name</h3>
+                    <p>@Model.Address</p>
+                </div>
+                <div id="share-buttons" class="share-buttons-top">
+                    @*http://www.sharelinkgenerator.com/*@
+                    <!-- Facebook -->
+                    <a href="http://www.facebook.com/sharer.php?u=@HttpUtility.UrlEncode(Request.Url.AbsoluteUri)" target="_blank">
+                        <img src="~/Content/NewTheme/Images/Socialicon/facebook.png" alt="Facebook" />
+                    </a>
+                    <!-- Google+ -->
+                    <a href="https://plus.google.com/share?url=@HttpUtility.UrlEncode(Request.Url.AbsoluteUri)" target="_blank">
+                        <img src="~/Content/NewTheme/Images/Socialicon/google.png" alt="Google" />
+                    </a>
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url=@HttpUtility.UrlEncode(Request.Url.AbsoluteUri)&title=Himalayan%20Farmstay&summary=&source=" target="_blank">
+                        <img src="~/Content/NewTheme/Images/Socialicon/linkedin.png" alt="LinkedIn" />
+                    </a>
+                    <!-- Twitter -->
+                    <a href="https://twitter.com/home?status=@HttpUtility.UrlEncode(Request.Url.AbsoluteUri)" target="_blank">
+                        <img src="~/Content/NewTheme/Images/Socialicon/twitter.png" alt="Twitter" />
+                    </a>
+                    <!-- Email -->
+                    <a href="mailto:?&subject=Himalayan Farmstay&body=@HttpUtility.UrlEncode("Hi,I%20found%20this%20website%20and%20thought%20you%20might%20like%20it%20"+ Request.Url.AbsoluteUri)">
+                        <img src="~/Content/NewTheme/Images/Socialicon/email.png" alt="Twitter" />
+                    </a>
+                </div>
+                <div class="farmstay-title-right">
+                    <div ng-if="DiscountPrice==0 && Price>0" class="boxprice"><span ng-bind="Currencysymbols+ (Price| currency:'')"></span></div>
+                    <div ng-if="DiscountPrice!=0 && Price>0" class="boxprice"><s ng-bind="Currencysymbols+ (Price| currency:'')"></s> <span ng-bind="Currencysymbols+ (DiscountPrice| currency:'')"></span></div>
+                    <a href="#Rooms" class="btn btn-primary btn-block btn-lg">Select Rooms</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="rgt-blogs col-sm">
+                <div class="overview-slider">
+                    <div class="overview-slider-teb">
+                        <ul>
+                            <li class="active-teb"><a href="#Overview">Overview</a></li>
+                            <li><a href="#Rooms">Rooms</a></li>
+                            <li><a href="#Map">Map</a></li>
+                            <li><a href="#Amenities">Amenities</a></li>
+                        @if (Model.RatingAndReview != null && Model.RatingAndReview.Count() > 0)
+                                {
+                            <li><a href="#ReviewRating">Review and Rating</a></li>
+                             }
+                        </ul>
+                    </div>
+                    <div class="overview-slider-box">
+                        <!-- Place somewhere in the <body> of your page -->
+                        <div id="slider" class="flexslider">
+                            <ul class="slides">
+                                @for (int i = 0; i < Model.FarmStaysImages.Count(); i++)
+                                {
+                                    <li>
+                                        <img src="@MvcApplication.FarmStayImagePath@Model.FarmStaysImages[i].ImageURL" />
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                        <div id="carousel" class="flexslider">
+                            <ul class="slides">
+                                @for (int i = 0; i < Model.FarmStaysImages.Count(); i++)
+                                {
+                                    <li>
+                                        <img src="@MvcApplication.FarmStayImagePath@Model.FarmStaysImages[i].ImageURL" />
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="left-cnt col-sm over-right">
+                <div class="form-group">
+                    <label class="control-label" for="CheckIn">Arrival Date</label>
+                    <div class="input-group-addon">
+                        <i class="calendar-ic"></i>
+                    </div>
+                    @Html.TextBoxFor(model => model.CheckIn, new { @class = "form-control enable", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.CheckIn)
+                    @*<label class="control-label" for="CheckIn">Arrival Date</label>
+                        <div class="input-group-addon">
+                            <i class="calendar-ic"></i>
+                        </div>
+                        <input class="form-control" id="CheckIn" ng-modal="Search.CheckIn" name="date" placeholder="Select Date" type="text">*@
+                </div>
+                <div class="form-group">
+
+                    <label class="control-label" for="CheckOut">Departure Date</label>
+                    <div class="input-group-addon">
+                        <i class="calendar-ic"></i>
+                    </div>
+                    @Html.TextBoxFor(model => model.CheckOut, new { @class = "form-control enable", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.CheckOut)
+                    @*<label class="control-label" for="CheckOut">Departure Date</label>
+                        <div class="input-group-addon">
+                            <i class="calendar-ic"></i>
+                        </div>
+                        <input class="form-control" id="CheckOut" ng-modal="Search.CheckOut" name="date" placeholder="Select Date" type="text">*@
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="NoofPeople">No. of Adults</label>
+                    <div class="selectWrapper">
+                        @Html.DropDownListFor(n => n.Guests, new List<SelectListItem>()
+                    { new SelectListItem() { Text = "1", Value = "1" },
+                      new SelectListItem() { Text = "2", Value = "2"},
+                      new SelectListItem() { Text = "3", Value = "3"},
+                      new SelectListItem() { Text = "4", Value = "4"},
+                      new SelectListItem() { Text = "5", Value = "5"},
+                      //new SelectListItem() { Text = "6", Value = "6"},
+                      //new SelectListItem() { Text = "7", Value = "7"},
+                      //new SelectListItem() { Text = "8", Value = "8"},
+                      //new SelectListItem() { Text = "9", Value = "9"},
+                      //new SelectListItem() { Text = "10", Value ="10"},
+                      //new SelectListItem() { Text = "11", Value ="11"},
+                    })
+                        @Html.ValidationMessageFor(model => model.Guests)
+                        @*<select id="NoofPeople" ng-modal="Search.Guests">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>*@
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="NoofChild">Child</label>
+                    <div class="selectWrapper">
+                        @Html.DropDownListFor(n => n.Child, new List<SelectListItem>()
+                    { new SelectListItem() { Text = "0", Value = "0"},
+                      new SelectListItem() { Text = "1", Value = "1" },
+                      new SelectListItem() { Text = "2", Value = "2"},
+                      new SelectListItem() { Text = "3", Value = "3"},
+                    })
+                        @Html.ValidationMessageFor(model => model.Child)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="IsSolo">Select Option</label>
+                    <div class="selectWrapper">
+                        @Html.DropDownListFor(n => n.IsSolo, new List<SelectListItem>() { new SelectListItem() { Text = "Exclusive", Value = false.ToString() }, new SelectListItem() { Text = "Solo", Value = true.ToString() } })
+                    </div>
+                    @*<label class="control-label" for="SelectOption">Select Option</label>
+                        <div class="selectWrapper">
+                            <select id="SelectOption" ng-modal="Search.IsSolo">
+                                <option value="0">Exclusive</option>
+                                <option value="1">Solo</option>
+                            </select>
+                        </div>*@
+                </div>
+
+                <div class="srchBtn">
+                    <input class="btn" value="Search Now" type="submit" ng-click="SearchFarmstays()">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="about-detail" id="Overview">
+                <h6>About @Model.Name</h6>
+                <p> @Html.Raw(Model.Description)</p>
+                <ul>
+                    <li><label>Check in Date :</label><span ng-bind="Search.CheckIn"></span> </li>
+                    <li><label>Check in Time :</label> @Model.CheckInTime</li>
+                    <li><label>Check out Date :</label> <span ng-bind="Search.CheckOut"></span></li>
+                    <li><label>Check out Time : </label> @Model.CheckOutTime</li>
+                    <li><label>No. of Rooms :</label> @Model.Bedrooms</li>
+                    <li><label>No. of Bathrooms :</label> @Model.Bathrooms</li>
+                    @if (!string.IsNullOrEmpty(Model.Location))
+                    { 
+                    <li><label>Location :</label> @Model.Location</li>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.LanguagesSpoken))
+                    {
+                   <li class="width50pr"><label>Languages Spoken:</label> @Model.LanguagesSpoken</li>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.TypeofFood))
+                    {
+                      <li class="width50pr"><label>Type of Food :</label> @Model.TypeofFood</li>
+                    }
+                    @*@if (!string.IsNullOrEmpty(Model.USPTags))
+                    {
+                        <li class="tags-right "> <span>@Model.USPTags</span></li>
+                    }  
+                    @if (!string.IsNullOrEmpty(Model.Persuasions))
+                    {
+                        <li class="tags-right "><span>@Model.Persuasions</span></li>
+                    }*@
+                </ul>
+
+            </div>
+        </div>
+        <div class="row select-room-main" id="Rooms">
+            <div class="select-room">
+                <div class="select-room-hed">
+                    <h6>Select Room</h6>
+                    <span ng-if="FarmStayDiscount!='' && FarmStayDiscount!=null">Deal</span>
+                    @*<p><span> Early Bird Discount Applied {{}}% </span><span>,</span><span ng-bind=""> Holi Discount  ₹ 1500 off</span></p>*@
+                    <p ng-bind="FarmStayDiscount"></p>
+                    <div class="tags-right ">
+                        <span>@Model.USPTags</span>
+                        <span>@Model.Persuasions</span>
+                    </div>
+
+                </div>
+                
+                <div class="booking-section" ng-repeat="(key, value) in ListofRoom | groupBy: 'Name'">
+                    <h6>
+                        {{key}} <span class="small-txt" ng-show="Search.IsSolo=='False'">({{value[0].TypeName}}) (Max Person : {{value[0].MaxPerson}})</span>
+                        <span class="sub-tital-right">For <span ng-bind="value[0].Days"></span> night(s)</span>
+                    </h6>
+                    <div class="row" ng-repeat="roomrate in value">
+                        <div class="col-md-12">
+                            <div class="line-data">
+                                <h5>{{roomrate.RatePlanName}}</h5>
+                                <div class="book-btn">
+                                    <a href="FarmStaysBooking?Request={{roomrate.BookingURL}}" class="btn btn-primary btn-block btn-sm book-btn-detail-small">Book Now</a>
+                                </div>
+                                <div ng-if="roomrate.DiscountPrice==0" class="price"> <span ng-bind="Currencysymbols +(roomrate.Price| currency:'')"></span> <span ng-show="Search.IsSolo=='False'">(</span> <span ng-bind="'Includes ' + value[0].NoOfAdults + ' Adults'" ng-if="value[0].NoOfAdults>0 && Search.IsSolo=='False'"></span><span ng-bind="' + ' +  value[0].NoOfChild + ' Child'" ng-if="value[0].NoOfChild>0 && Search.IsSolo=='False'"></span><span ng-show="Search.IsSolo=='False'"> )</span></div>
+                                <div ng-if="roomrate.DiscountPrice!=0" class="price"><s ng-bind="Currencysymbols +(roomrate.Price| currency:'')"></s>  <span ng-bind="Currencysymbols+(roomrate.DiscountPrice| currency:'')"></span> <span ng-show="Search.IsSolo=='False'">(</span> <span ng-bind="'Includes ' + value[0].NoOfAdults + ' Adults'" ng-if="value[0].NoOfAdults>0 && Search.IsSolo=='False'"></span><span ng-bind="' + ' + value[0].NoOfChild + ' Child'" ng-if="value[0].NoOfChild>0 && Search.IsSolo=='False'"></span><span ng-show="Search.IsSolo=='False'"> )</span></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @*<div ng-repeat="RoomDetail in ListofRoom" class="roome-tipe-box">
+                    <div class="roome-tipe-name">
+                        <h6>{{RoomDetail.Name}} <span ng-bind="'('+RoomDetail.TypeName+')'"></span></h6>
+
+                    </div>
+                    <div class="book-room">
+                        <a href="javascript:;" ng-bind="RoomDetail.AvailableFor"></a>
+                        <div ng-if="RoomDetail.DiscountPrice==0" class="boxprice"> <span ng-bind="Currencysymbols+(RoomDetail.Price| currency:'')"></span><p>For <span ng-bind="RoomDetail.Days"></span> nights</p></div>
+                        <div ng-if="RoomDetail.DiscountPrice!=0" class="boxprice"><s ng-bind="Currencysymbols+(RoomDetail.Price| currency:'')"></s>  <span ng-bind="Currencysymbols+(RoomDetail.DiscountPrice| currency:'')"></span> <p>For <span ng-bind="RoomDetail.Days"></span> nights</p></div>
+                        <a href="FarmStaysBooking?Request={{RoomDetail.BookingURL}}" class="btn btn-primary btn-block btn-lg">Book Now</a>
+                        @*<button class="btn btn-primary btn-block btn-lg">Book now</button>
+                        <a target="_blank" href="FarmStaysBooking?FarmStayId=@Model.FarmStayId&RoomId={{RoomDetail.RoomId}}&CheckIn={{Search.CheckIn}}&CheckOut={{Search.CheckOut}}&Guests={{Search.Guests}}&IsSolo={{RoomDetail.IsShared}}" class="btn btn-primary btn-block btn-lg">Book Now</a>
+                    </div>
+                </div>*@
+                <div ng-if="ListofRoom==null ||ListofRoom.length<=0" class="noData">
+                    <p>
+                        No rooms are available for this date! Try again with another dates.
+                    </p>
+                </div>
+                @*<div class="roome-tipe-box">
+            <div class="roome-tipe-name">
+                <h6>Double Executive  <span>(Double)</span></h6>
+            </div>
+            <div class="book-room">
+                <a href="#">Available for 2 Male</a>
+                <div class="boxprice"><s>₹ 7000.00 </s> ₹ 6350.00 <p>For 3 nights</p></div>
+                <button class="btn btn-primary btn-block btn-lg">Book now</button>
+            </div>
+        </div>
+        <div class="roome-tipe-box">
+            <div class="roome-tipe-name">
+                <h6>Room Deluxe  <span>(Triple)</span></h6>
+            </div>
+            <div class="book-room">
+                <a href="#">Available for 2 Male</a>
+                <div class="boxprice"><s>₹ 7000.00 </s> ₹ 6350.00 <p>For 3 nights</p></div>
+                <button class="btn btn-primary btn-block btn-lg">Book now</button>
+            </div>
+        </div>*@
+            </div>
+        </div>
+        <div class="row" id="Map">
+            <div class="details-map">
+                <div class="map-sub-box">
+                    <div id="googleMap"></div>
+                </div>
+            </div>
+        </div>
+        @if (Model.FarmStaysAmenities != null && Model.FarmStaysAmenities.Count() > 0)
+        {
+            Model.FarmStaysAmenities = Model.FarmStaysAmenities.OrderBy(x=>x).ToList();
+            <div class="row select-room-main" id="Amenities">
+                <div class="amenities">
+                    <h6>Amenities</h6>
+                    <ul>
+                        @for (int i = 0; i < Model.FarmStaysAmenities.Count(); i++)
+                        {
+                            <li>
+                                @Model.FarmStaysAmenities[i]
+                            </li>
+                        }
+                        @*<li>Double Bed</li>
+                            <li>Swimming Pool</li>
+                            <li>Free Wifi</li>
+                            <li>Year of construction</li>
+                            <li>AC</li>
+                            <li>Breakfast Include</li>
+                            <li>Private Balcony</li>
+                            <li> Double rooms</li>
+                            <li>80 SQ MT</li>
+                            <li>Private Balcony</li>
+                            <li>Beach View</li>
+                            <li>Connecting rooms</li>*@
+                    </ul>
+                </div>
+            </div>
+        }
+        @if (Model.HouseRules != "" || Model.StayPolicy != "")
+        {
+            <div class="row">
+                <div class="rules-policy">
+                    <div class="rules-policy-box">
+                        <ul class="nav nav-tabs" role="tablist">
+                            @if (Model.HouseRules != "" && Model.HouseRules != null)
+                            {
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#home">House Rules</a>
+                            </li>
+                            }
+                            @if (Model.StayPolicy != "" && Model.StayPolicy != null)
+                            {
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#menu1">Stay Policy</a>
+                            </li>
+                            }
+                        </ul>
+                        <div class="tab-content">
+                            <div id="home" class="tab-pane active">
+                                <p>@Html.Raw(Model.HouseRules)</p>
+                            </div>
+                            <div id="menu1" class="tab-pane fade">
+                                <p>@Html.Raw(Model.StayPolicy)</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.RatingAndReview != null && Model.RatingAndReview.Count() > 0)
+        {
+            <div class="row select-room-main" id="ReviewRating">
+                <div class="ReviewRating">
+                    <h6>Reviews And Rating</h6>
+                    @foreach (var item in Model.RatingAndReview)
+                    {
+                        <div class="col-xs-12">
+                            <div class="form-group">                                
+                                <lable>@item.CreatedDate</lable> &nbsp;
+                                <lable>@item.FirstName @item.LastName</lable> &nbsp;                                
+                                <br/>
+                                <lable>@item.Reviews</lable> &nbsp;
+                                @Html.HiddenFor(model => item.Ratings)                                
+                                <br />
+                                <div class="col-lg-12" style="padding:0px;">
+                                    @*<div class="star-rating_@Model.RatingAndReview.IndexOf(item)">*@
+                                    @*<div class="star-rating">
+                                        <span class="fa fa-star-o" data-rating="1"></span>
+                                        <span class="fa fa-star-o" data-rating="2"></span>
+                                        <span class="fa fa-star-o" data-rating="3"></span>
+                                        <span class="fa fa-star-o" data-rating="4"></span>
+                                        <span class="fa fa-star-o" data-rating="5"></span>
+                                        <input type="hidden" name="hdVal" class="rating-value" value="0">
+                                    </div>*@
+                                    <input id="rating-input" value="@item.Ratings" disabled="disabled" type="number" class="rating" min=0 max=5 step=0.5 data-size="sm">
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

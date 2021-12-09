@@ -1,0 +1,52 @@
+﻿(function () {
+    'use strict';
+<<<<<<< local
+    angular.module('app', ['ngFileUpload','ngSanitize'])
+=======
+    angular.module('app', ['ngFileUpload', 'toastr'])
+>>>>>>> other
+})();
+
+(function () {
+    'use strict';
+    angular.module('app')
+        .factory('CommonFactory', function ($http, toastr) {
+            var _CommonFrontUrl = '/CommonFront';
+            var mem = {};
+
+            toastr.options = {
+                "closeButton": true,
+                "positionClass": "toast-top-right",
+                "timeOut": "3000"
+            };
+
+            var showSimpleToast = function (message, type) {
+                return toastr[type](message);
+            };
+
+            return {
+                GetAllCountry: function () {
+                    return $http({
+                        url: _CommonFrontUrl + "/GetCountryList",
+                        method: "GET",
+                    });
+                },
+                GetAllCityByCountryId: function (CountryID) {
+                    return $http({
+                        url: _CommonFrontUrl + "/GetAllCityByCountryId",
+                        method: "POST",
+                        data: { p_CountryId: CountryID }
+                    });
+                },
+                SuccessToast: function (text) {
+                    showSimpleToast(text, 'success');
+                },
+                ErrorToast: function (text) {
+                    showSimpleToast(text, 'error');
+                },
+                WarnToast: function (text) {
+                    showSimpleToast(text, 'warning');
+                },
+            }
+        });
+})();

@@ -1,0 +1,67 @@
+﻿@model HSBM.EntityModel.Blogs.BlogComment
+
+
+@{
+
+    ViewBag.Title = "Comment Details";
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    <script>
+
+        $(document).ready(function () {
+            tinymce.init({ selector: '#Description', height: 500 });
+        });
+    </script>
+
+}
+
+<div class="main-wrapper">
+    <h3>@ViewBag.Title</h3>
+
+    @using (Html.BeginForm("ViewBlogComment", "Blogs", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div ng-controller="AddUpdateBlogsController" class="inner-content">
+            @*<h4>BlogPageMaster</h4>
+                <hr />*@
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CommentBy, "Comment By", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.CommentBy, new { @class = "form-control", @readOnly = "readOnly" })
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CreatedDate, "Comment Date", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.strCreatedDate, new { @class = "form-control", @readOnly = "readOnly" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group blog-comnt">
+                        @Html.LabelFor(model => model.Comment, new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Comment, new { @class = "form-control", @readOnly = "readOnly", @rows = "5" })
+                    </div>
+                </div>
+            </div>
+                <div class="buttongroup">
+                    @Html.ActionLink("Cancel", "Comments", "Blogs", new { Id = Model.BlogId }, new { @class = "btn black-btn" })
+                </div>
+           
+        </div>
+    }
+
+</div>

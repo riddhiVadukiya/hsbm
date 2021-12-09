@@ -1,0 +1,417 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Account Statement History";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+
+    $(document).ready(function () {
+
+        var d = new Date();
+        $('#FarmStyasId').val('');
+        //$('#startMonth').val(d.getMonth());
+        //$('#startYear').val(d.getFullYear() - 1);
+        //$('#endMonth').val(d.getMonth() + 1);
+        //$('#endYear').val(d.getFullYear());
+        //$('#checkinFromMonth').val(d.getMonth());
+        //$('#checkinFromYear').val(d.getFullYear() - 1);
+        //$('#checkinToMonth').val(d.getMonth() + 1);
+        //$('#checkinToYear').val(d.getFullYear());
+
+        //$("#startMonth").change(function () { DateValidation(); });
+        //$("#startYear").change(function () { DateValidation(); });
+        //$("#endMonth").change(function () { DateValidation(); });
+        //$("#endYear").change(function () { DateValidation(); });
+        //$("#checkinFromMonth").change(function () { DateValidation(); });
+        //$("#checkinFromYear").change(function () { DateValidation(); });
+        //$("#checkinToMonth").change(function () { DateValidation(); });
+        //$("#checkinToYear").change(function () { DateValidation(); });
+
+
+        //function DateValidation() {
+
+        //    var startMonth = $('#startMonth').val();
+        //    var startYear = $('#startYear').val();
+        //    var endMonth = $('#endMonth').val();
+        //    var endYear = $('#endYear').val();
+        //    var checkinFromMonth = $('#checkinFromMonth').val();
+        //    var checkinFromYear = $('#checkinFromYear').val();
+        //    var checkinToMonth = $('#checkinToMonth').val();
+        //    var checkinToYear = $('#checkinToYear').val();
+
+
+        //    if (parseInt(startYear + startMonth) > parseInt(endYear + endMonth)) {
+        //        $('#endMonth').val(startMonth);
+        //        $('#endYear').val(startYear);
+        //    }
+        //    if (parseInt(checkinFromYear + checkinFromMonth) > parseInt(checkinToYear + checkinToMonth)) {
+        //        $('#checkinToMonth').val(checkinFromMonth);
+        //        $('#checkinToYear').val(checkinFromYear);
+        //    }
+        //}
+    });
+
+    angular.module('app').controller('AccountStatementHistoryController', ['$scope', '$compile', '$rootScope', function ($scope, $compile, $rootScope) {
+        var TableName = "AccountStatementHistory";
+
+        $scope.SetSearchFromLocalStorage = function (localdata) {
+            if (typeof (localdata) != 'undefined') { }
+        }
+
+        $scope.OpenCalender = function (id) {
+            document.getElementById(id).focus();
+        }
+        $scope.Search = {}
+
+        $scope.PrepareDataForLocalStorage = function () {
+
+            $scope.Search.FarmStyasId = $('#FarmStyasId').val();
+            //$scope.Search.startMonth = $('#startMonth').val();
+            //$scope.Search.startYear = $('#startYear').val();
+            //$scope.Search.endMonth = $('#endMonth').val();
+            //$scope.Search.endYear = $('#endYear').val();
+            //$scope.Search.checkinFromMonth = $('#checkinFromMonth').val();
+            //$scope.Search.checkinFromYear = $('#checkinFromYear').val();
+            //$scope.Search.checkinToMonth = $('#checkinToMonth').val();
+            //$scope.Search.checkinToYear = $('#checkinToYear').val();
+        }
+        $scope.SearchData = function () {
+            $scope.PrepareDataForLocalStorage();
+            BindAccountStatementGrid();
+        };
+        $scope.ResetData = function () {
+            var d = new Date();
+            $scope.Search = {};
+            $('#FarmStyasId').val('');
+            $('#CheckInFrom').datepicker('option', 'maxDate', null);
+            $('#CheckInTo').datepicker('option', 'minDate', null);
+            $('#BookingFrom').datepicker('option', 'maxDate', null);
+            $('#BookingTo').datepicker('option', 'minDate', null);
+            //$('#startMonth').val(d.getMonth());
+            //$('#startYear').val(d.getFullYear() - 1);
+            //$('#endMonth').val(d.getMonth() + 1);
+            //$('#endYear').val(d.getFullYear());
+            //$('#checkinFromMonth').val(d.getMonth());
+            //$('#checkinFromYear').val(d.getFullYear() - 1);
+            //$('#checkinToMonth').val(d.getMonth() + 1);
+            //$('#checkinToYear').val(d.getFullYear());
+            $scope.PrepareDataForLocalStorage();
+            BindAccountStatementGrid();
+        };
+        $('#CheckInFrom').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            onSelect: function (date) {
+                var dt2 = $('#CheckInTo');
+                var Date = $(this).datepicker('getDate');
+                dt2.datepicker('option', 'minDate', Date);
+                $scope.Search.CheckInFrom = $("#CheckInFrom").val();
+            }
+        });
+        $('#CheckInTo').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            onSelect: function (date) {
+                var dt2 = $('#CheckInFrom');
+                var maxDate = $(this).datepicker('getDate');
+                dt2.datepicker('option', 'maxDate', maxDate);
+                $scope.Search.CheckInTo = $("#CheckInTo").val();
+            }
+        });
+        $('#BookingFrom').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            onSelect: function (date) {
+                var dt2 = $('#BookingTo');
+                var Date = $(this).datepicker('getDate');
+                dt2.datepicker('option', 'minDate', Date);
+                $scope.Search.BookingFrom = $("#BookingFrom").val();
+            }
+        });
+        $('#BookingTo').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            onSelect: function (date) {
+                var dt2 = $('#BookingFrom');
+                var maxDate = $(this).datepicker('getDate');
+                dt2.datepicker('option', 'maxDate', maxDate);
+                $scope.Search.BookingTo = $("#BookingTo").val();
+            }
+        });
+        function BindAccountStatementGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+
+            var Columns = [
+                        { data: 'Farmstaysid', bVisible: false },
+                        { data: 'FarmstaysName' },
+                        //{ data: 'BookingDate', bSortable: false },
+                        //{ data: 'CheckInDate', bSortable: false },
+                        { data: 'TotalBooking' },
+                        //{ data: 'TotalEarning' },
+                         {
+                             mRender: function (data, type, row, full) {
+                                 return $rootScope.Currencysymbols + convertToPrice(row.TotalEarning);
+                             }
+                         },
+                        {
+                            bSortable: false,
+                            sClass: "action-cell",
+                            mRender: function (data, type, row, full) {
+                                return "<a target='_blank' href='/Admin/Orders?farmstaysid=" + row.Farmstaysid + "' title='View' class='glyphicon glyphicon-eye-open'></a>";
+                            }
+                        }
+            ];
+            BindSearchGridData('AccountStatementHistory', Columns, '/Admin/AccountStatement/GetAccountStatementHistoryBySearchRequest', $scope.Search, initialStart, initialLength, initialSortCol, initialSortType, function () {
+                if ($("#AccountStatementHistory").dataTable().fnGetData().length == 0) {
+                    $('#AccountStatementHistory_NoRecordFoundButton').hide();
+                } else {
+                    $('#AccountStatementHistory_NoRecordFoundButton').show();
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            var localdata = GettLocalStorageData(TableName);
+            if (localdata != null) {
+                BindAccountStatementGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+            } else {
+                $scope.PrepareDataForLocalStorage();
+                BindAccountStatementGrid();
+            }
+        });
+
+        $scope.SetLocalStorage = function (url) {
+            SetLocalStorageData($scope.Search, TableName);
+            window.location = url;
+        }
+
+    }]);
+</script>
+
+<div class="main-wrapper AccountStatementHistory">
+    <h3>Account Statement History</h3>
+    <div ng-controller="AccountStatementHistoryController" class="inner-content filter-button-set">
+        @using (Html.BeginForm("Export", "AccountStatement", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Farm/Home Stay</label>
+                        <input type="text" class="form-control" ng-model="Search.FarmStaysName" id="FarmStaysName" name="FarmStaysName" />
+                        @*<select ng-model="Search.FarmStyasId" id="FarmStyasId" name="Search.FarmStyasId" class="form-control">
+                            <option value="">Select Farm/Home Stays</option>
+                            @foreach (var item in (IEnumerable<SelectListItem>)ViewBag.FrontFarmStays)
+                            {
+                                <option value="@Html.Raw(item.Value)">@Html.Raw(item.Text)</option>
+                            }
+                        </select>*@
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class=" control-label">Booking From Date:</label>
+                    <div class="input-group date">
+                        <input type="text" class="form-control" ng-model="Search.BookingFrom" id="BookingFrom" name="BookingFrom" />
+                        <span class="input-group-addon" ng-click="OpenCalender('BookingFrom')">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class=" control-label">Booking To Date:</label>
+                    <div class="input-group date">
+                        <input type="text" class="form-control" ng-model="Search.BookingTo" id="BookingTo" name="BookingTo" />
+                        <span class="input-group-addon" ng-click="OpenCalender('BookingTo')">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label class=" control-label">Check-In From Date:</label>
+                    <div class="input-group date">
+                        <input type="text" class="form-control" ng-model="Search.CheckInFrom" id="CheckInFrom" name="CheckInFrom" />
+                        <span class="input-group-addon" ng-click="OpenCalender('CheckInFrom')">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                @*<div class="input-group date">
+                        <input type="text" class="form-control netto-input" ng-model="Search.CheckInFrom" id="CheckInFrom" name="CheckInFrom" required maxlength="100" />
+                        <span class="input-group-addon" ng-click="OpenCalender('CheckInTime')">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                    </div>*@
+                <div class="col-md-4">
+                    <label class=" control-label">Check-In To Date:</label>
+                    <div class="input-group date">
+                        <input type="text" class="form-control" ng-model="Search.CheckInTo" id="CheckInTo" name="CheckInTo" />
+                        <span class="input-group-addon" ng-click="OpenCalender('CheckInTo')">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+
+                @*<div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group padd-right-left">
+                            <div class="col-sm-12">
+                                <label class="control-label">Booking From Month/Year</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <select ng-model="Search.startMonth" id="startMonth" name="Search.startMonth" class="form-control">
+                                        <option value="" selected hidden />
+                                        @for (int i = 1; i <= 12; i++)
+                                        {
+                                            <option value="@Html.Raw(i)">@Html.Raw(new DateTime(2010, i, 1).ToString("MMMM"))</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <select ng-model="Search.startYear" id="startYear" name="Search.startYear" class="form-control">
+                                        <option value="" selected hidden />
+                                        @for (int i = 2001; i <= (DateTime.Now.Year + 1); i++)
+                                        {
+                                            <option value="@Html.Raw(i)">@Html.Raw(i)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group padd-right-left">
+                            <div class="col-sm-12">
+                                <label class="control-label">Booking To Month/Year</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <select ng-model="Search.endMonth" id="endMonth" name="Search.endMonth" class="form-control">
+                                        <option value="" selected hidden />
+                                        @for (int i = 1; i <= 12; i++)
+                                        {
+                                            <option value="@Html.Raw(i)">@Html.Raw(new DateTime(2010, i, 1).ToString("MMMM"))</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <select ng-model="Search.endYear" id="endYear" name="Search.endYear" class="form-control">
+                                        <option value="" selected hidden />
+                                        @for (int i = 2001; i <= (DateTime.Now.Year + 1); i++)
+                                        {
+                                            <option value="@Html.Raw(i)">@Html.Raw(i)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group padd-right-left">
+                            <div class="col-sm-12">
+                                <label class="control-label">Check-in From Month/Year</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <select ng-model="Search.checkinFromMonth" id="checkinFromMonth" name="Search.checkinFromMonth" class="form-control">
+                                        <option value="" selected hidden />
+                                        @for (int i = 1; i <= 12; i++)
+                                        {
+                                            <option value="@Html.Raw(i)">@Html.Raw(new DateTime(2010, i, 1).ToString("MMMM"))</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <select ng-model="Search.checkinFromYear" id="checkinFromYear" name="Search.checkinFromYear" class="form-control">
+                                        <option value="" selected hidden />
+                                        @for (int i = 2001; i <= (DateTime.Now.Year + 1); i++)
+                                        {
+                                            <option value="@Html.Raw(i)">@Html.Raw(i)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group padd-right-left">
+                            <div class="col-sm-12">
+                                <label class="control-label">Check-in To Month/Year</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <select ng-model="Search.checkinToMonth" id="checkinToMonth" name="Search.checkinToMonth" class="form-control">
+                                        <option value="" selected hidden />
+                                        @for (int i = 1; i <= 12; i++)
+                                        {
+                                            <option value="@Html.Raw(i)">@Html.Raw(new DateTime(2010, i, 1).ToString("MMMM"))</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <select ng-model="Search.checkinToYear" id="checkinToYear" name="Search.checkinToYear" class="form-control">
+                                        <option value="" selected hidden />
+                                        @for (int i = 2001; i <= (DateTime.Now.Year + 1); i++)
+                                        {
+                                            <option value="@Html.Raw(i)">@Html.Raw(i)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="buttongroup">
+                        <input type="button" ng-click="SearchData()" value="Search" class="btn green-btn" />
+                        <input type="button" ng-click="ResetData()" value="Reset" class="btn black-btn" />
+                    </div>
+                </div>
+            </div>
+            <div class="grid-btn-set">
+                <div class="ln_solid"></div>
+                <div id="AccountStatementHistory_NoRecordFoundButton" class="buttongroup" style="margin:0px;">
+                    <input type="submit" name="btnExport" value="Export" class="btn green-btn pull-right" />
+                    @*<input type="button" name="btnExport" ng-click="Export()" value="Export" class="btn green-btn pull-right" />*@
+                    <div class="pull-right">
+                        <div class="form-group">
+
+                            <select id="ExportTypeExcel"
+                                    name="ExportTypeExcel"
+                                    @*ng-model="Search.ExportTypeExcel"*@
+                                    required>
+                                <option selected value="0">CSV</option>
+                                <option value="1">Excel</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <table id="AccountStatementHistory" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Farm/Home Stays</th>
+                            @*<th>Booking Date</th>
+                                <th>Check-In Date</th>*@
+                            <th>Total Bookings</th>
+                            <th>Total Earning</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div id="AccountStatementHistory_NoRecordFound" class="empty-grid">No records found</div>
+            </div>
+        }
+    </div>
+</div>

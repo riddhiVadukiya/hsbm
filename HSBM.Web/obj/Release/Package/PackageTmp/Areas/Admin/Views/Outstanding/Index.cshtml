@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "Outstanding";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    angular.module('app').controller('OutstandingController', ['$scope', '$compile', '$rootScope', function ($scope, $compile, $rootScope) {
+        var TableName = "Outstanding";
+
+        $scope.SetSearchFromLocalStorage = function (localdata) {
+            if (typeof (localdata) != 'undefined') { }
+        }
+
+        $scope.Search = {}
+
+        $scope.SearchData = function () {
+            BindOutstandingGrid();
+        };
+        $scope.ResetData = function () {
+            $scope.Search = {};
+            BindOutstandingGrid();
+        };
+
+        function BindOutstandingGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+
+            var Columns = [
+                        { data: 'Farmstaysid', bVisible: false },
+                        { data: 'FarmstaysName' },
+                        { data: 'TotalBooking' },
+                        //{ data: 'TotalOutstanding' },
+                        {                            
+                            mRender: function (data, type, row, full) {
+                                return $rootScope.Currencysymbols + convertToPrice(row.TotalOutstanding);
+                            }
+                        },
+                        {
+                            bSortable: false,
+                            sClass: "action-cell",
+                            mRender: function (data, type, row, full) {
+                                return "<a target='_blank' href='/Admin/Orders?farmstaysid=" + row.Farmstaysid + "' title='View' class='glyphicon glyphicon-eye-open'></a>";
+                            }
+                        }
+            ];
+            BindSearchGridData('Outstanding', Columns, '/Admin/Outstanding/GetOutstandingBySearchRequest', $scope.Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+        }
+
+        var localdata = GettLocalStorageData(TableName);
+        if (localdata != null) {
+            BindOutstandingGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+        } else {
+            BindOutstandingGrid();
+        }
+
+        $scope.SetLocalStorage = function (url) {
+            SetLocalStorageData($scope.Search, TableName);
+            window.location = url;
+        }
+
+    }]);
+</script>
+
+
+
+<div class="main-wrapper">
+    <h3>Outstanding</h3>
+    <div ng-controller="OutstandingController" class="inner-content">
+
+        <div class="buttongroup pos-rel">
+            <h4>1st @DateTime.Now.ToString("MMM") to Till Date</h4>
+        </div>
+        <div class="grid-btn-set">
+            <table id="Outstanding" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Farm/Home Stays</th>
+                        <th>Total Bookings</th>
+                        <th>Outstanding</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="Outstanding_NoRecordFound" class="empty-grid">No records found</div>
+        </div>
+    </div>
+</div>
+

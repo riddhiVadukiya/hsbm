@@ -1,0 +1,87 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Farm/Home Stays(Master)";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-wrapper">
+    <h3>Farm/Home Stays</h3>
+    <div ng-controller="FarmStaysController" class="inner-content filter-button-set">
+        <script>
+    function BindFarmStaysGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+
+        var Columns = [
+                    { data: 'Id', bVisible: false },
+                    { data: 'Name' },
+                    {
+                        @if (SessionProxy.CheckModuleAccess(Module.FarmStays, ModuleAccess.CanUpdate) || SessionProxy.CheckModuleAccess(Module.FarmStays, ModuleAccess.CanDelete))
+                        {
+                        @: bVisible: true,
+                        }
+                        else
+                        {
+                        @: bVisible: false,
+                        }
+                        bSortable: false,
+                        sClass: "action-cell",
+                        mRender: function (data, type, row, full) {
+                            var btn = "";
+                                    @if (SessionProxy.CheckModuleAccess(Module.FarmStays, ModuleAccess.CanUpdate))
+                                    {
+                                        @: btn += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/FarmStays/UpdateFarmStays/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-pencil'> </a> &nbsp;";
+                                    }
+                                    @if (SessionProxy.CheckModuleAccess(Module.FarmStays, ModuleAccess.CanDelete))
+                                    {
+                                        @: if (!row.IsActive) { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',true)\" href='javascript:void(0);' title='Restore' class='glyphicon glyphicon-refresh'></a>"; } else { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',false)\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>"; }
+                                    }
+                                    return btn;
+                                }
+                            }
+                ];
+                BindSearchGridData('FarmStays', Columns, '/Admin/FarmStays/GetAllFarmStaysBySearchRequest', $('[ng-controller="FarmStaysController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+            }
+        </script>
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Farm/Home Stay</label>
+                    <input type="text" ng-model="Search.Name" class="form-control" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="Search.IncludeIsDeleted" name="cc" ng-model="Search.IncludeIsDeleted" />
+                    <label for="Search.IncludeIsDeleted"><span></span>Include Deleted</label>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="buttongroup">
+                    <input type="button" ng-click="SearchData()" value="Search" class="btn green-btn" />
+                    <input type="button" ng-click="ResetData()" value="Reset" class="btn black-btn" />
+                </div>
+            </div>
+        </div>
+
+        <div class="ln_solid"></div>
+        @if (SessionProxy.CheckModuleAccess(Module.FarmStays, ModuleAccess.CanAdd))
+        {
+            <div class="buttongroup pos-rel">
+                @Html.ActionLink("Add Farm/Home Stay", "AddFarmStays", null, new { @class = "btn green-btn" })
+            </div>
+        }<div class="grid-btn-set">
+    <table id="FarmStays" class="table table-bordered table-striped table-responsive row-border hover bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Farm/Home Stay</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="FarmStays_NoRecordFound" class="empty-grid">No records found</div>
+</div>
+</div>
+</div>

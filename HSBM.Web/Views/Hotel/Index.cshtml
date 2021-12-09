@@ -1,0 +1,295 @@
+﻿@model HSBM.EntityModel.HotelMaster.SearchRequest
+@using HSBM.Common.Utils;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    var APIProvider = '@Model.APIProvider';
+</script>
+<div ng-controller="HotelsController">
+
+    <section class="awe-parallax category-heading-section-demo-2">
+        <div class="awe-overlay"></div>
+        <div class="container">
+            <div class="category-heading-content category-heading-content__2 text-uppercase">
+                <!-- BREADCRUMB -->
+                <div class="breadcrumb">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><span>Hotels</span></li>
+                    </ul>
+                </div>
+                <!-- BREADCRUMB -->
+                <div class="find">
+                    <h2 class="text-center">Find Your Hotel</h2>
+                    <form>
+                        <div class="row form-group">
+                            <div class="col-sm-3 form-elements">
+                                <label>Destination </label>
+                                <div class="form-item">
+                                    <i class="awe-icon awe-icon-marker-1"></i>
+                                    <select id="Destination" class="form-control" ng-options="d.Id as d.CityName for d in DestinationSource | orderBy:'CityName'" ng-model="Search.DestinationId" @*ng-init="Search.Country='JFK'"*@></select>
+                                    @*<ui-select ng-model="Search.DestinationId" theme="selectize" style="width: 300px;" title="Choose a destination">
+                                            <ui-select-match placeholder="Select Destination">{{$select.selected.name}}</ui-select-match>
+                                            <ui-select-choices repeat="dest in DestinationSource | filter: $select.search">
+                                                <span ng-bind-html="dest.CityName | highlight: $select.search"></span>
+                                            </ui-select-choices>
+                                        </ui-select>*@
+                                </div>
+                            </div>
+                            <div class="col-sm-2 form-elements">
+                                <label>Check in</label>
+                                <div class="form-item">
+                                    <i class="awe-icon awe-icon-calendar"></i>
+                                    <input type="text" class="awe-calendar" value="Date" ng-model="Search.CheckIn">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 form-elements">
+                                <label>Check out</label>
+                                <div class="form-item">
+                                    <i class="awe-icon awe-icon-calendar"></i>
+                                    <input type="text" class="awe-calendar" value="Date" ng-model="Search.CheckOut">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 form-elements">
+                                <label class="label-text">Rooms</label>
+                                <a class="form-control dropdown-toggleselect" id="selectBox">
+                                    <span ng-init="SetTotalPeople()">
+                                        <span class="homestayPaxCount">{{TotalPeople}} People</span> in
+                                        <span class="homestayRoomCount">{{ListofSearchRoom.length}} Room</span>
+                                    </span>
+                                    <i class="fa fa-caret-down text-grey font-icon icon-inside" id=""> </i>
+                                </a>
+
+                                <div id="Dropdown-adult" class="booking-info-pax display-none">
+                                    <div class="room_no" ng-repeat="roomDetail in ListofSearchRoom">
+                                        <a ng-if="$index>0" href="javascript:;" class="removeRoom pull-right" ng-click="RemoveSearchRoom($index);SetTotalPeople();"> X</a>
+                                        <h5>Room {{$index+1}}:</h5>
+                                        <div class="pax-limit col-x-fluid clearfix w100 fl">
+                                            <span class="pax-title">
+                                                <span class="pax-num-adult" ng-bind="roomDetail.AdultCount"></span>&nbsp;Adults
+                                                <span class="pax-num-title">18+ years</span>
+                                            </span>
+                                            <div class="pax-count">
+                                                <div class="pax-count-div">
+                                                    <span class="divider"></span>
+                                                    <span class="pax-count-plus fa fa-plus" ng-click="roomDetail.AdultCount=(roomDetail.AdultCount+1);SetTotalPeople();"></span>
+                                                    <span class="pax-count-minus disabled fa fa-minus" ng-click="(roomDetail.AdultCount>1? (roomDetail.AdultCount=(roomDetail.AdultCount-1)):1) ;SetTotalPeople();"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pax-limit col-x-fluid clearfix w100 fl">
+                                            <span class="pax-title">
+                                                <span class="pax-num-adult" ng-bind="roomDetail.ChildCount"></span>&nbsp;Children
+                                                <span class="light-grey">Below 12 years</span>
+                                            </span>
+                                            <div class="pax-count">
+                                                <div class="pax-count-div">
+                                                    <span class="divider"></span>
+                                                    <span class="pax-count-plus fa fa-plus" ng-click="AddChild(roomDetail)"></span>
+                                                    <span class="pax-count-minus disabled fa fa-minus" ng-click="MinusChild(roomDetail)"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <ul ng-if="roomDetail.ChildCount>0" class="select-child-ages pax-limit clearfix" data-homestaychildage="">
+                                            <li class="col-x-fluid  fl"> <span class="pax-title">Age(s) of Children </span> </li>
+                                            <!--<li class="childageselect" ng-repeat="Child in range(roomDetail.NumberOfChildren) track by $index">-->
+                                            <li class="childageselect" ng-repeat="Child in roomDetail.arrayofchildrenages">
+                                                <div class="ddOutOfVision" id="msdrpdd25_msddHolder">
+                                                    <select class="" data-role="none" id="msdrpdd25" tabindex="-1" ng-model="Child.age" required>
+                                                        <option value="">--</option>
+                                                        <option value="0">&lt; 1</option>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value="9">9</option>
+                                                        <option value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                    </select>
+                                                </div>
+                                                <div class="clear"></div>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                    <div class="add-del-room clearfix">
+                                        <a href="javascript:void(0);" class="homestayaddRoom eventTrackable  active" ng-click="AddSearchRoom();SetTotalPeople()">Add room</a>
+                                        <!--<a href="javascript:void(0);" class="homestayremoveRoom" ng-click="RemoveSearchRoom()"> Remove room</a>-->
+                                    </div>
+                                    <!--<div class="be-ddn-footer"> <a id="close"  href="#" class="done">Done</a> </div>-->
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <div class="form-actions">
+                                    <input type="submit" value="Search Hotel" ng-click="SearchHotels()">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- HEADING PAGE -->
+    <!-- END / HEADING PAGE -->
+
+    <section class="filter-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-md-push-3" id="HotelData">
+                    <div class="filter-page__content">
+                        <div class="filter-item-wrapper">
+                            <div class="filter-item-wrapper">
+                                <h3 ng-show="HotelLoading">Searching....</h3>
+                                <h3 ng-show="No_result_found">No result found</h3>
+                                <h3 ng-show="HotelSearchResult.length && (HotelSearchResult | filter: { _isShown:true}).length==0">No hotels for your search</h3>
+                                <h5 ng-show="HotelSearchResult.length && (HotelSearchResult | filter: { _isShown:true}).length>0" ng-bind="((HotelSearchResult | filter: { _isShown:true}).length) + ' Hotels Found'"></h5>
+                            </div>
+                            <div class="hotel-item" ng-repeat="Hotel in HotelSearchResult | filter: { _isShown:true}">
+                                <div class="item-media">
+                                    <div class="image-cover">
+                                        <img ng-if="Hotel.ThumbnailUrl==null || Hotel.ThumbnailUrl==''" ng-src="{{Hotel.ThumbnailUrl}}" alt="" onerror="this.src ='@Helper.DefaultImageLocation'">
+                                        <img ng-if="Hotel.ThumbnailUrl==null || Hotel.ThumbnailUrl==''" ng-src="@Helper.DefaultImageLocation" alt="">
+                                    </div>
+                                </div>
+
+                                <div class="item-body">
+                                    <div class="item-title">
+                                        <h2>
+                                            <a ng-click="ViewHotelDetail(Hotel)" href="javascript:;"><span ng-bind="Hotel.HotelName"></span></a>                                            
+                                            <a ng-if="Hotel.ExistInWishlist" href="JavaScript:;" data-toggle="tooltip" title="Remove from Wishlist" ng-click="AddRemoveFromWishList(Hotel)" class="wlicon">
+                                                <i class="fa fa-heart color-grey" aria-hidden="true"></i>
+                                            </a>
+                                            <a ng-if="!Hotel.ExistInWishlist" href="JavaScript:;" data-toggle="tooltip" title="Add To Wishlist" ng-click="AddRemoveFromWishList(Hotel)" class="wlicon">
+                                                <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                            </a>
+                                        </h2>
+                                    </div>
+                                    <div class="item-hotel-star">
+                                        <span class="col-md-pull-9" ng-repeat="star in range(Hotel.Stars) track by $index">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <div class="item-address">
+                                        <i class="awe-icon awe-icon-marker-2"></i>
+                                        <span ng-bind="Hotel.AddressLine1"></span>&nbsp;
+                                        <span ng-bind="Hotel.City"></span>&nbsp;
+                                        <span ng-bind="Hotel.PostalCode"></span>&nbsp;
+                                        <span ng-bind="Hotel.Country"></span>
+                                    </div>
+                                    <div class="item-footer" ng-if="Hotel.Rank>0">
+                                        <div class="item-rate">Rank: <span ng-bind="Hotel.Rank"></span></div>
+                                    </div>
+                                </div>
+                                <div class="item-price-more">
+                                    <div class="price">
+                                        Prices from
+                                        <span class="amount" ng-bind="Hotel.RoomDetail.Currency + ' ' + Hotel.RoomDetail.MinRate"></span>
+                                    </div>
+                                    <a ng-click="ViewHotelDetail(Hotel)" href="javascript:;" class="awe-btn">Book now</a>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <!-- PAGINATION -->
+                        @*<div class="page__pagination" ng-show="!No_result_found && HotelList[0].RecordsTotal > ListParams.pageSize">
+                                <h5>Showing {{ListParams.skip+1}} of {{ListParams.NoOfPages}} Pages</h5>
+                                <a href="javascript:;" class="pagination-prev" ng-click="GoToNextPage(false)" ng-show="HotelList[0].RecordsTotal > 1"><i class="fa fa-caret-left"></i></a>
+                                <input type="number" ng-model="ListParams.skip + 1" ng-keyup="GoToPage(ListParams.skip)" />
+                                @*<a href="javascript:;" ng-if="$index < ListParams.NoOfPages" ng-repeat="page in [] | rangeStar: ListParams.NoOfPages" ng-class="{'current': $index == (ListParams.skip) }" ng-bind="$index+1" ng-click="GoToPage($index+1)"></a>* @
+                                <a href="javascript:;" class="pagination-next" ng-click="GoToNextPage(true)" ng-show="HotelList[0].RecordsTotal > 1"><i class="fa fa-caret-right"></i></a>
+                            </div>*@
+                        <!-- END / PAGINATION -->
+
+
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-md-pull-9 stick" ng-show="HotelList.length">
+                    <div class="page-sidebar theiaStickySidebar">
+                        <div class="sidebar-title">
+                            <h2>Hotel filter</h2>
+                            <div class="clear-filter">
+                                <a href="javascript:;" ng-click="ClearFilters()">Clear all</a>
+                            </div>
+                        </div>
+                        <!-- WIDGET -->
+                        @*<div class="widget widget_has_radio_checkbox_text">
+                                <h3>Hotel</h3>
+                                <div class="widget_content">
+                                    <label class="from">
+                                        Name
+                                        <span class="form-item db">
+                                            <i class="awe-icon awe-icon-search"></i>
+                                            <input type="text" ng-model="Search.HotelName" ng-keyup="SearchHotelsByFilter()">
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>*@
+                        <!-- END / WIDGET -->
+                        <!-- WIDGET -->
+                        <div class="widget widget_has_radio_checkbox">
+                            <h3>Star Rating</h3>
+                            <ul>
+                                <li ng-repeat="i in StarRatingRange">
+                                    <label>
+                                        <input class="hotelStarRating" type="checkbox" ng-model="i.isChecked" ng-checked="i.isChecked" ng-click="SearchHotelsByFilter()">
+                                        <i class="awe-icon awe-icon-check"></i>
+                                        <span ng-if="i.value!=0" class="rating">
+                                            <i class=" fa fa-star" ng-repeat="j in [] | rangeStar:i.value">
+                                            </i>
+                                        </span>
+                                        <span ng-if="i.value==0" class="rating">
+                                            Unrated
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- END / WIDGET -->
+                        <!-- WIDGET -->
+                        <div class="widget widget_price_filter">
+                            <h3>Price Level</h3>
+                            <rzslider data-rz-slider-model="HotelPriceSource.minValue"
+                                      data-rz-slider-high="HotelPriceSource.maxValue"
+                                      data-rz-slider-options="HotelPriceSource.options"></rzslider>
+                        </div>
+                        <!-- END / WIDGET -->
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    $(document).on('click', function (e) {
+        var elem = $(e.target).closest('#selectBox'),
+            box = $(e.target).closest('#Dropdown-adult');
+
+        if (elem.length) {
+            e.preventDefault();
+            $('#Dropdown-adult').toggle();
+            $('#Dropdown-adult').css("position", "absolute");
+        } else if (!box.length) {
+            $('#Dropdown-adult').hide();
+        }
+    });
+</script>

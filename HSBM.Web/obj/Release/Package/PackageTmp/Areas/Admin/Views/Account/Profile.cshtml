@@ -1,0 +1,153 @@
+﻿@model HSBM.EntityModel.SystemUsers.SystemUsers
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#CountryMasterID").change(function () {
+            $.post('/Customer/GetRegionList', { Id: $('#CountryMasterID').val() }, function (data) {
+                var options = $("#RegionMasterID");
+                options.find('option').remove();
+                $.each(data, function () {
+                    options.append($("<option />").val(this.Value).text(this.Text));
+                });
+            })
+        });
+
+        $("#RegionMasterID").change(function () {
+            $.post('/Customer/GetCityList', { Id: $('#RegionMasterID').val() }, function (data) {
+                var options = $("#CityMasterID");
+                options.find('option').remove();
+                $.each(data, function () {
+                    options.append($("<option />").val(this.Value).text(this.Text));
+                });
+            })
+        });
+
+    });
+</script>
+
+<div class="main-wrapper">
+    <h3>Profile</h3>
+    <div class="inner-content">
+        <section id="loginForm">
+            @using (Html.BeginForm("UpdateProfile", "Account", FormMethod.Post))
+            {
+
+                @Html.HiddenFor(t => t.Id)
+                @Html.HiddenFor(t => t.RoleMasterID)
+                @Html.HiddenFor(t => t.IsActive)
+                <div class="row">
+                    <div class="col-xs-12 col-sm-
+                      col-md-4">
+                        <div class="form-group">
+                            <label class="control-label"> @Html.LabelFor(t => t.FirstName) </label>
+                            @Html.TextBoxFor(t => t.FirstName)
+                            @Html.ValidationMessageFor(t => t.FirstName)
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label class="control-label"> @Html.LabelFor(t => t.LastName) </label>
+                            @Html.TextBoxFor(t => t.LastName)
+                            @Html.ValidationMessageFor(t => t.LastName)
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                <label for="EmailAddress">Email Address</label>
+                            </label>
+                            @Html.TextBoxFor(t => t.Email, new { @readonly = "readonly", @class = "form-control" })
+                        </div>
+                    </div>
+
+                    @*<div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                <label for="UserName">User Name</label>
+                            </label>
+                            @Html.TextBoxFor(t => t.UserName, new { @readonly = "readonly", @class = "form-control" })
+                        </div>
+                    </div>*@
+
+                </div>
+                <div class="row">
+                    
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+<!--                            <label class="control-label"> @Html.LabelFor(t => t.Telephone) </label>-->
+                            <label class="control-label"> Telephone Number </label>
+                           
+                            @Html.TextBoxFor(t => t.Telephone)
+                            @Html.ValidationMessageFor(t => t.Telephone)
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+<!--                            <label class="control-label"> @Html.LabelFor(t => t.Mobile) </label>-->
+                           <label class="control-label"> Mobile Number </label>
+                            @Html.TextBoxFor(t => t.Mobile)
+                            @Html.ValidationMessageFor(t => t.Mobile)
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label class="control-label"> @Html.LabelFor(model => model.Address) </label>
+                            @Html.TextBoxFor(model => model.Address)
+                            @Html.ValidationMessageFor(model => model.Address)
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label class="control-label"> @Html.LabelFor(model => model.Address2) </label>
+                            @Html.TextBoxFor(model => model.Address2)
+                            @Html.ValidationMessageFor(model => model.Address2)
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label class="control-label"> @Html.LabelFor(model => model.Gender) </label>
+                            @Html.DropDownListFor(model => model.Gender, ViewBag.GenderDropDown as List<SelectListItem>)
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">City</label>
+                            @Html.DropDownListFor(model => model.CityMasterID, ViewBag.CityDropDown as List<SelectListItem>)
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Region</label>
+                            @Html.DropDownListFor(model => model.RegionMasterID, ViewBag.RegionDropDown as List<SelectListItem>)
+                            @Html.ValidationMessageFor(model => model.RegionMasterID)
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Country</label>
+                            @Html.DropDownListFor(model => model.CountryMasterID, ViewBag.CountryDropDown as List<SelectListItem>)
+                            @Html.ValidationMessageFor(model => model.CountryMasterID)
+                        </div>
+                    </div>*@
+
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="buttongroup">
+                        <input type="submit" value="Save" class="btn green-btn" />
+                    </div>
+                </div>
+
+            }
+        </section>
+    </div>
+</div>
+
+
+
+
+

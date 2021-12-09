@@ -1,0 +1,232 @@
+﻿@model HSBM.EntityModel.Front.FarmStaysBlogResponse
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@using HSBM.EntityModel.Blogs;
+@{
+    ViewBag.Title = "Blog Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    List<FrontBlogResponse> _FrontBlogResponse = (List<FrontBlogResponse>)(ViewBag.FrontBlogResponse);
+    List<BlogCategory> _CategoryList = (List<BlogCategory>)(ViewBag.CategoryList);
+    List<FrontBlogResponse> _PopularBlogList = (List<FrontBlogResponse>)(ViewBag.PopularBlogList);
+    List<FrontBlogArchivesResponse> _BlogArchivesList = (List<FrontBlogArchivesResponse>)(ViewBag.BlogArchivesList);
+}
+@if (Model != null)
+{
+    <div class="blogs-main blog-listing" ng-controller="BlogsController">
+        <input type="hidden" id="hdnModelBlog" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_FrontBlogResponse)" />
+        <input type="hidden" id="hdnModelCategoryList" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_CategoryList)" />
+        <input type="hidden" id="hdnModelPopularBlogList" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_PopularBlogList)" />
+        <input type="hidden" id="hdnModelBlogArchivesList" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_BlogArchivesList)" />
+        <input type="hidden" id="hdnBlogId" value="@Model.Id" />
+        <div class="row">
+            <div class="title-block blogdetail-title">
+                <h3>@Model.Title</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="rgt-blogs col-sm">
+                <div class="blog-detail">
+                    <div class="blog-img">
+                        @*<img src="images/blog-img1.png" alt="">*@
+                        <img src="@MvcApplication.BlogImagePath@Model.Image" alt="" onerror="this.src='/images/no_image.jpg'" class="blogdtlimg heightAuto">
+                    </div>
+                    <div class="blogetail-text">
+                        <div class="date">@Model.CreatedDate.ToString("MMMM dd, yyyy")</div>
+                        <p>@Html.Raw(Model.Description)</p>
+                    </div>
+                    @if (@Model.listBlogComment.Count() > 0)
+                    {
+                        <div class="comment-list">
+                            <div class="comment-title">
+                                <h4>Comments List</h4>
+                                <div class="total-comments"> @Model.listBlogComment.Count() Comments </div>
+                            </div>
+                            @for (int i = 0; i < @Model.listBlogComment.Count(); i++)
+                            {
+                                <div class="single-comment">
+                                    @*<div class="user-img">
+                                            <img src="images/user-placeholder.png" alt="User Image">
+                                        </div>*@
+                                    <div class="comment-text">
+                                        <p>@Model.listBlogComment[i].Comment</p>
+                                        <div class="reply-btn">
+                                            <img src="images/reply-ic.png" alt="">
+                                        </div>
+                                        <div class="user-name">
+                                            <h5>@Model.listBlogComment[i].CommentBy</h5>
+                                            <div class="date">@Model.listBlogComment[i].CreatedDate.ToString("MMMM dd, yyyy")</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    <div class="comment-box">
+                        <div class="comment-title">
+                            <h4>Leave Your Comment</h4>
+                        </div>
+                        <form id="frmBlogComment">
+                            <div class="form-group">
+                                <label for="">Message</label>
+                                <textarea id="txtComment" ng-model="UserComment" placeholder="Comment" class="col-md-12"></textarea>
+                                @*<textarea name="" id="" cols="30" rows="10" placeholder="Type here..."></textarea>*@
+                                <div class="clearfix"></div>
+                                @*<div class="mt-20 resultmsg display-none" id="divResultmsg">
+                                        {{res_msg}} <span class="close_btn" onclick="document.getElementById('divResultmsg').style.display='none';">X</span>
+                                    </div>*@
+                            </div>
+                            @if (SessionProxy.CustomerDetails != null && SessionProxy.CustomerDetails.Email != null && SessionProxy.CustomerDetails.Password != null && SessionProxy.CustomerDetails.UserType == (int)UserTypes.Customer)
+                            {
+                                <button type="button" class="btn btn-primary" ng-disabled="UserComment==''" onclick="javascript:return SaveComment('@Model.Id')">Comment</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-primary" onclick="javascript:return SaveComment('@Model.Id')">Login & Comment</button>
+                            }
+                            @*<button class="btn btn-primary" ng-click="HideDetail()">Back To List</button>*@
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="left-cnt col-sm">
+                <div class="right-sidebar">
+                    <div class="search-bar">
+                        <h3>Search</h3>
+                        <div class="form-group">
+                            @*<input type="text" ng-model="FrontBlogRequest.keyword" placeholder="Search and hit enter" ng-keypress="searchkeypress($event)" id="txtSearchbyKeyword">*@
+                            <input type="text" placeholder="Blogs to search" id="txtSearchbyKeyword">
+                            @*<span ng-click="SearchbyKeyword(true);"><i class="awe-icon awe-icon-search blogsearchic"></i></span>*@
+                            <a href="#">
+                                <img src="../images/search-ic.png" onclick="searchkeypress(event)" alt="">
+                            </a>
+                            @*<div class="mt-10 mb-10">
+                                    <button type="button" class="simplebtn" ng-click="ResetSearch()">Reset</button>
+                                </div>*@
+                        </div>
+                    </div>
+                    @if (_BlogArchivesList.Count() > 0)
+                    {
+                        <div class="archives-listing">
+                            <h3>Archives</h3>
+                            <ul>
+                                @foreach (var item in _BlogArchivesList)
+                                {
+                                    <li><a href="/Blogs/Index?ArchivesData=@item.ArchivesData">@item.ArchivesData</a></li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    @if (_PopularBlogList.Count() > 0)
+                    {
+                        <div class="archives-listing popular-post">
+                            <h3>Popular Posts</h3>
+                            <ul>
+                                @*<li ng-repeat="popularpost in PopularBlogList">
+                                        <div class="content">
+                                            <a href="javascript:;" ng-click="ShowDetail(popularpost)">{{popularpost.Title}}</a>
+                                        </div>
+                                    </li>*@
+                                @foreach (var item in _PopularBlogList)
+                                {
+                                    <li>
+                                        <a target="_blank" href="/Blogs/Detail?Id=@item.Id">@item.Title</a>
+                                    </li>
+                                    @*<li><a href="javascript:;" ng-click="SearchbyArchives('@item.ArchivesData')">@item.ArchivesData</a></li>*@
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+
+        $('#Blogs').addClass('active');
+    })
+
+    function SaveComment(id) {
+
+        var isValid = true;
+        isValid = $("#frmBlogComment").valid();
+        if (isValid) {
+            $.ajax({
+                url: '/CommonFront/CheckUserIsLoggedIn',
+                type: 'GET',
+                cache: false,
+                datatype: "json",
+                data: {},
+                success: function (data) {
+
+                    if (data) {
+                        //$("#dvLoginErrorMsg").html("");
+                        //$("#dvLoginErrorMsg").hide();
+                        //$('#loginModal').modal('hide');
+                        //window.location.reload();
+                        $.ajax({
+                            url: '/Blogs/AddBlogComment',
+                            type: 'POST',
+                            cache: false,
+                            data: { BlogId: id, Comment: $("#txtComment").val() },
+                            success: function (data) {
+                                if (data.Data == null) {
+                                    window.location.reload();
+                                }
+                                else {
+                                    return false;
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                return false;
+                            }
+                        });
+
+                    }
+                    else {
+
+                        $(document.body).addClass('modal-open');
+                        setTimeout(function () {
+                            $('#loginModal').modal('show');
+                        }, 400);
+                        return false;
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    return false;
+                }
+            });
+
+        }
+        else {
+            return false;
+        }
+    }
+
+    function searchkeypress(keyEvent) {
+        var name2 = getUrlVars()["Search"];
+        //if (keyEvent.keyCode === 13) {
+        if ($("#txtSearchbyKeyword").val() != '' || name2 != '') {
+            SearchbyKeyword();
+        }
+        //}
+    }
+    function SearchbyKeyword() {
+
+        window.location.href = "/Blogs/Index?Search=" + $("#txtSearchbyKeyword").val();
+    }
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+</script>

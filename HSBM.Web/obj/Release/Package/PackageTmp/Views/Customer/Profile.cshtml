@@ -1,0 +1,183 @@
+﻿@model HSBM.EntityModel.SystemUsers.SystemUsers
+@{
+    ViewBag.Title = "My Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#CountryMasterID").change(function () {
+            $.post('/Customer/GetRegionList', { Id: $('#CountryMasterID').val() }, function (data) {
+                var options = $("#RegionMasterID");
+                options.find('option').remove();
+                $.each(data, function () {
+                    options.append($("<option />").val(this.Value).text(this.Text));
+                });
+            })
+        });
+
+        $("#RegionMasterID").change(function () {
+            $.post('/Customer/GetCityList', { Id: $('#RegionMasterID').val() }, function (data) {
+                var options = $("#CityMasterID");
+                options.find('option').remove();
+                $.each(data, function () {
+                    options.append($("<option />").val(this.Value).text(this.Text));
+                });
+            })
+        });
+
+    });
+
+    function isValidPhone(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if ((charCode >= 48 && charCode <= 57) || charCode == 40 || charCode == 41 || charCode == 43 || charCode == 45) {
+            if ($("#Telephone").val().length == 0 && charCode == 45) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+</script>
+
+<section class="login-page-demo profile-main-box" id="loginForm">
+    <div class="awe-overlay"></div>
+    <div class="container">
+        <div class="customer-login-box">
+            <h2>Profile</h2>
+
+
+            @using (Html.BeginForm("UpdateProfile", "Customer", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.HiddenFor(t => t.Id)
+                    @Html.HiddenFor(t => t.RoleMasterID)
+                    @Html.HiddenFor(t => t.IsActive)
+                    <div class="form-group row">
+                        <div class="col-md-10">
+                            <label class="control-label"> @ViewBag.Message</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*<div class="col-md-4">
+                                <label class=" control-label">User Name</label>
+
+                                @Html.TextBoxFor(t => t.UserName, new { @readonly = "readonly", @class = "form-control" })
+                            </div>*@
+                        <div class="col-md-4">
+                            <label class=" control-label">
+                                @Html.LabelFor(t => t.FirstName)
+                            </label>
+
+                            @Html.TextBoxFor(t => t.FirstName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(t => t.FirstName)
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="control-label">
+                                @Html.LabelFor(t => t.LastName)
+                            </label>
+
+                            @Html.TextBoxFor(t => t.LastName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(t => t.LastName)
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class=" control-label">EmailAddress</label>
+
+                            @Html.TextBoxFor(t => t.Email, new { @readonly = "readonly", @class = "form-control" })
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        @*<div class="form-group">
+                                <label class=" control-label">
+                                    @Html.LabelFor(t => t.Telephone)
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(t => t.Telephone, new { @class = "form-control", onkeypress = "return isValidPhone(event);", minlength = "6" })
+                                    @Html.ValidationMessageFor(t => t.Telephone)
+                                </div>
+                            </div>*@
+                        <div class="col-md-4">
+                            <label class=" control-label">
+                                @Html.LabelFor(model => model.Gender)
+                            </label>
+
+                            @Html.DropDownListFor(model => model.Gender, ViewBag.GenderDropDown as List<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-4">
+                            <label class=" control-label">
+                                @Html.LabelFor(t => t.Mobile)
+                            </label>
+
+                            @Html.TextBoxFor(t => t.Mobile, new { @class = "form-control", minlength = "10" })
+                            @Html.ValidationMessageFor(t => t.Mobile)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class=" control-label">
+                                @Html.LabelFor(model => model.Address)
+                            </label>
+
+                            @Html.TextAreaFor(model => model.Address, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Address)
+
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                            <label class=" control-label">
+                                @Html.LabelFor(model => model.Address2)
+                            </label>
+                            <div class="col-md-6">
+                                @Html.EditorFor(model => model.Address2, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Address2)
+                            </div>
+                        </div>*@
+
+                    @*<div class="form-group">
+                            <label class="control-label col-md-4">Country</label>
+                            <div class="col-md-4">
+                                @Html.DropDownListFor(model => model.CountryMasterID, ViewBag.CountryDropDown as List<SelectListItem>, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CountryMasterID)
+                            </div>
+                        </div>*@
+
+                    @*<div class="form-group">
+                            <label class="control-label col-md-4">Region</label>
+                            <div class="col-md-4">
+                                @Html.DropDownListFor(model => model.RegionMasterID, ViewBag.RegionDropDown as List<SelectListItem>, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.RegionMasterID)
+                            </div>
+                        </div>*@
+
+                    @*<div class="form-group">
+                            <label class="control-label col-md-4">City</label>
+                            <div class="col-md-4">
+                                @Html.DropDownListFor(model => model.CityMasterID, ViewBag.CityDropDown as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                        </div>*@
+
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-xs-12 text-center mt-30">
+                        <input type="submit" value="Save" class="btn btn-primary btn-lg" />
+                    </div>
+                </div>
+
+
+
+            }
+
+        </div>
+    </div>
+</section>

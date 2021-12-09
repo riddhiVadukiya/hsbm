@@ -1,0 +1,234 @@
+﻿@using HSBM.EntityModel.Blogs;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    List<FrontBlogResponse> _FrontBlogResponse = (List<FrontBlogResponse>)(ViewBag.FrontBlogResponse);
+    List<BlogCategory> _CategoryList = (List<BlogCategory>)(ViewBag.CategoryList);
+    List<FrontBlogResponse> _PopularBlogList = (List<FrontBlogResponse>)(ViewBag.PopularBlogList);    
+}
+<div ng-controller="BlogsController">
+    <input type="hidden" id="hdnModelBlog" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_FrontBlogResponse)" />    
+    <input type="hidden" id="hdnModelCategoryList" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_CategoryList)" />    
+    <input type="hidden" id="hdnModelPopularBlogList" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_PopularBlogList)" />    
+
+    
+    <section class="blog-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9" id="divBlogList">
+                    <div class="blog-page__content">
+
+                        <!-- POST -->
+                        <div class="post" ng-repeat="blog in FrontBlogResponse">
+                            <div class="post-media">
+                                <div class="image-wrap">
+                                    <a href="javascript:;" ng-click="ShowDetail(blog)">
+                                        <img src="{{'/Uploaded/' + blog.Image}}" alt="" onerror="this.src='/images/no_image.jpg'">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="post-body">
+                                <div class="post-meta">
+                                    <div class="date">{{blog.CreatedDate | date : 'MMM dd, yyyy'}}</div>
+                                    <div class="author">by {{blog.Author}}</div>
+                                    <div class="cat">
+                                        <ul>
+                                            <li>{{blog.Categories}}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="comment">{{blog.CommentCount}} Comments &raquo;</div>
+                                </div>
+                                <div class="post-title">
+                                    <h2>
+                                        <a href="javascript:;" ng-click="ShowDetail(blog)">{{blog.Title}}</a>
+                                    </h2>
+                                </div>
+                                <div class="post-content">
+                                    <p ng-bind-html="(blog.Description | limitTo: 100)+(blog.Description.length > 100 ? '...' : '')"></p>
+                                </div>
+                                <div class="post-link">
+                                    <a href="javascript:;" ng-click="ShowDetail(blog)" class="awe-btn awe-btn-style2">Read more</a>
+                                </div>
+                            </div>
+                        </div>    
+                        <div ng-if="FrontBlogResponse.length == 0">
+                            <h3 class="noblog">No Blog Found !!!</h3>
+                        </div>                    
+                        <!-- END / POST -->
+                                               
+                        <!-- PAGINATION -->
+                        <div class="page__pagination" ng-if="blocks.length > 0">
+                            <span class="pagination-prev" ng-click="Previous()" id="btnPrevious"><i class="fa fa-caret-left"></i></span>
+                            <a ng-repeat="block in blocks" ng-class="block.IsSelected ? 'current' : ''" ng-click="FrontBlogRequest.PageIndex = $index + 1; GoToSpecificPage()">{{block.PageIndex}}</a>
+
+                            <a class="pagination-next" ng-click="Next()" id="btnNext"><i class="fa fa-caret-right"></i></a>
+                        </div>
+                        <!-- END / PAGINATION -->
+                    </div>
+                </div>
+
+                <div class="col-md-9 mb95 display-none" id="divBlogDetail">
+                    <div class="blog-page__content blog-single">
+                        <!-- POST -->
+                        <div class="post">
+                            <div class="post-meta">
+                                <div class="date">{{blog.CreatedDate | date : 'MMM dd, yyyy'}}</div>
+                                <div class="author">by {{blog.Author}}</div>
+                                <div class="cat">
+                                    <ul>
+                                        <li>{{blog.Categories}}</li>
+                                    </ul>
+                                </div>
+                                <div class="comment">{{blog.CommentCount}} Comments</div>
+                            </div>
+                            <div class="post-title">
+                                <h1>{{blog.Title}}</h1>
+                            </div>
+                            <div class="">
+                                <div class="image-wrap">
+                                    <img src="{{'/Uploaded/' + blog.Image}}" alt="" onerror="this.src='/images/no_image.jpg'" class="blogdtlimg heightAuto">
+                                </div>
+                            </div>
+                            <div class="post-body mt-20">
+                                <div class="post-content" ng-bind-html="blog.Description">
+
+                                </div>
+                            </div>                            
+                        </div>                        
+                        <!-- END / POST -->
+                        <div class="post-footer ">
+                            <div class="cat-box ">
+                                <h4>Category</h4>
+                                <div class="cat">
+                                    <a href="javascript:;" class="defaultCursor">{{blog.Categories}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="hrline mt-20"></div>
+                        <!-- ABOUT AUTHOR -->
+                        <div class="about-author mt-20">
+                            
+                            <div class="">
+                                <div class="author-title">
+                                    <h4>About the author</h4>
+                                </div>
+                                <div class="author-name">
+                                    <h3>Name of author : {{blog.Author}}</h3>
+                                </div>                                
+                            </div>
+                        </div>
+                        <!-- END / ABOUT AUTHOR -->
+                      
+                        <!-- COMMENTS -->                       
+                        <div id="comments">                           
+                            <div class="commentlist-wrapper" >
+                                <div class="reply-title">
+                                    <h4><i class="fa fa-comment mr-10"></i>{{blog.CommentCount}} Comments</h4>
+                                </div>
+                                <ul class="commentlist">
+                                    <li class="comment" ng-repeat="comment in BlogComments">
+                                        <div class="comment-box">
+                                            <div class="comment-author">
+                                                <a href="javascript:;"><img src="/images/demo-thumb.jpg" alt=""></a>
+                                            </div>
+                                            <div class="comment-body">
+                                                <cite class="fn"><a href="javascript:;">{{comment.CommentBy}}</a></cite>
+                                                <p>{{comment.Comment}}</p>
+                                                <div class="comment-meta">
+                                                    <span>{{comment.CreatedDate}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>                                    
+                                </ul>
+                            </div>
+
+                            <div>
+                                <div class="col-sm-12 col-md-12">
+
+                                    <div class="section-title">
+                                        <h3><span>Leave Your Comment</span></h3>
+                                    </div>
+                                    <div>
+                                        <textarea id="txtComment" ng-model="UserComment" placeholder="Comment" class="col-md-12"></textarea>
+                                        <button class="simplebtn mt-20 fl" ng-click="SaveComment()">Submit</button>
+                                        <button class="simplebtn mt-20 fr" ng-click="HideDetail()">Back To List</button>
+                                        <div class="clearfix"></div>
+                                        <div class="mt-20 resultmsg display-none" id="divResultmsg">
+                                            {{res_msg}} <span class="close_btn" onclick="document.getElementById('divResultmsg').style.display='none';">X</span>
+                                        </div>    
+
+                                    </div>      
+                                                        
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END / COMMENTS -->
+                       
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="page-sidebar">
+                        <div class="widget widget_search">
+                            <h3>Search in Blog</h3>
+                            
+                            <input type="text" ng-model="FrontBlogRequest.keyword" placeholder="Search and hit enter" ng-keypress="searchkeypress($event)">
+                            <span ng-click="SearchbyKeyword(true);"><i class="awe-icon awe-icon-search blogsearchic"></i></span>
+                            <div class="mt-10 mb-10">
+                                <button type="button" class="simplebtn" ng-click="ResetSearch()" >Reset</button>
+                            </div>
+                            
+                        </div>                        
+                        <!-- Categories -->
+                        <div class="widget widget_categories">
+                            <h3>Categories</h3>
+                            <ul>
+                                <li ng-repeat="category in CategoryList"><a href="javascript:;" ng-click="SearchbyKeyword(false, category.Id);">{{category.Category}}</a></li>                                
+                            </ul>
+                        </div>
+                        <!-- END / Categories -->
+                        <!-- Popular Posts -->
+                        <h3>Popular Posts</h3>
+                        <div class="widget widget_has_thumbnail popularpost">                            
+                            <ul>
+                                <li ng-repeat="popularpost in PopularBlogList">
+                                    <div class="image-wrap image-cover">
+                                        <a href="javascript:;" ng-click="ShowDetail(popularpost)">
+                                            <img src="{{'/Uploaded/' + popularpost.Image}}" alt="" onerror="this.src='/images/no_image.jpg'">
+                                        </a>
+                                    </div>
+                                    <div class="content">
+                                        <a href="javascript:;" ng-click="ShowDetail(popularpost)">{{popularpost.Title}}</a>
+                                    </div>
+                                </li>                               
+                            </ul>
+                        </div>
+                        <!-- END / Popular Posts -->                       
+
+                        <!-- WIDGET -->
+                        <div class="widget widget_follow_us">
+                            <h3>Follow us</h3>
+                            <div class="awe-social">
+                                <a href="javascript:;"><i class="fa fa-twitter"></i></a>
+                                <a href="javascript:;"><i class="fa fa-pinterest"></i></a>
+                                <a href="javascript:;"><i class="fa fa-facebook"></i></a>
+                                <a href="javascript:;"><i class="fa fa-youtube-play"></i></a>
+                            </div>
+                        </div>
+                        <!-- END / WIDGET -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</div>
+
+

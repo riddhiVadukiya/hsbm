@@ -1,0 +1,59 @@
+﻿@model HSBM.EntityModel.SubscriptionMaster.SubscriptionMaster
+
+@{
+    if (Model.Id > 0)
+    {
+        ViewBag.Title = "Update Subscriber";
+    }
+    else
+    {
+        ViewBag.Title = "Add Subscriber";
+    }
+
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("AddSubscription", "Subscription", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal x_panel">
+        @*<h4>SubscriptionMaster</h4>
+        <hr />*@
+        @Html.ValidationSummary(true)
+
+        <div class="form-group mt10">
+            @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-2 col-sm-2 col-xs-12" })
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", maxlength = "250" })
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, new { @class = "control-label col-md-2 col-sm-2 col-xs-12" })
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", maxlength = "50" })
+                @Html.ValidationMessageFor(model => model.FirstName)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, new { @class = "control-label col-md-2 col-sm-2 col-xs-12" })
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", maxlength = "50" })
+                @Html.ValidationMessageFor(model => model.LastName)
+            </div>
+        </div>        
+        <div class="ln_solid"></div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-3">
+                <input type="submit" value="Save" class="btn btn-success" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+}
+

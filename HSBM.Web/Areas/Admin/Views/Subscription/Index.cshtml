@@ -1,0 +1,112 @@
+﻿@model HSBM.EntityModel.SubscriptionMaster.SubscriptionMaster
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-wrapper">
+    <h3>Subscribers</h3>
+    <div ng-controller="SubscriptionController" class="inner-content">
+        <script>
+            function BindSubscriptionGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+                var Columns = [
+                            { data: 'Id', bVisible: false },
+                            { data: 'strCreatedDate' },
+                            { data: 'Email' },
+                            {
+                                @if (SessionProxy.CheckModuleAccess(Module.Subscribers, ModuleAccess.CanUpdate))
+                                {
+                                @: bVisible: true,
+                                                                                                   }
+                                else
+                                {
+                                @: bVisible: false,
+                                                                                                }
+                                bSortable: false,
+                                sClass: "action-cell",
+                                mRender: function (data, type, row, full) {
+                                    var btn = "";
+                                    @if (SessionProxy.CheckModuleAccess(Module.Subscribers, ModuleAccess.CanUpdate))
+                                    {
+                                        @: if (!row.IsActive) { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" href='javascript:void(0);' title='Unsubscribe' class='glyphicon glyphicon-ok grayColor'></a> " } else { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" href='javascript:void(0);' title='Subscribe' class='glyphicon glyphicon-ok'></a> " }
+                                                                                                            }
+                                    return btn;
+                                }
+                            }
+                ];
+                BindSearchGridData('Subscription', Columns, '/Admin/Subscription/GetAllSubscriptionBySearchRequest', $('[ng-controller="SubscriptionController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () {
+
+                    if ($("#Subscription").dataTable().fnGetData().length == 0) {
+                        $('#Subscription_NoRecordFoundButton').hide();
+                    } else {
+                        $('#Subscription_NoRecordFoundButton').show();
+                    }
+
+                });
+            }
+        </script>
+        @Html.AntiForgeryToken()
+        @using (Html.BeginForm("Export", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            <input type="hidden" class="form-control" ng-model="Search.CreatedFromDate" id="CreatedFromDate" name="CreatedFromDate" />
+              <input type="hidden" class="form-control" ng-model="Search.CreatedToDate" id="CreatedToDate" name="CreatedToDate" />
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <label>From Date:</label>
+                    <div class="input-group date">
+                        <input type="text" class="form-control" ng-model="Search.CreatedDateFrom" id="CreatedDateFrom" name="CreatedDateFrom" />
+                        <span class="input-group-addon" ng-click="OpenCalender('CreatedDateFrom')">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <label>To Date:</label>
+                    <div class="input-group date">
+                        <input type="text" class="form-control" ng-model="Search.CreatedDateTo" id="CreatedDateTo" name="CreatedDateTo" />
+                        <span class="input-group-addon" ng-click="OpenCalender('CreatedDateTo')">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="buttongroup" style="margin-top:25px;">
+                        <input type="button" ng-click="SearchData()" value="Search" class="btn green-btn" />
+                        <input type="button" ng-click="ResetData()" value="Reset" class="btn black-btn" />
+                    </div>
+                </div>
+            </div>
+            <div class="ln_solid"></div>            
+            <div id="Subscription_NoRecordFoundButton" class="buttongroup" style="margin:0px;">
+                <input type="submit" name="btnExport" value="Export" class="btn green-btn pull-right" />
+                <div class="col-xs-6 col-sm-2 col-md-2 pull-right" >
+                    <div class="form-group">
+                       
+                        <select id="ExportTypeExcel"
+                                name="ExportTypeExcel"
+                                @*ng-model="Search.CategoryId"*@
+                                required>
+                            <option value="0">CSV</option>
+                            <option value="1">Excel</option>
+                        </select>
+                    </div>
+                </div>
+                </div>            
+            <table id="Subscription" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Subscribed Date</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="Subscription_NoRecordFound" class="empty-grid">No records found</div>
+        }
+    </div>
+</div>

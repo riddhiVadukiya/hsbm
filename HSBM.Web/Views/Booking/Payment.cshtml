@@ -1,0 +1,13 @@
+﻿@model object
+@{
+    ViewBag.Title = "Payment";
+    Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml";
+}
+<div>Payment process...@Model</div>
+
+<script>
+    window.onload = function () {
+        location.href = "/Hotel/Booking/ThankYou/" + '@Model';
+    }
+</script>
+

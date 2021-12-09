@@ -1,0 +1,105 @@
+﻿@model HSBM.EntityModel.EmailTemplates.EmailTemplates
+
+@{
+    if (Model.Id > 0)
+    {
+        ViewBag.Title = "Update Email Template";
+    }
+    else
+    {
+        ViewBag.Title = "Add Email Template";
+    }
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    <script>
+        $(document).ready(function () {
+            tinymce.init(
+                {
+                    selector: '#TemplatesHtml',
+                    height: 500,
+                    plugins: "code",
+                  
+       
+            menubar: "tools",
+                });
+        });
+    </script>
+}
+
+<div class="main-wrapper">
+    <h3>@ViewBag.Title</h3>
+
+    @using (Html.BeginForm("AddUpdateEmailTemplates", "EmailTemplates", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="inner-content">
+        @*<h4>EmailTemplates</h4>
+            <hr />*@
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.CreatedBy)
+        @Html.HiddenFor(model => model.CreatedDate)
+        @Html.HiddenFor(model => model.UpdatedBy)
+        @Html.HiddenFor(model => model.UpdateDate)
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TemplateType, new { @class = "control-label" })
+
+                    @Html.DropDownListFor(model => model.TemplateType, HSBM.Web.Helpers.Common.GetEmailTemplateTypeForDropDown(), "Select", new { @class = "select2_single form-control" })
+                    @Html.ValidationMessageFor(model => model.TemplateType)
+                </div>
+            </div>
+            @*<div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+
+                    @Html.TextBoxFor(model => model.Name, new {  maxlength = "50" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>*@
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Subject, new { @class = "control-label" })
+
+                    @Html.TextBoxFor(model => model.Subject, new { @maxlength=100})
+                    @Html.ValidationMessageFor(model => model.Subject)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.TemplatesHtml, new { @class = "control-label" })*@
+                    <label class="control-label" for="TemplatesHtml">Description</label>
+
+                    @Html.EditorFor(model => model.TemplatesHtml)
+                    @Html.ValidationMessageFor(model => model.TemplatesHtml)
+                </div>
+            </div>
+        </div>
+        @*<div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group checkbox" style="margin:0px;">
+                    <div class="flex-middle checkbox-ip">
+                        @Html.CheckBoxFor(model => model.IsActive)
+                        @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.IsActive)
+                </div>
+            </div>
+        </div>*@
+        <div class="ln_solid"></div>
+            <div class="buttongroup">
+                <input type="submit" value="Save" class="btn green-btn" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+      
+    </div>
+    }
+
+</div>

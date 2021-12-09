@@ -1,0 +1,9 @@
+D:\FarmStay\HSBM.WindowsService\bin\Release\HSBM.WindowsService.exe
+D:\FarmStay\HSBM.WindowsService\bin\Release\HSBM.WindowsService.pdb
+D:\FarmStay\HSBM.WindowsService\obj\Release\HSBM.WindowsService.HimalayanFarmstayService.resources
+D:\FarmStay\HSBM.WindowsService\obj\Release\HSBM.WindowsService.ProjectInstaller.resources
+D:\FarmStay\HSBM.WindowsService\obj\Release\HSBM.WindowsService.csproj.GenerateResource.Cache
+D:\FarmStay\HSBM.WindowsService\obj\Release\HSBM.WindowsService.exe
+D:\FarmStay\HSBM.WindowsService\obj\Release\HSBM.WindowsService.pdb
+D:\FarmStay\HSBM.WindowsService\obj\Release\HSBM.WindowsService.csprojAssemblyReference.cache
+D:\FarmStay\HSBM.WindowsService\obj\Release\HSBM.WindowsService.csproj.CoreCompileInputs.cache

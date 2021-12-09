@@ -1,0 +1,63 @@
+﻿@model HSBM.EntityModel.SiteSettings.SiteSettings
+
+@{
+    
+    ViewBag.Title = "Update Setting";
+    
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="main-wrapper">
+    <h3>@ViewBag.Title</h3>
+
+    @using (Html.BeginForm("AddUpdateSiteSetting", "SiteSettings", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="inner-content">
+            @*<h4>SiteSettings</h4>
+                <hr />*@
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.SiteSettingId)
+            @Html.HiddenFor(model => model.CreatedBy)
+            @Html.HiddenFor(model => model.CreatedDate)
+            @Html.HiddenFor(model => model.UpdatedBy)
+            @Html.HiddenFor(model => model.UpdateDate)
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelForModel(Model.Name, new { @class = "control-label "  })
+
+                        @switch (Model.SiteSettingId)
+                        {
+                            case (int)HSBM.Common.Enums.SiteSettingEnum.DefaultCurrency:
+                                @Html.DropDownListFor(model => model.Value, Model.CurrencyList)
+                                @Html.ValidationMessageFor(model => model.Value)
+                                break;
+                            default:
+                            @Html.TextBoxFor(model => model.Value, new { maxlength = "100" })
+                            @Html.ValidationMessageFor(model => model.Value)
+                                break;
+                        }
+                    </div>
+                </div>
+
+                @*<div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsActive, new { @class = "control-label " })
+
+                        @Html.EditorFor(model => model.IsActive)
+                        @Html.ValidationMessageFor(model => model.IsActive)
+                    </div>
+                </div>*@
+            </div>
+<!--            <div class="ln_solid"></div>-->
+            <div class="buttongroup">
+                <input type="submit" value="Save" class="btn btn-success" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+
+        </div>
+    }
+</div>

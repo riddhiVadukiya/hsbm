@@ -1,0 +1,405 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/frontjquery")
+    @Scripts.Render("~/bundles/frontEndScripts")
+
+    <!-- GOOGLE FONT -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,600,400,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+
+    <link id="colorreplace" rel="stylesheet" type="text/css" href="~/Content/css/colors/blue.css">
+
+    @*<script src="~/signalr/hubs"></script>*@
+
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+
+</head>
+
+<!--[if IE 7]> <body class="ie7 lt-ie8 lt-ie9 lt-ie10"> <![endif]-->
+<!--[if IE 8]> <body class="ie8 lt-ie9 lt-ie10"> <![endif]-->
+<!--[if IE 9]> <body class="ie9 lt-ie10"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<body ng-app="FrontApp">
+    <!--<![endif]-->
+
+    <div id="page-wrap">
+
+        <!-- PRELOADER -->
+        @*<div class="preloader"></div>*@
+        <!-- END / PRELOADER -->
+
+        <header id="header-page">
+
+            <div class="header-page__inner">
+                <div class="container">
+                    <div class="logo">
+                        <a href="/"><img src="@System.Configuration.ConfigurationManager.AppSettings["LogoPath"].ToString()" alt="@System.Configuration.ConfigurationManager.AppSettings["SiteName"].ToString()"></a>
+                    </div>
+                </div>
+
+                <nav class="navigation awe-navigation" data-responsive="1200">
+                    <ul class="menu-list">
+                        <li class="menu-item-has-children current-menu-parent">
+                            <a href="/">Home</a>
+                        </li>
+                        @*<li class="menu-item-has-children">
+                            <a href="@Url.Action("Index", "Blogs")">Blog</a>
+                        </li>*@
+                        @if (SessionProxy.CustomerDetails != null && SessionProxy.CustomerDetails.Id != null && SessionProxy.CustomerDetails.Id >= 0 && SessionProxy.CustomerDetails.UserType == (int)UserTypes.Customer)
+                        {
+                            <li class="menu-item-has-children">
+                                <a href="javascript:;">@SessionProxy.CustomerDetails.FirstName @SessionProxy.CustomerDetails.LastName</a>
+                                <ul class="sub-menu">
+                                    <li class="current-menu-item"><a href="@Url.Action("Profile", "Customer")">Profile</a></li>
+                                    @*<li><a href="@Url.Action("BookingHistory", "Customer")">Booking History</a></li>
+                                    <li><a href="@Url.Action("HotelWishlist", "Customer")">Hotel Wishlist</a></li>*@
+                                    <li><a href="@Url.Action("ChangePassword", "Customer")">Change Password</a></li>
+                                    <li><a href="@Url.Action("LogOut", "Customer")">Logout</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="menu-item-has-children">
+                                <a href="javascript:;">Login</a>
+                                <ul class="sub-menu">
+                                    <li class="current-menu-item"><a href="@Url.Action("Login", "Customer")">Login</a></li>
+                                    <li><a href="@Url.Action("CustomerRegister", "Customer")">Register</a></li>
+                                </ul>
+                            </li>
+                        }
+                        @*<div class="col-sm-2 col-xs-12 form-elements pull-right" ng-controller="CommonController">
+                            <div class="form-item" ng-init="CurrencySource">
+                                <select id="Currency" class="form-control" ng-model="Search.Currency" ng-change="ChangeBaseCurrency()">
+                                    <option ng-repeat="f in CurrencySource" value="{{f.Value}}" ng-selected="f.Value==Search.Currency">{{f.Text}}</option>
+                                </select>
+                            </div>
+                        </div>*@
+                    </ul>
+                </nav>
+
+
+            </div>
+
+
+        </header>
+
+
+        <!-- HERO SECTION -->
+        @*<section class="hero-section">
+                <div id="slider-revolution">
+                    <ul>
+                        <li data-slotamount="7" data-masterspeed="500" data-title="Hygge">
+                            <img src="~/Images/1.jpg" data-bgposition="left center" data-duration="14000" data-bgpositionend="right center" alt="">
+
+                            <div class="tp-caption sfb fadeout slider-caption-sub slider-caption-sub-1" data-x="500" data-y="230" data-speed="700" data-start="1500" data-easing="easeOutBack">
+                                Last minute deal
+                            </div>
+
+                            <div class="tp-caption sfb fadeout slider-caption slider-caption-1" data-x="center" data-y="280" data-speed="700" data-easing="easeOutBack" data-start="2000">Top discount Paris Hotels</div>
+
+                            <a href="#" class="tp-caption sfb fadeout awe-btn awe-btn-style3 awe-btn-slider" data-x="center" data-y="380" data-easing="easeOutBack" data-speed="700" data-start="2200">Book now</a>
+                        </li>
+
+                        <li data-slotamount="7" data-masterspeed="500" data-title="Wonderlust">
+                            <img src="~/Images/2.jpg" data-bgposition="left center" data-duration="14000" data-bgpositionend="right center" alt="">
+
+                            <div class="tp-caption  sft fadeout slider-caption-sub slider-caption-sub-2" data-x="center" data-y="220" data-speed="700" data-start="1500" data-easing="easeOutBack">
+                                Check out the top weekly destination
+                            </div>
+
+                            <div class="tp-caption sft fadeout slider-caption slider-caption-2" data-x="center" data-y="260" data-speed="700" data-easing="easeOutBack" data-start="2000">
+                                We'r AGILE Centric
+                            </div>
+
+                            <a href="#" class="tp-caption sft fadeout awe-btn awe-btn-style3 awe-btn-slider" data-x="center" data-y="370" data-easing="easeOutBack" data-speed="700" data-start="2200">Book now</a>
+                        </li>
+
+                        <li data-slotamount="7" data-masterspeed="500" data-title="Meraki">
+                            <img src="~/Images/3.jpg" data-bgposition="left center" data-duration="14000" data-bgpositionend="right center" alt="">
+
+                            <div class="tp-caption lfl fadeout slider-caption slider-caption-3" data-x="center" data-y="260" data-speed="700" data-easing="easeOutBack" data-start="1500">
+                                Real Estate, Travels
+                            </div>
+
+                            <div href="#" class="tp-caption lfr fadeout slider-caption-sub slider-caption-sub-3" data-x="center" data-y="365" data-easing="easeOutBack" data-speed="700" data-start="2000">Take you to every corner of the world</div>
+                        </li>
+
+                    </ul>
+                </div>
+            </section>*@
+
+        <section>
+            <div id="HomeSlider" ng-controller="CommonController">
+                @*<div carousel interval="3000" class="carousel slide">
+                    <div slide ng-repeat="banner in BannerList">
+                     
+                        <img onerror="this.src='@HSBM.Common.Utils.Helper.DefaultImageLocation''" src="'@HSBM.Common.Utils.Helper.DefaultImageLocation'" class="blank-bg" style="background-image: url(/Uploaded/{{banner.ImageName}});">
+                    </div>
+                </div>*@
+                <img src="http://www.indoamerican-news.com/wp-content/uploads/2016/07/slider-img5.jpg">
+            </div>
+        </section>
+
+        @*<section class="hero-section">
+                <div id="slider-revolution">
+                    <div ng-controller="CommonController">
+                        <ul>
+                            <li data-slotamount="7" data-masterspeed="500" ng-repeat="banner in BannerList">
+                                <img ng-src="~/Uploaded/{{banner.ImageName}}" data-bgposition="left center" data-duration="14000" data-bgpositionend="right center" alt="{{banner.Alt}}">
+
+                                <div class="tp-caption sfb fadeout slider-caption-sub slider-caption-sub-1" data-x="500" data-y="230" data-speed="700" data-start="1500" data-easing="easeOutBack">
+                                    {{banner.Title}}
+                                </div>
+
+                                <div class="tp-caption sfb fadeout slider-caption slider-caption-1" data-x="center" data-y="280" data-speed="700" data-easing="easeOutBack" data-start="2000">
+                                    {{banner.Description}}
+                                </div>
+
+
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </section>*@
+        <!-- END / HERO SECTION -->
+
+
+        <section>
+            <div class="container">
+                @*<div class="col-md-12">*@
+                <h3>@ViewBag.Message</h3>
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                }
+                @RenderBody()
+                @*</div>*@
+            </div>
+        </section>
+
+
+        <!-- FOOTER PAGE -->
+        <footer id="footer-page">
+            <div class="container">
+                <div class="row">
+                    <!-- WIDGET -->
+                    <div class="col-md-3">
+                        <div class="widget widget_contact_info">
+                            <div class="widget_background">
+                                <div class="widget_background__half">
+                                    <div class="bg"></div>
+                                </div>
+                                <div class="widget_background__half">
+                                    <div class="bg"></div>
+                                </div>
+                            </div>
+                            <div class="logo">
+                                <img src="~/Images/logo-footer.png" alt="">
+                            </div>
+                            <div class="widget_content">
+                                @*<p>3rd Floor, Purusharth Plaza, Nr People's Bank, Amin Marg, Rajkot</p>
+                                <p>+91-281-22446677</p>
+                                <a href="#">info@brevitysoftware.com</a>*@
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END / WIDGET -->
+                    <!-- WIDGET -->
+                    <div class="col-md-2">
+                        <div class="widget widget_about_us">
+                            @*<h3>About Us</h3>
+                            <div class="widget_content">
+                                <p>Brevity Software is a mobile application and website design & development company in India. It is an amalgam of talented designers, developers, project managers and business developers who work in co-ordination towards a single goal – Client Success.</p>
+                            </div>*@
+                        </div>
+                    </div>
+                    <!-- END / WIDGET -->
+                    <!-- WIDGET -->
+                    @*<div class="col-md-2">
+                            <div class="widget widget_categories">
+                                <h3>Categiries</h3>
+                                <ul>
+                                    <li><a href="#">Countries</a></li>
+                                    <li><a href="#">Regions</a></li>
+                                    <li><a href="#">Cities</a></li>
+                                    <li><a href="#">Districts</a></li>
+                                    <li><a href="#">Countries</a></li>
+                                    <li><a href="#">Airports</a></li>
+                                    <li><a href="#">Hotels</a></li>
+                                    <li><a href="#">Places of interest</a></li>
+                                </ul>
+                            </div>
+                        </div>*@
+                    <!-- END / WIDGET -->
+                    <!-- WIDGET -->
+                    <div class="col-md-2" ng-init="GetCMSPages()" ng-controller="CommonController">
+                        <div class="widget widget_recent_entries">
+                            <h3>Search</h3>
+                            <ul>                                
+                                <li ng-repeat="p in CMSPages">
+                                    <a href="{{p.Link}}">{{p.Text}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END / WIDGET -->
+                    <!-- WIDGET -->
+                    <div class="col-md-3">
+                        <div class="widget widget_follow_us">
+                            <div class="widget_content">
+                                <p>Chat With Us</p>
+                                @*<span class="phone"><a href="skype:hardik.beeline">hardik.beeline</a></span>
+                                <span class="phone"><a href="skype:bhavin.beeline">bhavin.beeline</a></span>*@
+                                <div class="awe-social">
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                    <a href="#"><i class="fa fa-pinterest"></i></a>
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                    <a href="#"><i class="fa fa-youtube-play"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" ng-controller="CommonController">
+                        <div class="widget widget_follow_us">
+                            <div class="widget_content">
+                                <form name="subForm" class="ng-pristine ng-valid ng-submitted" novalidate>
+                                    <p>Subscribe:</p>
+                                    <input ng-model="SubscribeEmail" class="form-control" validate-email name="SubscribeEmail" type="email"
+                                           ng-class="{ 'has-error' : subForm.SubscribeEmail.$error.email && !subForm.SubscribeEmail.$pristine}" />
+                                    <button ng-click="SendSubscribeRequest()" class="form-control" ng-disabled="subForm.SubscribeEmail.$error.email || SubscribeEmail=='' || SubscribeEmail == null || SubscribeEmail == undefined">Subscribe</button>
+                                    <label>{{SubscribeMessage}}</label>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END / WIDGET -->
+                </div>
+                <div class="copyright">
+                    <p>Copyright © @System.DateTime.Now.Year, @System.Configuration.ConfigurationManager.AppSettings["SiteURL"].ToString() All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+        <!-- END / FOOTER PAGE -->
+        @*</div>*@
+
+    </div>
+
+
+
+
+
+    @Scripts.Render("~/bundles/footer-js")
+    <script type="text/javascript">
+        $('body').show();
+        $('.version').text(NProgress.version);
+        NProgress.start();
+        setTimeout(function () { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
+
+        $(document).ready(function () {
+            $('#divtoogle').hide();
+            $("#ddltoogle").click(function () {
+                $("#divtoogle").slideToggle();
+            });
+        });
+
+
+    </script>
+
+    <script type="text/javascript">
+        //if ($('#slider-revolution').length) {
+        //    $('#slider-revolution').show().revolution({
+        //        ottedOverlay: "none",
+        //        delay: 10000,
+        //        startwidth: 1600,
+        //        startheight: 650,
+        //        hideThumbs: 200,
+
+        //        thumbWidth: 100,
+        //        thumbHeight: 50,
+        //        thumbAmount: 5,
+
+
+        //        simplifyAll: "off",
+
+        //        navigationType: "none",
+        //        navigationArrows: "solo",
+        //        navigationStyle: "preview4",
+
+        //        touchenabled: "on",
+        //        onHoverStop: "on",
+        //        nextSlideOnWindowFocus: "off",
+
+        //        swipe_threshold: 0.7,
+        //        swipe_min_touches: 1,
+        //        drag_block_vertical: false,
+
+        //        parallax: "mouse",
+        //        parallaxBgFreeze: "on",
+        //        parallaxLevels: [7, 4, 3, 2, 5, 4, 3, 2, 1, 0],
+
+
+        //        keyboardNavigation: "off",
+
+        //        navigationHAlign: "center",
+        //        navigationVAlign: "bottom",
+        //        navigationHOffset: 0,
+        //        navigationVOffset: 20,
+
+        //        soloArrowLeftHalign: "left",
+        //        soloArrowLeftValign: "center",
+        //        soloArrowLeftHOffset: 20,
+        //        soloArrowLeftVOffset: 0,
+
+        //        soloArrowRightHalign: "right",
+        //        soloArrowRightValign: "center",
+        //        soloArrowRightHOffset: 20,
+        //        soloArrowRightVOffset: 0,
+
+        //        shadow: 0,
+        //        fullWidth: "on",
+        //        fullScreen: "off",
+
+        //        spinner: "spinner2",
+
+        //        stopLoop: "off",
+        //        stopAfterLoops: -1,
+        //        stopAtSlide: -1,
+
+        //        shuffle: "off",
+
+        //        autoHeight: "off",
+        //        forceFullWidth: "off",
+
+
+
+        //        hideThumbsOnMobile: "off",
+        //        hideNavDelayOnMobile: 1500,
+        //        hideBulletsOnMobile: "off",
+        //        hideArrowsOnMobile: "off",
+        //        hideThumbsUnderResolution: 0,
+
+        //        hideSliderAtLimit: 0,
+        //        hideCaptionAtLimit: 0,
+        //        hideAllCaptionAtLilmit: 0,
+        //        startWithSlide: 0
+        //    });
+        //}
+
+    </script>
+
+
+</body>
+</html>

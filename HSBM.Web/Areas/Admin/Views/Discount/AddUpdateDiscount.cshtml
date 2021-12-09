@@ -1,0 +1,263 @@
+﻿@model HSBM.EntityModel.DiscountMaster.DiscountMaster
+@using System.Linq;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    if (Model.Id > 0)
+    {
+        ViewBag.Title = "Update Discount";
+    }
+    else
+    {
+        ViewBag.Title = "Add Discount";
+    }
+
+    <link href="~/Content/isteven-multi-select.css" rel="stylesheet" />
+
+    <script>
+        angular.module('app').controller('DiscountMasterController', ['$scope', '$compile', function ($scope, $compile) {
+            $scope.FarmStaysList = [
+                @*@foreach (var category in Model.FarmStaysCategories)
+            {
+                if(Model.FarmStays.Where(t=>t.CategoryId == category.Value).Any())
+                {
+                    @Html.Raw("{ name: '" + category.Text + "', msGroup: true },")*@
+                    @foreach (var item in Model.FarmStays)
+                    {
+                        //if (category.Value == item.CategoryId) {
+                        @Html.Raw("{ name: \"" + item.FarmsName + "\", Id: " + item.FarmId + ", IsApplied: " +  Convert.ToString(item.IsApplied).ToLower() + " },")
+                       //  }
+                     }
+                    // @Html.Raw("{ msGroup: false },")
+          //      }
+          //}
+            ];
+            $scope.FarmStaysListOut = [];
+
+            // $scope.SubmitForm = function () {
+            //$('#frmdiscount').submit( function () {
+            //    
+            //   // $("#frmdiscount").submit();
+            //    if ($scope.FarmStaysListOut == "" || $scope.FarmStaysListOut == null) {
+            //        toastr["error"]("Please select farmstays", "Error")
+            //    }
+            //    else {
+            //        var _SelectedFarmStays = $scope.FarmStaysListOut.map(function (e) { return e.Id }).toString();
+            //        $("#SelectedFarmStays").val(_SelectedFarmStays)
+            //        $("#frmdiscount").submit();
+            //    }
+            //}
+            //);
+            $("#NameValidation").hide();
+            $("#frmdiscount").submit(function (event) {
+                if ($("#Name").val() == "" || $("#Name").val() == null) {
+                    $("#NameValidation").show();
+                }
+                else {
+                    $("#NameValidation").hide();
+                    if ($scope.FarmStaysListOut == "" || $scope.FarmStaysListOut == null) {
+                        toastr["error"]("Please select farmstays", "Error")
+                    }
+                    else {
+                        var _SelectedFarmStays = $scope.FarmStaysListOut.map(function (e) { return e.Id }).toString();
+                        $("#SelectedFarmStays").val(_SelectedFarmStays)
+                        $("#frmdiscount").submit();
+                    }
+                }
+                event.preventDefault();
+            });
+
+            $scope.OpenCalender = function (id) {
+                document.getElementById(id).focus();
+            }
+        }]);
+
+        $(document).ready(function () {
+
+            $("#Name").blur(function () {
+                if ($("#Name").val() == "") {
+                    $("#NameValidation").show();
+                }
+                else {
+                    $("#NameValidation").hide();
+                }
+            })
+            $('.IsPercentage').change(function () {
+                if ($('input[name=IsPercentage]:checked').val() == 'True') {
+                    $("#DiscountValueIcon").empty().html('%');
+                } else {
+                    $("#DiscountValueIcon").empty().html('₹');
+                }
+
+            });
+
+            var _Date = new Date();
+            _Date.setDate(_Date.getDate() + 1);
+            $('#StartDate').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+                dateFormat: DefaultDateFormatsForDatePicker,
+                minDate: _Date,
+                onSelect: function (date) {
+                    var dt2 = $('#EndDate');
+                    var startDate = $(this).datepicker('getDate');
+                    var minDate = $(this).datepicker('getDate');
+                    dt2.datepicker('setDate', minDate);
+                    startDate.setDate(startDate.getDate() + 30);
+                    //sets dt2 maxDate to the last day of 30 days window
+                    //dt2.datepicker('option', 'maxDate', startDate);
+                    dt2.datepicker('option', 'minDate', minDate);
+                    //$(this).datepicker('option', 'minDate', minDate);
+                }
+            }).on('change.dp', function () {
+                
+
+
+                var startDate = stringToDate($('#StartDate').val(), DefaultDateFormat, '/');
+                var endDate = stringToDate($('#EndDate').val(), DefaultDateFormat, '/');
+                if (startDate == 'Invalid Date') {
+                    $('#StartDate').datepicker('setDate', new Date());
+                    $('#EndDate').datepicker('setDate', new Date());
+                }else if (startDate <= new Date()) {
+                    $('#StartDate').datepicker('setDate', new Date());
+                    $('#EndDate').datepicker('setDate', new Date());
+                } else if (startDate > endDate) {
+                    $('#EndDate').datepicker('setDate', startDate);
+                }
+
+            });
+
+            $('#EndDate').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+                dateFormat: DefaultDateFormatsForDatePicker
+            }).on('change.dp', function () {
+                
+                var startDate = stringToDate($('#StartDate').val(), DefaultDateFormat, '/');
+                var endDate = stringToDate($('#EndDate').val(), DefaultDateFormat, '/');
+                if (endDate == 'Invalid Date') {
+                    $('#StartDate').datepicker('setDate', new Date());
+                    $('#EndDate').datepicker('setDate', new Date());
+                }else if (endDate <= new Date()) {
+                    $('#StartDate').datepicker('setDate', new Date().getDate());
+                    $('#EndDate').datepicker('setDate', new Date().getDate());
+                } else if (startDate > endDate) {
+                    $('#StartDate').datepicker('setDate', endDate);
+                }
+
+                
+
+
+            });
+
+            
+            
+
+        });
+    </script>
+
+}
+<div class="main-wrapper">
+    <h3>@ViewBag.Title</h3>
+    @using (Html.BeginForm("AddOrUpdateDiscountMaster", "Discount", FormMethod.Post, new { id = "frmdiscount" }))
+    {
+        @Html.AntiForgeryToken()
+        @*@Html.ValidationSummary()*@
+        <div ng-controller="DiscountMasterController" class="inner-content">
+            @Html.ValidationSummary(true)
+
+            @Html.HiddenFor(t => t.Id)
+            @Html.HiddenFor(t => t.IsEBO)
+            @*@Html.HiddenFor(t => t.BookbyDate)*@
+            @Html.HiddenFor(t => t.SelectedFarmStays)
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Name)
+                        <span class="field-validation-error" id="NameValidation">The Name field is required.</span>
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group mt-34 redio-btn">
+
+                        @Html.RadioButtonFor(x => x.IsPercentage, true, new { @class = "IsPercentage" })
+                        <label for="percentage"><span></span>Percentage</label>
+                        @Html.RadioButtonFor(x => x.IsPercentage, false, new { @class = "IsPercentage" })
+                        <label for="flat"><span></span>Flat</label>
+                        @Html.ValidationMessageFor(model => model.IsPercentage)
+                    </div>
+                    @*<div class="form-group radiobtn mt-34">
+                            <input type="radio" id="percentage" name="percentage" />
+                            <label for="percentage"><span></span>Percentage</label>
+                            <input type="radio" id="flat" name="percentage" />
+                            <label for="flat"><span></span>Flat</label>
+                        </div>*@
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group discount-value">
+                        <label class="control-label">Discount Value</label>  
+                        @*@Html.LabelFor(model => model.DiscountValue, new { @class = "control-label" })*@
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.DiscountValue)
+                            <span id="DiscountValueIcon" class="input-group-addon">@Html.Raw((Model.IsPercentage) ? "%" : "₹")</span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DiscountValue)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Start Date</label>  
+                        @*@Html.LabelFor(model => model.StartDate, new { @class = "control-label" })*@
+                        <div class="input-group date">
+                            @Html.TextBoxFor(model => model.StartDate)
+                            <span class="input-group-addon" ng-click="OpenCalender('StartDate')">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.StartDate)
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">End Date</label>  
+                        @*@Html.LabelFor(model => model.EndDate, new { @class = "control-label" })*@
+                        <div class="input-group date">
+                            @Html.TextBoxFor(model => model.EndDate)
+                            <span class="input-group-addon" ng-click="OpenCalender('EndDate')">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.EndDate)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <label class="control-label">Apply Discount on Farm/Home stays</label>
+                        <div isteven-multi-select
+                             input-model="FarmStaysList"
+                             output-model="FarmStaysListOut"
+                             button-label="name"
+                             item-label="name"
+                             tick-property="IsApplied"
+                             group-property="msGroup">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttongroup">
+                <input type="submit" value="Save" class="btn green-btn" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn black-btn" })
+            </div>
+        </div>
+    }
+</div>
+
+

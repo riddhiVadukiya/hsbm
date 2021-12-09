@@ -1,0 +1,192 @@
+D:\FarmStay\HSBM.Web\obj\Debug\HSBM.Web.csprojResolveAssemblyReference.cache
+D:\FarmStay\HSBM.Web\bin\HSBM.Web.dll.config
+D:\FarmStay\HSBM.Web\bin\HSBM.Web.dll
+D:\FarmStay\HSBM.Web\bin\HSBM.Web.pdb
+D:\FarmStay\HSBM.Web\bin\Antlr3.Runtime.dll
+D:\FarmStay\HSBM.Web\bin\BLToolkit.4.dll
+D:\FarmStay\HSBM.Web\bin\HSBM.Common.dll
+D:\FarmStay\HSBM.Web\bin\HSBM.EntityModel.dll
+D:\FarmStay\HSBM.Web\bin\HSBM.Repository.dll
+D:\FarmStay\HSBM.Web\bin\HSBM.Service.dll
+D:\FarmStay\HSBM.Web\bin\Less.dll
+D:\FarmStay\HSBM.Web\bin\log4net.dll
+D:\FarmStay\HSBM.Web\bin\MCPG.CCA.Util.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.AspNet.Identity.Core.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.AspNet.SignalR.Core.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Cookies.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Facebook.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Google.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.OAuth.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Twitter.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.Web.Infrastructure.dll
+D:\FarmStay\HSBM.Web\bin\MVCGrid.dll
+D:\FarmStay\HSBM.Web\bin\Newtonsoft.Json.dll
+D:\FarmStay\HSBM.Web\bin\Ninject.dll
+D:\FarmStay\HSBM.Web\bin\Ninject.Extensions.Conventions.dll
+D:\FarmStay\HSBM.Web\bin\Ninject.Web.Common.dll
+D:\FarmStay\HSBM.Web\bin\Ninject.Web.Mvc.dll
+D:\FarmStay\HSBM.Web\bin\Ninject.Web.WebApi.dll
+D:\FarmStay\HSBM.Web\bin\NReco.VideoConverter.dll
+D:\FarmStay\HSBM.Web\bin\Owin.dll
+D:\FarmStay\HSBM.Web\bin\PayPal.dll
+D:\FarmStay\HSBM.Web\bin\System.Net.Http.Formatting.dll
+D:\FarmStay\HSBM.Web\bin\System.Web.Helpers.dll
+D:\FarmStay\HSBM.Web\bin\System.Web.Http.dll
+D:\FarmStay\HSBM.Web\bin\System.Web.Http.WebHost.dll
+D:\FarmStay\HSBM.Web\bin\System.Web.Mvc.dll
+D:\FarmStay\HSBM.Web\bin\System.Web.Optimization.dll
+D:\FarmStay\HSBM.Web\bin\System.Web.Razor.dll
+D:\FarmStay\HSBM.Web\bin\System.Web.WebPages.Deployment.dll
+D:\FarmStay\HSBM.Web\bin\System.Web.WebPages.dll
+D:\FarmStay\HSBM.Web\bin\System.Web.WebPages.Razor.dll
+D:\FarmStay\HSBM.Web\bin\WebActivatorEx.dll
+D:\FarmStay\HSBM.Web\bin\WebGrease.dll
+D:\FarmStay\HSBM.Web\bin\Microsoft.WindowsAzure.Configuration.dll
+D:\FarmStay\HSBM.Web\bin\PushSharp.Apple.dll
+D:\FarmStay\HSBM.Web\bin\PushSharp.Core.dll
+D:\FarmStay\HSBM.Web\bin\PushSharp.Google.dll
+D:\FarmStay\HSBM.Web\bin\DocumentFormat.OpenXml.dll
+D:\FarmStay\HSBM.Web\bin\System.Linq.Dynamic.dll
+D:\FarmStay\HSBM.Web\bin\HSBM.Common.pdb
+D:\FarmStay\HSBM.Web\bin\HSBM.EntityModel.pdb
+D:\FarmStay\HSBM.Web\bin\HSBM.Repository.pdb
+D:\FarmStay\HSBM.Web\bin\HSBM.Service.pdb
+D:\FarmStay\HSBM.Web\bin\Less.pdb
+D:\FarmStay\HSBM.Web\bin\log4net.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.AspNet.SignalR.Core.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.xml
+D:\FarmStay\HSBM.Web\bin\MVCGrid.xml
+D:\FarmStay\HSBM.Web\bin\Newtonsoft.Json.xml
+D:\FarmStay\HSBM.Web\bin\Ninject.xml
+D:\FarmStay\HSBM.Web\bin\Ninject.Extensions.Conventions.xml
+D:\FarmStay\HSBM.Web\bin\Ninject.Web.Common.xml
+D:\FarmStay\HSBM.Web\bin\Ninject.Web.Mvc.xml
+D:\FarmStay\HSBM.Web\bin\Ninject.Web.WebApi.xml
+D:\FarmStay\HSBM.Web\bin\PayPal.xml
+D:\FarmStay\HSBM.Web\bin\System.Web.Helpers.xml
+D:\FarmStay\HSBM.Web\bin\System.Web.Mvc.xml
+D:\FarmStay\HSBM.Web\bin\System.Web.Razor.xml
+D:\FarmStay\HSBM.Web\bin\System.Web.WebPages.xml
+D:\FarmStay\HSBM.Web\bin\System.Web.WebPages.Deployment.xml
+D:\FarmStay\HSBM.Web\bin\System.Web.WebPages.Razor.xml
+D:\FarmStay\HSBM.Web\bin\System.Web.Optimization.xml
+D:\FarmStay\HSBM.Web\bin\Antlr3.Runtime.pdb
+D:\FarmStay\HSBM.Web\bin\System.Net.Http.Formatting.xml
+D:\FarmStay\HSBM.Web\bin\System.Web.Http.xml
+D:\FarmStay\HSBM.Web\bin\System.Web.Http.WebHost.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.AspNet.Identity.Core.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Facebook.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Cookies.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.OAuth.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Google.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Twitter.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\FarmStay\HSBM.Web\bin\Microsoft.WindowsAzure.Configuration.xml
+D:\FarmStay\HSBM.Web\obj\Debug\HSBM.Web.dll
+D:\FarmStay\HSBM.Web\obj\Debug\HSBM.Web.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\HSBM.Web.dll.config
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\HSBM.Web.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\HSBM.Web.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Antlr3.Runtime.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\BLToolkit.4.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\HSBM.Common.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\HSBM.EntityModel.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\HSBM.Repository.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\HSBM.Service.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Less.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\log4net.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\MCPG.CCA.Util.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.AspNet.Identity.Core.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.AspNet.SignalR.Core.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Cookies.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Facebook.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Google.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.OAuth.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Twitter.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Web.Infrastructure.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\MVCGrid.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Newtonsoft.Json.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Ninject.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Ninject.Extensions.Conventions.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Ninject.Web.Common.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Ninject.Web.Mvc.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Ninject.Web.WebApi.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\NReco.VideoConverter.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Owin.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\PayPal.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Net.Http.Formatting.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Helpers.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Http.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Http.WebHost.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Mvc.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Optimization.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Razor.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.WebPages.Deployment.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.WebPages.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.WebPages.Razor.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\WebActivatorEx.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\WebGrease.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.WindowsAzure.Configuration.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\PushSharp.Apple.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\PushSharp.Core.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\PushSharp.Google.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\DocumentFormat.OpenXml.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Linq.Dynamic.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\HSBM.Common.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\HSBM.EntityModel.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\HSBM.Repository.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\HSBM.Service.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Less.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\log4net.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.AspNet.SignalR.Core.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\MVCGrid.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Newtonsoft.Json.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Ninject.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Ninject.Extensions.Conventions.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Ninject.Web.Common.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Ninject.Web.Mvc.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Ninject.Web.WebApi.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\PayPal.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Helpers.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Mvc.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Razor.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.WebPages.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.WebPages.Deployment.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.WebPages.Razor.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Optimization.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Antlr3.Runtime.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Net.Http.Formatting.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Http.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\System.Web.Http.WebHost.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.AspNet.Identity.Core.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Facebook.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Cookies.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.OAuth.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Google.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.Twitter.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\bin\Microsoft.WindowsAzure.Configuration.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\obj\Debug\HSBM.Web.csprojResolveAssemblyReference.cache
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\obj\Debug\HSBM.Web.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Web\obj\Debug\HSBM.Web.pdb

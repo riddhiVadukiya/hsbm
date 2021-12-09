@@ -1,0 +1,49 @@
+﻿@model Int64
+@{
+    ViewBag.Title = "Thank You";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<div class="container thnkyou-page">
+        <div class="row">
+            <h2>Thank You</h2>
+            @if (ViewBag.ErrorMessage == null)
+            {
+                if (Model > 0)
+                {
+                    <p>Your Email address is Verified. Please <a href="/Customer/Login"> Login</a> </p>
+                }
+                else
+                {
+                    <p>For verify your email address please check mail</p>
+                }
+                <br />
+                <br />
+            }
+            else
+            {
+                <p>@ViewBag.ErrorMessage</p>
+            }
+        </div>
+    </div>*@
+<div class="thankyou">    
+    <img src="~/Images/yes.png" />
+    <h6>Thank You!</h6>
+    @if (ViewBag.ErrorMessage == null)
+    {
+        if (Model > 0)
+        {
+            <p>Your Email address is Verified. Please <a href="#" onclick="javascript: return ShowLoginPopup();">Sign In</a> </p>
+        }
+        else
+        {
+            <p>For verify your email address please check mail</p>
+        }
+        <br />
+        <br />
+    }
+    else
+    {
+        <p>@ViewBag.ErrorMessage</p>
+    }
+</div>

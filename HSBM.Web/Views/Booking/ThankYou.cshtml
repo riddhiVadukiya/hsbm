@@ -1,0 +1,61 @@
+﻿@model HSBM.EntityModel.BookingMaster.BookedHotelModel
+@{
+    ViewBag.Title = "ThankYou";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="checkout-section-demo">
+    <div class="container">
+        <div class="row">
+            <div class="checkout-page__content">
+                <div class="complete-content">
+                    <div class="woocommerce-info">
+                        Thank you for your purchase! We received your order.
+                    </div>
+                    <div class="your-order">
+                        <h2>Your Order</h2>
+                        <table class="order-table">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Hotel Name</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td># @Model.OrderReferenceNumber</td>
+                                    <td>@Model.HotelName<br />
+                                    <td>@Model.BookingDate.ToString("dd MMM yyyy")</td>
+                                    <td>@Model.Currency @Model.TotalPrice</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="billing-info">
+                            <h3>Billing info</h3>
+                            <table class="billing-table">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <h4 class="title">Customer Name</h4>
+                                            <p class="title">@Model.UserName</p>
+                                        </td>
+                                        <td>
+                                            <h4 class="title">Email</h4>
+                                            <p>@Model.UserEmail</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

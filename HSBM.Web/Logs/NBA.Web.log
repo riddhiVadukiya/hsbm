@@ -1,0 +1,45 @@
+2017-07-13 13:09:07,715 [42] HTTPUser ERROR NBA.Repository.Repositories.HotelDetailRepository [(null)] - 
+BLToolkit.Data.DataException: Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. ---> System.Data.SqlClient.SqlException: Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. ---> System.ComponentModel.Win32Exception: The wait operation timed out
+   --- End of inner exception stack trace ---
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at BLToolkit.Data.DbManager.<>c__DisplayClass99_0.<ExecuteReaderInternal>b__0()
+   at BLToolkit.Data.DbManager.ExecuteOperation[T](OperationType operationType, Func`1 operation)
+   --- End of inner exception stack trace ---
+   at BLToolkit.Data.DbManager.OnOperationException(OperationType op, DataException ex)
+   at BLToolkit.Data.DbManager.HandleOperationException(OperationType op, Exception ex)
+   at BLToolkit.Data.DbManager.ExecuteOperation[T](OperationType operationType, Func`1 operation)
+   at BLToolkit.Data.DbManager.ExecuteReaderInternal(CommandBehavior commandBehavior)
+   at BLToolkit.Data.DbManager.ExecuteReader(CommandBehavior commandBehavior)
+   at BLToolkit.Data.DbManager.ExecuteReaderInternal()
+   at BLToolkit.Data.DbManager.ExecuteListInternal[T](IList`1 list, Object[] parameters)
+   at BLToolkit.Data.DbManager.ExecuteList[T]()
+   at NBA.Repository.Repositories.HotelDetailRepository.GetHotelDetailById(Int64 HotelId)
+2017-07-19 12:33:08,789 [1] HTTPUser DEBUG NBA.Web.MvcApplication [(null)] - Registering Routes...
+2017-07-19 12:33:20,883 [6] HTTPUser DEBUG NBA.Sabre.Library.Workflow.Workflow [(null)] - Running workflow with the start activity: NBA.Sabre.Library.Activities.InstaFlightsActivity
+2017-07-19 12:33:20,899 [6] HTTPUser DEBUG NBA.Sabre.Library.Rest.RestClient [(null)] - GET /v1/shop/flights?origin=JFK&destination=LAX&departuredate=2017-07-07&returndate=2017-07-08&sortby=totalfare&order=asc&sortby2=departuretime&order2=asc&passengercount=1&eticketsonly=Y
+2017-07-19 12:33:20,927 [6] HTTPUser DEBUG NBA.Sabre.Library.Rest.RestAuthorizationManager [(null)] - POST /v2/auth/token
+grant_type=client_credentials
+2017-07-19 12:33:27,899 [6] HTTPUser DEBUG NBA.Sabre.Library.Workflow.Workflow [(null)] - Running workflow with the start activity: NBA.Sabre.Library.Activities.InstaFlightsActivity
+2017-07-19 12:33:27,899 [6] HTTPUser DEBUG NBA.Sabre.Library.Rest.RestClient [(null)] - GET /v1/shop/flights?origin=JFK&destination=LAX&departuredate=2017-07-07&returndate=2017-07-08&sortby=totalfare&order=asc&sortby2=departuretime&order2=asc&passengercount=1&eticketsonly=Y
+2017-07-19 12:33:27,900 [7] HTTPUser DEBUG NBA.Sabre.Library.Rest.RestAuthorizationManager [(null)] - POST /v2/auth/token
+grant_type=client_credentials
+2017-07-19 12:33:42,667 [6] HTTPUser DEBUG NBA.Sabre.Library.Workflow.Workflow [(null)] - Running workflow with the start activity: NBA.Sabre.Library.Activities.InstaFlightsActivity
+2017-07-19 12:33:42,668 [6] HTTPUser DEBUG NBA.Sabre.Library.Rest.RestClient [(null)] - GET /v1/shop/flights?origin=JFK&destination=LAX&departuredate=0001-01-01&returndate=2017-07-08&sortby=totalfare&order=asc&sortby2=departuretime&order2=asc&passengercount=1&eticketsonly=Y
+2017-07-19 12:33:42,669 [7] HTTPUser DEBUG NBA.Sabre.Library.Rest.RestAuthorizationManager [(null)] - POST /v2/auth/token
+grant_type=client_credentials
+2017-07-19 12:34:08,056 [7] HTTPUser DEBUG NBA.Sabre.Library.Workflow.Workflow [(null)] - Running workflow with the start activity: NBA.Sabre.Library.Activities.InstaFlightsActivity
+2017-07-19 12:34:08,057 [7] HTTPUser DEBUG NBA.Sabre.Library.Rest.RestClient [(null)] - GET /v1/shop/flights?origin=JFK&destination=LAX&departuredate=2017-07-27&returndate=2017-07-28&sortby=totalfare&order=asc&sortby2=departuretime&order2=asc&passengercount=1&eticketsonly=Y
+2017-07-19 12:34:08,058 [8] HTTPUser DEBUG NBA.Sabre.Library.Rest.RestAuthorizationManager [(null)] - POST /v2/auth/token
+grant_type=client_credentials

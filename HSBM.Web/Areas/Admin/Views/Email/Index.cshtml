@@ -1,0 +1,73 @@
+﻿@model HSBM.Web.Models.EmailViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+
+    $(document).ready(function () {
+        tinymce.init({ selector: '#Body', height: 200 });
+    });
+</script>
+
+@using (Html.BeginForm("SendMails", "Email", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <h2>Send Email</h2>
+    <div class="form-horizontal col-md-12 x_panel">
+                
+        @Html.ValidationSummary(true)
+
+        <div class="form-group mt10">
+            @Html.Label("To", new { @class = "control-label col-md-1 col-sm-1 col-xs-12" })
+            <div class="col-md-11">
+                @Html.TextBoxFor(model => model.ToEmail, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ToEmail)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CC, new { @class = "control-label col-md-1 col-sm-1 col-xs-12" })
+            <div class="col-md-11">
+                @Html.TextBoxFor(model => model.CC, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CC)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BCC, new { @class = "control-label col-md-1 col-sm-1 col-xs-12" })
+            <div class="col-md-11">
+                @Html.TextBoxFor(model => model.BCC, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BCC)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Subject, new { @class = "control-label col-md-1 col-sm-1 col-xs-12" })
+            <div class="col-md-11">
+                @Html.TextBoxFor(model => model.Subject, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Body, new { @class = "control-label col-md-1 col-sm-1 col-xs-12" })
+            <div class="col-md-11">
+                @Html.TextAreaFor(model => model.Body, new { @class = "form-control" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                <h3>Attachments</h3>
+                <input type="file" name="fileUploader" />
+            </div>*@
+
+        <div class="ln_solid"></div>
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-3">
+                <input type="submit" value="Send" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}

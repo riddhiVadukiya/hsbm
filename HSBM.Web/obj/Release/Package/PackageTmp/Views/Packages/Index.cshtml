@@ -1,0 +1,764 @@
+﻿@model HSBM.Web.Models.FarmStaysRequestModel
+@{
+    ViewBag.Title = "Packages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<script src='https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBLxdK0Jtez3dx2Myo-78HcEsX0BuOeoms&callback=myMap'></script>*@
+<script>
+
+    $(document).ready(function () {
+
+        $('#Packages').addClass('active');
+
+        if ($('#IsSolo').val() == "False")
+            $('#IsSolo').attr("disabled", true);
+
+        $.validator.addMethod('date',
+                    function (value, element) {
+                        if (this.optional(element)) {
+                            return true;
+                        }
+                        var ok = true;
+                        try {
+                            $.datepicker.parseDate(DefaultDateFormatsForDatePicker, value);
+                        }
+                        catch (err) {
+                            ok = false;
+                        }
+                        return ok;
+                    });
+
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+
+        $('#CheckIn').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            container: container,
+            minDate: new Date(),
+            //setDate:'20/04/2018',
+            onSelect: function (date) {
+                var dt2 = $('#CheckOut');
+                var CheckIn = $(this).datepicker('getDate');
+                var minDate = $(this).datepicker('getDate');
+                minDate.setDate(minDate.getDate() + 1);
+
+                dt2.datepicker('setDate', minDate);
+                CheckIn.setDate(CheckIn.getDate() + 30);
+                //sets dt2 maxDate to the last day of 30 days window
+                //dt2.datepicker('option', 'maxDate', CheckIn);
+                dt2.datepicker('option', 'minDate', minDate);
+                // $(this).datepicker('option', 'minDate', minDate);
+            }
+        });
+        $('#CheckOut').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            minDate: $('#CheckOut').val(),
+            container: container,
+            //setDate: '20/04/2018'
+        });
+
+        $('.showHide-filters').click(function () {
+            $('.searchMain .filterby').slideToggle();
+        });
+
+        $('#Guests').change(function () {
+            if ($('#Guests').val() == 1) {
+                $('#IsSolo').val("True");
+                $('#IsSolo').attr("disabled", false);
+            }
+            else {
+                $('#IsSolo').val("False");
+                $('#IsSolo').attr("disabled", true);
+            }
+        })
+
+    });
+    angular.module('FrontApp').filter('customFilter', function () {
+        return function (input, Location, pricefilter, amenityfilter, ratingsfilter, categoryfilter) {
+
+
+            var filteredList = [];
+            var filteredList1 = [];
+            var filteredList2 = [];
+            var filteredList3 = [];
+            var filteredList4 = [];
+
+            if (typeof (input) != "undefined" && input.length > 0) {
+
+                for (var i = 0; i < input.length; i++) {
+                    if (Location != null && Location != "") {
+                        if (input[i].Location.toLowerCase().includes(Location.toLowerCase()))
+                            filteredList.push(input[i]);
+                    } else {
+                        filteredList.push(input[i]);
+                    }
+                    // filteredList.push(input[i]);
+                }
+
+                var _flag = false;
+                angular.forEach(pricefilter, function (item) { if (item.checked) _flag = true; });
+                if (_flag) {
+                    for (var i = 0; i < filteredList.length; i++) {
+                        for (var prop in pricefilter) {
+                            if (pricefilter[prop].checked) {
+                                if (filteredList[i].NetPrice > 0) {
+                                    if (filteredList[i].NetPrice >= pricefilter[prop].StartPrice && filteredList[i].NetPrice <= pricefilter[prop].EndPrice) {
+                                        filteredList1.push(filteredList[i]);
+                                        break;
+                                    }
+                                } else {
+                                    if (filteredList[i].Price != 0 && filteredList[i].Price >= pricefilter[prop].StartPrice && filteredList[i].Price <= pricefilter[prop].EndPrice) {
+                                        filteredList1.push(filteredList[i]);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    filteredList = filteredList1;
+                }
+                var _flagR = false;
+                angular.forEach(ratingsfilter, function (item) { if (item.checked) _flagR = true; });
+                if (_flagR) {
+                    for (var i = 0; i < filteredList.length; i++) {
+                        for (var prop in ratingsfilter) {
+                            if (ratingsfilter[prop].checked) {
+                                if (filteredList[i].Ratings > 0) {
+                                    if (filteredList[i].Ratings == ratingsfilter[prop].Rating) {
+                                        filteredList3.push(filteredList[i]);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    filteredList = filteredList3;
+                }
+
+                var _farmstaysId = '';
+                var _flagA = false;
+                angular.forEach(amenityfilter, function (item) { if (item.checked) _farmstaysId += item.FamrstaysId + ","; });
+
+
+                if (_farmstaysId.length > 0) {
+                    var _arrayfarmstaysId = _farmstaysId.split(',');
+
+                    for (var i = 0; i < filteredList.length; i++) {
+
+                        for (var j = 0; j < _arrayfarmstaysId.length; j++) {
+
+                            if (_arrayfarmstaysId[j] != '' && filteredList[i].Id == parseInt(_arrayfarmstaysId[j].trim())) {
+                                filteredList2.push(filteredList[i]);
+                                break;
+                            }
+                        }
+                    }
+                    filteredList = filteredList2;
+                }
+
+                var _farmstaysIds = '';
+                angular.forEach(categoryfilter, function (item) { if (item.checked) _farmstaysIds += item.FamrstaysId + ","; });
+
+
+                if (_farmstaysIds.length > 0) {
+                    var _arrayfarmstaysId = _farmstaysIds.split(',');
+
+                    for (var i = 0; i < filteredList.length; i++) {
+
+                        for (var j = 0; j < _arrayfarmstaysId.length; j++) {
+
+                            if (_arrayfarmstaysId[j] != '' && filteredList[i].Id == parseInt(_arrayfarmstaysId[j].trim())) {
+                                filteredList4.push(filteredList[i]);
+                                break;
+                            }
+                        }
+                    }
+                    filteredList = filteredList4;
+                }
+
+            }
+            return filteredList;
+        };
+
+    });
+
+    angular.module('FrontApp').filter('range', function () {
+        return function (input, total) {
+            total = parseInt(total);
+
+            for (var i = 0; i < total; i++) {
+                input.push(i);
+            }
+
+            return input;
+        };
+    });
+    angular.module('FrontApp').controller('SearchFarmStaysController', ['$scope', '$compile', '$filter', '$rootScope', function ($scope, $compile, $filter, $rootScope) {
+        $scope.listviewstyle = 'listViewContainer';
+
+
+        $scope.ChangeSortBy = function (SortBy) {
+            $scope.OrderStr = SortBy;
+        }
+        $scope.SearchFarmstays = function () {
+
+
+            $scope.requestData = {
+                CheckIn: $('#CheckIn').val(),
+                CheckOut: $('#CheckOut').val(),
+                Guests: $('#Guests').val(),
+                Child: $('#Child').val(),
+                IsSolo: $('#IsSolo').val(),
+                IsPackage: $('#IsPackage').val()
+            };
+
+
+
+
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            $.ajax({
+                url: '/FarmStays/GetFarmstays',
+                type: 'POST',
+                data: {
+                    reqSerach: $scope.requestData
+                },
+                success: function (result) {
+                    if (result != null && result.FarmStaysObj) {
+                        $scope.SearchFarmStays = result.FarmStaysObj.SearchFarmStays;
+                        $scope.AmenityFilter = result.FarmStaysObj.AmenityFilter;
+                        $scope.CategoryFilter = result.FarmStaysObj.CategoryFilter;
+                        $scope.PriceFilter = result.FarmStaysObj.PriceFilter;
+                        $scope.PerNight = result.PerNight;
+                        //$scope.RatingsFilter = [1, 2, 3, 4, 5];
+                        $scope.RatingsFilter = result.FarmStaysObj.RatingsFilter;
+                        for (var i = 0; i < result.FarmStaysObj.SearchFarmStays.length; i++) {
+
+                            result.FarmStaysObj.SearchFarmStays[i].NetPrice = convertToPrice(result.FarmStaysObj.SearchFarmStays[i].NetPrice);
+                            result.FarmStaysObj.SearchFarmStays[i].Price = convertToPrice(result.FarmStaysObj.SearchFarmStays[i].Price);
+                        }
+                        $scope.$digest();
+                        $scope.displaymapLatLong();
+                    }
+                },
+                error: function (ex) {
+
+                }
+            });
+        }
+
+        $scope.SearchFarmstays();
+
+        $scope.ClearAll = function () {
+
+            $scope.appliedFilters = [];
+            angular.forEach($scope.AmenityFilter, function (item) { item.checked = false; });
+
+            angular.forEach($scope.CategoryFilter, function (item) { item.checked = false; });
+
+            angular.forEach($scope.PriceFilter, function (item) { item.checked = false; });
+
+            angular.forEach($scope.RatingsFilter, function (item) { item.checked = false; });
+
+            $scope.Location = $scope.SearchLocation = "";
+            $scope.displaymapLatLong();
+
+        };
+
+        $scope.appliedFilter = function () {
+            $scope.appliedFilters = [];
+            angular.forEach($scope.AmenityFilter, function (item) { if (item.checked) { $scope.appliedFilters.push({ IsPrice: false, IsRatings: false, Name: item.Name, IsCategory: false }) } });
+
+            angular.forEach($scope.CategoryFilter, function (item) { if (item.checked) { $scope.appliedFilters.push({ IsPrice: false, IsRatings: false, Name: item.Name, IsCategory: true }) } });
+
+            angular.forEach($scope.PriceFilter, function (item) { if (item.checked) { $scope.appliedFilters.push({ IsPrice: true, IsRatings: false, Name: item.Name, IsCategory: false }) } });
+
+            angular.forEach($scope.RatingsFilter, function (item) { if (item.checked) { $scope.appliedFilters.push({ IsPrice: false, IsRatings: true, Name: item.FullName, IsCategory: false }) } });
+
+            if ($scope.SearchLocation != null && $scope.SearchLocation != "")
+                $scope.appliedFilters.push({ IsPrice: false, IsRatings: false, Name: $scope.SearchLocation, IsCategory: false, IsSearchText: true });
+
+            $scope.displaymapLatLong();
+        };
+
+        $scope.RemoveAppliedFilter = function (obj) {
+
+            if (obj.IsSearchText && $scope.SearchLocation != null && $scope.SearchLocation != "") {
+                $scope.SearchLocation = $scope.Location = "";
+            }
+            else if (obj.IsPrice) {
+                angular.forEach($scope.PriceFilter, function (item) { if (item.Name == obj.Name) { item.checked = false; } });
+            }
+            else if (obj.IsRatings) {
+                angular.forEach($scope.RatingsFilter, function (item) { if (item.FullName == obj.Name) { item.checked = false; } });
+            }
+            else if (obj.IsCategory) {
+                angular.forEach($scope.CategoryFilter, function (item) { if (item.Name == obj.Name) { item.checked = false; } });
+            }
+            else {
+                angular.forEach($scope.AmenityFilter, function (item) { if (item.Name == obj.Name) { item.checked = false; } });
+            }
+
+            var index = $scope.appliedFilters.indexOf(obj);
+            $scope.appliedFilters.splice(index, 1);
+
+            $scope.displaymapLatLong();
+        };
+
+        var prev_infowindow = false;
+        $scope.displaymapLatLong = function () {
+            $scope.MarkerList = [];
+            var myOptions =
+                   {
+                       zoom: 8,
+                       center: new google.maps.LatLng((34.152588), (77.577049)),
+                       mapTypeId: google.maps.MapTypeId.ROADMAP
+                   };
+            map = new google.maps.Map(document.getElementById('googleMap'), myOptions);
+
+
+
+            var lstSearchFarmStays = $filter('customFilter')($scope.SearchFarmStays, $scope.SearchLocation, $scope.PriceFilter, $scope.AmenityFilter, $scope.RatingsFilter, $scope.CategoryFilter);
+
+            for (var i = 0; i < lstSearchFarmStays.length; i++) {
+                var latitude = lstSearchFarmStays[i].Latitude;
+                var longitude = lstSearchFarmStays[i].Longitude;
+
+                marker = new google.maps.Marker({ map: map, position: new google.maps.LatLng(latitude, longitude) });
+
+                var infowindow = new google.maps.InfoWindow()
+
+                var _urlforDetail = "FarmStayId=" + lstSearchFarmStays[i].Id + "&CheckIn=" + $scope.requestData.CheckIn + "&CheckOut=" + $scope.requestData.CheckOut + "&Guests=" + $scope.requestData.Guests + "&IsSolo=" + $scope.requestData.IsSolo + "&Child=" + $scope.requestData.Child;
+                var _bookbuttonText = lstSearchFarmStays[i].Price > 0 ? 'Book Now' : 'Unavailable'
+                var _bookbuttonclass = lstSearchFarmStays[i].Price > 0 ? ' ' : ' unavail-btn'
+
+                var _discountValueType = lstSearchFarmStays[i].DiscountIsPercentage ? lstSearchFarmStays[i].DiscountValue + '%' : 'Flat ' + $rootScope.Currencysymbols + lstSearchFarmStays[i].DiscountValue;
+                var _discounttag = lstSearchFarmStays[i].DiscountValue > 0 && lstSearchFarmStays[i].Price > 0 ? '<div class="discount-tag">' + _discountValueType + ' Off </div>' : '';
+                var _AvailableFor = (lstSearchFarmStays[i].AvailableFor).length > 0 ? ' available' : '';
+
+                var _price = '';
+                var _sPrice = '';
+                if (lstSearchFarmStays[i].Price > 0) {
+                    if (lstSearchFarmStays[i].Price > 0 && lstSearchFarmStays[i].Price != lstSearchFarmStays[i].NetPrice) {
+                        _sPrice = '<s>' + $rootScope.Currencysymbols + ' ' + $filter('currency')(lstSearchFarmStays[i].Price, '') + '</s>';
+                    }
+                    var showprice = lstSearchFarmStays[i].NetPrice > 0 ? $filter('currency')(lstSearchFarmStays[i].NetPrice, '') : $filter('currency')(lstSearchFarmStays[i].Price, '');
+
+                    _price = '<div class="boxprice">' + _sPrice + ' ' + $rootScope.Currencysymbols + ' ' + showprice + ' <span>For ' + $scope.PerNight + ' nights</span></div>'
+                }
+
+                var _deals = ''
+                if ((lstSearchFarmStays[i].DealApplied).length > 0 && lstSearchFarmStays[i].Price > 0) {
+                    _deals = '<div class="dealslable"><span class="lbl">Deal Applied</span> <a href="#" data-toggle="tooltip" data-placement="top" >View Details</a><h6>' + lstSearchFarmStays[i].DealApplied + '</h6> </div>';
+                }
+
+                var content = '<div class="gridbox map-open-grid">' +
+    '<div class="list-thumb">' +
+        '<figure>' +
+            '<a target="_blank" href="FarmStaysDetail?' + _urlforDetail + '">' +
+                '<img src="Content/NewTheme/images/blank.png" style="background-image: url(@MvcApplication.FarmStayImagePath' + lstSearchFarmStays[i].Image + ');" alt="' + lstSearchFarmStays[i].Name + '" />' +
+            '</a>' +
+        '</figure>' +
+        _discounttag +
+    '</div>' +
+        '<div class="list-dtl">' +
+        '<div class="list-title">' +
+            '<h3>' +
+                '<a target="_blank" href="FarmStaysDetail?' + _urlforDetail + '" class="ng-binding">' + lstSearchFarmStays[i].Name + '</a>' +
+            '</h3>' +
+            '<div class="male-available">' +
+                '<span data-toggle="tooltip" data-placement="top" title="' + lstSearchFarmStays[i].AvailableFor + '">' +
+                    //'<img src="/Content/NewTheme/images/blank.png" class="av-mail-ic ' + _AvailableFor + '" alt="" />' +
+                '</span>' +
+            '</div>' +
+        '</div>' +
+        _price +
+        '<div class="boxrooms">No. of Bedrooms : <span>' + lstSearchFarmStays[i].Bedrooms + '</span></div>' +
+        _deals +
+        '<div class="booknow-btn"><a target="_blank" href="FarmStaysDetail?' + _urlforDetail + '" class="btn btn-primary btn-block btn-lg ' + _bookbuttonclass + '">' + _bookbuttonText + '</a></div>' +
+    '</div>' +
+                '</div>';
+
+                @*if (lstSearchFarmStays[i].Price > 0) {
+                    content = ' <div class="tour-info-map\"><div class=\"tour-thmb\"><img src=\"Content/NewTheme/images/blank.png\" style=\"background-image: url(@MvcApplication.FarmStayImagePath' + lstSearchFarmStays[i].Image + ');\" alt=\"' + lstSearchFarmStays[i].Name + '\" /></div><div class=\"tour-dlt-map\"><h2 class=\"hotel-name\">' + lstSearchFarmStays[i].Name + '</h2> <div class=\"price\">Rs.' + lstSearchFarmStays[i].NetPrice + '</div>' +
+                    '<a class=\"btn btn-dark-invers btn-dark-invers-small\" target=\"_blank\" href=\"FarmStaysDetail?' + _urlforDetail + '\">Book Now</a>' +
+                    '</div></div>';
+                } else {
+                    content = ' <div class="tour-info-map\"><div class=\"tour-thmb\"><img src=\"Content/NewTheme/images/blank.png\" style=\"background-image: url(@MvcApplication.FarmStayImagePath' + lstSearchFarmStays[i].Image + ');\" alt=\"' + lstSearchFarmStays[i].Name + '\" /></div><div class=\"tour-dlt-map\"><h2 class=\"hotel-name\">' + lstSearchFarmStays[i].Name + '</h2> <div class=\"price\">Rs.' + lstSearchFarmStays[i].NetPrice + '</div>' +
+                '<a class=\"btn btn-dark-invers btn-dark-invers-small\" target=\"_blank\" href=\"FarmStaysDetail?' + _urlforDetail + '\">Unavailable</a>' +
+                '</div></div>';
+                }*@
+
+
+                google.maps.event.addListener(marker, 'mouseover', (function (marker, content, infowindow) {
+                    return function () {
+
+                        if (prev_infowindow) {
+                            prev_infowindow.close();
+                        }
+
+                        prev_infowindow = infowindow;
+                        infowindow.setContent(content);
+                        infowindow.open(map, this);
+
+                    };
+                })(marker, content, infowindow));
+
+
+            }
+
+
+        }
+
+
+    }]);
+
+</script>
+<div ng-controller="SearchFarmStaysController">
+    <div class="listing-bnr"><img src="~/Content/NewTheme/images/blank.png" style="background-image: url(/Content/NewTheme/images/listing-bnr.jpg);" alt=""></div>
+
+    <div class="breadcrumb-search">
+        <nav class="breadcrumb">
+            <a class="breadcrumb-item" href="/">Home</a>
+            <span class="breadcrumb-item active">Packages</span>
+        </nav>
+        @using (Html.BeginForm("Index", "FarmStays", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(Model => Model.IsPackage);
+            <div class="listing-searchbar">
+                <div class="srchFld">
+                    <div class="form-group">
+
+                        <label class="control-label" for="CheckIn">Arrival Date</label>
+                        <div class="input-group-addon">
+                            <i class="calendar-ic"></i>
+                        </div>
+                        @Html.TextBoxFor(model => model.CheckIn, new { @class = "form-control enable", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.CheckIn)
+
+
+                    </div>
+                </div>
+                <div class="srchFld">
+                    <div class="form-group">
+                        @*<label class="control-label" for="DepartureDate">Departure Date</label>
+                            <div class="input-group-addon">
+                                <i class="calendar-ic"></i>
+                            </div>
+                            <input class="form-control" id="DepartureDate" name="date" placeholder="Select Date" type="text" />*@
+
+
+                        <label class="control-label" for="CheckOut">Departure Date</label>
+                        <div class="input-group-addon">
+                            <i class="calendar-ic"></i>
+                        </div>
+                        @Html.TextBoxFor(model => model.CheckOut, new { @class = "form-control enable", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.CheckOut)
+
+                    </div>
+                </div>
+                <div class="srchFld">
+                    <label class="control-label" for="Guests">No. of Adults</label>
+                    <div class="selectWrapper">
+
+                        @Html.DropDownListFor(n => n.Guests, new List<SelectListItem>()
+                    { new SelectListItem() { Text = "1", Value = "1" },
+                      new SelectListItem() { Text = "2", Value = "2"},
+                      new SelectListItem() { Text = "3", Value = "3"},
+                      new SelectListItem() { Text = "4", Value = "4"},
+                      new SelectListItem() { Text = "5", Value = "5"}
+                    })
+                        @Html.ValidationMessageFor(model => model.Guests)
+
+                    </div>
+                </div>
+
+                <div class="srchFld">
+                    <label class="control-label" for="Child">Child</label>
+                    <div class="selectWrapper">
+
+                        @Html.DropDownListFor(n => n.Child, new List<SelectListItem>()
+                    { new SelectListItem() { Text = "0", Value = "0"},
+                      new SelectListItem() { Text = "1", Value = "1" },
+                      new SelectListItem() { Text = "2", Value = "2"},
+                      new SelectListItem() { Text = "3", Value = "3"}
+                    })
+                        @Html.ValidationMessageFor(model => model.Child)
+
+                    </div>
+                </div>
+                <div class="srchFld">
+                    <label class="control-label" for="IsSolo">Select Option</label>
+                    <div class="selectWrapper">
+                        @Html.DropDownListFor(n => n.IsSolo, new List<SelectListItem>() { new SelectListItem() { Text = "Exclusive", Value = false.ToString() }, new SelectListItem() { Text = "Solo", Value = true.ToString() } })
+                    </div>
+                </div>
+                <div class="srchBtn">
+                    <input class="btn" type="button" value="Search Now" ng-click="SearchFarmstays()">
+                </div>
+            </div>
+
+        }
+    </div>
+
+    <div class="searchMain">
+        <button class="showHide-filters btn btn-primary btn-lg btn-block">Show filters</button>
+        <div class="filterby" id="sidebar">
+            <div class="boxheader">Filter by</div>
+            <div class="boxcontainer">
+                <div class="fltr-block ">
+                    <h3>Location</h3>
+                    <div class="location-search">
+                        <input type="text" id="Location" name="Location" ng-model="Location" />
+                        <i class="fa fa-search cursor-pointer" ng-click="SearchLocation=Location;appliedFilter()"></i>
+                    </div>
+                </div>
+                <div class="fltr-block">
+                    <h3>Price</h3>
+                    <ul class="custom-form">
+                        <li ng-repeat="price in PriceFilter">
+                            <div class="fltr-cat">
+                                <input type="checkbox" id="chkprice{{$index}}" name="chkprice" ng-model="price.checked" ng-init="price.checked = false" ng-change="appliedFilter()" />
+                                <label for="chkprice{{$index}}"><span></span>{{price.Name.replace('||',Currencysymbols).replace('||',Currencysymbols)}}</label>
+                            </div>
+                            <div class="fltr-count" ng-bind="'('+ price.Count +')'"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="fltr-block">
+                    <h3>User Ratings</h3>
+                    <ul class="custom-form">
+                        <li ng-repeat="ratings in RatingsFilter">
+                            <div class="fltr-cat">
+                                <input type="checkbox" id="chkratings{{$index}}" name="chkratings" ng-model="ratings.checked" ng-init="ratings.checked = false" ng-change="appliedFilter()" />
+                                <label for="chkratings{{$index}}">
+                                    <span></span>
+                                    <i class="fa fa-star" style="color:#838383; " ng-repeat="n in [] | range:$index+1"></i>
+                                </label>
+                            </div>
+                            <div class="fltr-count" ng-bind="'('+ ratings.Count +')'"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="fltr-block">
+                    <h3>Amenities</h3>
+                    <ul class="custom-form" ng-init="amenitylimit = 5">
+                        <li ng-repeat="amenity in AmenityFilter | limitTo:amenitylimit">
+                            <div class="fltr-cat">
+                                <input type="checkbox" id="chkamenity{{$index}}" name="chkamenity" ng-model="amenity.checked" ng-init="amenity.checked = false" ng-change="appliedFilter()" />
+                                <label for="chkamenity{{$index}}"><span></span>{{amenity.Name}}</label>
+                            </div>
+                            <div class="fltr-count" ng-bind="'('+amenity.Count +')'"></div>
+                        </li>
+                    </ul>
+                    <div class="filterby-last-btn" ng-show="AmenityFilter.length > amenitylimit">
+                        <button class="btn btn-primary btn-block btn-lg" ng-click="amenitylimit=AmenityFilter.length"> Show More</button>
+                    </div>
+                    <div class="filterby-last-btn" ng-show="amenitylimit > 5">
+                        <button class="btn btn-primary btn-block btn-lg" ng-click="amenitylimit=5"> Show Less</button>
+                    </div>
+                </div>
+                <div class="fltr-block">
+                    <h3>Categories</h3>
+                    <ul class="custom-form" ng-init="categorylimit = 5">
+                        <li ng-repeat="category in CategoryFilter | limitTo:categorylimit">
+                            <div class="fltr-cat">
+                                <input type="checkbox" id="chkcategory{{$index}}" name="chkcategory" ng-model="category.checked" ng-init="category.checked = false" ng-change="appliedFilter()" />
+                                <label for="chkcategory{{$index}}"><span></span>{{category.Name}}</label>
+                            </div>
+                            <div class="fltr-count" ng-bind="'('+category.Count +')'"></div>
+                        </li>
+                    </ul>
+                    <div class="filterby-last-btn" ng-show="CategoryFilter.length > categorylimit">
+                        <button class="btn btn-primary btn-block btn-lg" ng-click="categorylimit=CategoryFilter.length"> Show More</button>
+                    </div>
+                    <div class="filterby-last-btn" ng-show="categorylimit > 5">
+                        <button class="btn btn-primary btn-block btn-lg" ng-click="categorylimit=5"> Show Less</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-container">
+            <div class="search-header">
+                <div class="hdrtop">
+                    <div class="lft-title">
+                        <h2>Packages <span ng-if="(SearchFarmStays).length > 0" ng-bind="'('+ (SearchFarmStays).length+')'"></span></h2>
+                    </div>
+                    <div class="sort-by">
+                        <label>
+                            Sort By:
+                        </label>
+                        <div class="selectWrapper">
+                            <select id="Type" name="Type" ng-model="SortBy" ng-change="ChangeSortBy(SortBy)" required>
+                                <option value="" ng-selected="SortBy==''">Price</option>
+                                <option value="OrderIndex" ng-selected="SortBy=='OrderIndex'">Popularity</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="rgt-views">
+                        <ul>
+                            <li><a href="JavaScript:void(0);" ng-click="listviewstyle='listViewContainer'" class="listView-ic {{listviewstyle=='listViewContainer'?'active':''}}"></a></li>
+                            <li><a href="JavaScript:void(0);" ng-click="listviewstyle=''" class="gridView-ic {{listviewstyle==''?'active':''}}"></a></li>
+                            <li><a href="JavaScript:void(0);" ng-click="listviewstyle='mapViewContainer'" class="mapView-ic {{listviewstyle=='mapViewContainer'?'active':''}}"></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="active-filters">
+                    <div class="act-fltr-list">
+                        <span class="chip-style" ng-repeat="filter in appliedFilters"><span ng-bind="filter.Name.replace('||',Currencysymbols).replace('||',Currencysymbols)"></span> <a href="javascript:void(0)" ng-click="RemoveAppliedFilter(filter)"></a></span>
+                    </div>
+                    <div class="clear-link" ng-if="appliedFilters.length>0"><a href="javascript:void(0);" ng-click="ClearAll()">Clear all</a></div>
+                </div>
+            </div>
+            <div ng-show="listviewstyle==''" class="search-body">
+                <div class="row">
+                    <div class="col-md-4" ng-repeat="farmstay in SearchFarmStays  | customFilter: SearchLocation: PriceFilter:AmenityFilter:RatingsFilter:CategoryFilter">
+                        <div class="gridbox">
+                            <div class="list-thumb">
+                                <figure>
+                                    <a target="_blank" href="FarmStaysDetail?FarmStayId={{farmstay.Id}}&CheckIn={{requestData.CheckIn}}&CheckOut={{requestData.CheckOut}}&Guests={{requestData.Guests}}&IsSolo={{requestData.IsSolo}}&Child={{requestData.Child}}">
+                                        <img src="~/Content/NewTheme/images/blank.png" style="background-image: url(@MvcApplication.FarmStayImagePath{{farmstay.Image}});" alt="{{farmstay.Name}}" />
+                                    </a>
+                                </figure>
+                                <div ng-if="farmstay.DiscountValue > 0 && farmstay.Price > 0" class="discount-tag" ng-bind="(farmstay.DiscountIsPercentage? farmstay.DiscountValue+ ' %':' Flat '+Currencysymbols+farmstay.DiscountValue) + ' Off'"></div>
+                            </div>
+                            <div class="list-dtl thr-row-hig">
+                                <div class="list-title">
+                                    <h3><a target="_blank" href="FarmStaysDetail?FarmStayId={{farmstay.Id}}&CheckIn={{requestData.CheckIn}}&CheckOut={{requestData.CheckOut}}&Guests={{requestData.Guests}}&IsSolo={{requestData.IsSolo}}&Child={{requestData.Child}}" ng-bind="farmstay.Name"></a></h3>
+                                    <div class="male-available">
+                                        <span data-toggle="tooltip" data-placement="top" title="{{farmstay.AvailableFor}}"></span>
+                                        @*<span data-toggle="tooltip" data-placement="top" title="{{farmstay.AvailableFor}}"><img src="~/Content/NewTheme/images/blank.png" class="av-mail-ic {{(farmstay.AvailableFor).length > 0 ? 'available' : '' }}" alt=""></span>*@
+                                    </div>
+                                </div>
+
+                                <div ng-if="farmstay.Price > 0" class="boxprice"><s ng-if="farmstay.NetPrice > 0 && farmstay.Price != farmstay.NetPrice" ng-bind="Currencysymbols +' '+(farmstay.Price| currency:'')"></s> {{Currencysymbols}} {{farmstay.NetPrice > 0 ? (farmstay.NetPrice| currency:'') : (farmstay.Price| currency:'')}} <span ng-bind="'for '+PerNight+' nights'"></span></div>
+                                <div class="boxrooms">No. of Bedrooms : <span ng-bind="farmstay.Bedrooms"></span></div>
+                                <div class="dealslable" ng-if="(farmstay.DealApplied).length > 0 && farmstay.Price > 0">
+                                    <span class="lbl">Deal Applied</span>
+                                    <a href="#" data-toggle="tooltip" data-placement="top">View Details</a>
+                                    <h6 ng-bind="farmstay.DealApplied"></h6>
+                                </div>
+                                <div ng-if="farmstay.Price > 0" class="booknow-btn"><a target="_blank" href="FarmStaysDetail?FarmStayId={{farmstay.Id}}&CheckIn={{requestData.CheckIn}}&CheckOut={{requestData.CheckOut}}&Guests={{requestData.Guests}}&IsSolo={{requestData.IsSolo}}&Child={{requestData.Child}}" class="btn btn-primary btn-block btn-lg"> Book Now</a></div>
+                                <div ng-if="farmstay.Price == 0" class="booknow-btn"><a target="_blank" href="FarmStaysDetail?FarmStayId={{farmstay.Id}}&CheckIn={{requestData.CheckIn}}&CheckOut={{requestData.CheckOut}}&Guests={{requestData.Guests}}&IsSolo={{requestData.IsSolo}}&Child={{requestData.Child}}" class="btn btn-primary btn-block btn-lg unavail-btn"> Unavailable</a></div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="listviewstyle=='listViewContainer'" class="search-body listViewContainer">
+                <div class="row">
+                    <div class="col-md" ng-repeat="farmstay in SearchFarmStays  | orderBy : OrderStr | customFilter: SearchLocation:PriceFilter:AmenityFilter:RatingsFilter:CategoryFilter">
+                        <div class="gridbox">
+                            <div class="list-thumb">
+                                <figure><a target="_blank" href="FarmStaysDetail?FarmStayId={{farmstay.Id}}&CheckIn={{requestData.CheckIn}}&CheckOut={{requestData.CheckOut}}&Guests={{requestData.Guests}}&IsSolo={{requestData.IsSolo}}&Child={{requestData.Child}}"><img src="~/Content/NewTheme/images/blank.png" style="background-image: url(@MvcApplication.FarmStayImagePath{{farmstay.Image}});" alt="{{farmstay.Name}}"></a></figure>
+                                <div ng-if="farmstay.DiscountValue > 0 && farmstay.Price > 0" class="discount-tag" ng-bind="(farmstay.DiscountIsPercentage?farmstay.DiscountValue+' %':' Flat '+Currencysymbols+farmstay.DiscountValue)+' Off'"> </div>
+                            </div>
+                            <div class="list-dtl">
+                                <div class="dtl-left">
+                                    <div class="list-title">
+                                        <h3><a target="_blank" href="FarmStaysDetail?FarmStayId={{farmstay.Id}}&CheckIn={{requestData.CheckIn}}&CheckOut={{requestData.CheckOut}}&Guests={{requestData.Guests}}&IsSolo={{requestData.IsSolo}}&Child={{requestData.Child}}">{{farmstay.Name}}</a></h3>
+                                    </div>
+
+                                    <div class="list-parent-main">
+                                        <div class="list-row half">
+                                            <div class="list-lbl">No. of Bedrooms :</div>
+                                            <div class="list-vl" ng-bind="farmstay.Bedrooms"></div>
+                                        </div>
+
+                                        <div class="list-row half">
+                                            <div class="list-lbl">No. of Bathrooms :</div>
+                                            <div class="list-vl" ng-bind="farmstay.Bathrooms"></div>
+                                        </div>
+
+                                        <div ng-if="farmstay.Location" class="list-row half">
+                                            <div class="list-lbl">Location:</div>
+                                            <div class="list-vl" ng-bind="farmstay.Location"></div>
+                                        </div>
+                                        <div ng-if="farmstay.LanguagesSpoken" class="list-row half">
+                                            <div class="list-lbl">Languages Spoken:</div>
+                                            <div class="list-vl" ng-bind="farmstay.LanguagesSpoken"></div>
+                                        </div>
+                                        <div ng-if="farmstay.TypeofFood" class="list-row half">
+                                            <div class="list-lbl">Type of Food :</div>
+                                            <div class="list-vl" ng-bind="farmstay.TypeofFood"></div>
+                                        </div>
+                                        <div ng-if="farmstay.Neighborhood" class="list-row half">
+                                            <div class="list-lbl">Neighborhood:</div>
+                                            <div class="list-vl" ng-bind="farmstay.Neighborhood"></div>
+                                        </div>
+                                    </div>
+
+                                    @*<div class="boxrooms-row">
+                                            <div class="boxrooms">No. of Bedrooms : <span ng-bind="farmstay.Bedrooms"></span></div>
+                                            <div class="boxrooms">No. of Bathrooms : <span ng-bind="farmstay.Bathrooms"></span></div>
+                                        </div>
+                                        <div class="boxrooms-row">
+                                            <div ng-if="farmstay.Location" class="boxrooms">Location: <span ng-bind="farmstay.Location"></span></div>
+                                        </div>
+                                        <div ng-if="farmstay.TypeofFood" class="boxrooms-row boxrooms">
+                                            <span class="boxrooms-in"><span class="header"> Type of Food:</span> {{farmstay.TypeofFood}}  </span>
+                                        </div>
+                                        <div ng-if="farmstay.LanguagesSpoken" class="boxrooms-row boxrooms">
+                                            <span class="boxrooms-in"><span class="header"> Languages Spoken:</span> {{farmstay.LanguagesSpoken}} </span>
+                                        </div>*@
+                                    <div class="deal-box">
+                                        <div class="dealslable" ng-if="(farmstay.DealApplied).length > 0 && farmstay.Price > 0">
+                                            <span class="lbl">Deal Applied</span>
+                                            <a href="#" data-toggle="tooltip" data-placement="top">View Details</a>
+                                            <h6 ng-bind="farmstay.DealApplied"></h6>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="dtl-right">
+                                    <div ng-if="farmstay.Price > 0" class="boxprice">
+                                        <s ng-if="farmstay.NetPrice > 0 && farmstay.Price != farmstay.NetPrice" ng-bind="Currencysymbols +' '+ (farmstay.Price| currency:'')"></s> {{Currencysymbols}} {{farmstay.NetPrice > 0 ? (farmstay.NetPrice| currency:'') : (farmstay.Price| currency:'')}} <span ng-bind="'for '+PerNight+' nights'"></span>
+                                    </div>
+                                    <div ng-if="farmstay.Price > 0" class="booknow-btn"><a target="_blank" href="FarmStaysDetail?FarmStayId={{farmstay.Id}}&CheckIn={{requestData.CheckIn}}&CheckOut={{requestData.CheckOut}}&Guests={{requestData.Guests}}&IsSolo={{requestData.IsSolo}}&Child={{requestData.Child}}" class="btn btn-primary btn-block btn-lg"> Book Now</a></div>
+                                    <div ng-if="farmstay.Price == 0" class="booknow-btn"><a target="_blank" href="FarmStaysDetail?FarmStayId={{farmstay.Id}}&CheckIn={{requestData.CheckIn}}&CheckOut={{requestData.CheckOut}}&Guests={{requestData.Guests}}&IsSolo={{requestData.IsSolo}}&Child={{requestData.Child}}" class="btn btn-primary btn-block btn-lg unavail-btn"> Unavailable</a></div>
+                                    <div ng-if="farmstay.Persuasions" class="boxrooms Persuasions-right text-center"><span ng-bind="farmstay.Persuasions"></span></div>
+                                    <div ng-if="farmstay.USPTags" class="boxrooms tags-right text-center"><span ng-bind="farmstay.USPTags"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div ng-show="(SearchFarmStays | customFilter: SearchLocation: PriceFilter:AmenityFilter:RatingsFilter:CategoryFilter).length==0" class="noData">
+                <p>
+                    No records found
+                </p>
+            </div>
+
+            <div ng-show="listviewstyle=='mapViewContainer'" class="search-body mapViewContainer">
+                <div class="row">
+                    <div class="col-md">
+                        <div id="googleMap"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<script>
+    $("#sidebar").stick_in_parent();
+</script>
+
+
+

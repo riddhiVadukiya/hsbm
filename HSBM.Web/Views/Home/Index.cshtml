@@ -1,0 +1,339 @@
+﻿@model List<HSBM.EntityModel.Front.FarmStaysHomeResponse>
+@using HSBM.Common.Utils;
+@{
+    ViewBag.Title = "Home Page";
+    //Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
+@*<style type="text/css">
+        .carousel {
+            background: #2f4357;
+            margin-top: 20px;
+        }
+
+            .carousel .item {
+                min-height: 280px; /* Prevent carousel from being distorted if for some reason image doesn't load */
+            }
+
+                .carousel .item img {
+                    margin: 0 auto; /* Align slide image horizontally center */
+                }
+
+        .bs-example {
+            margin: 20px;
+        }
+    </style>*@
+<script>
+
+
+    $(document).ready(function () {
+
+        if ($('#IsSolo').val() == "False")
+            $('#IsSolo').attr("disabled", true);
+
+        $.validator.addMethod('date',
+                    function (value, element) {
+                        if (this.optional(element)) {
+                            return true;
+                        }
+                        var ok = true;
+                        try {
+                            $.datepicker.parseDate(DefaultDateFormatsForDatePicker, value);
+                        }
+                        catch (err) {
+                            ok = false;
+                        }
+                        return ok;
+                    });
+
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+
+        $('#CheckIn').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            container: container,
+            minDate: new Date(),
+            onSelect: function (date) {
+                var dt2 = $('#CheckOut');
+                var CheckIn = $(this).datepicker('getDate');
+                var minDate = $(this).datepicker('getDate');
+                minDate.setDate(minDate.getDate() + 1);
+
+                dt2.datepicker('setDate', minDate);
+                CheckIn.setDate(CheckIn.getDate() + 30);
+                //sets dt2 maxDate to the last day of 30 days window
+                dt2.datepicker('option', 'minDate', minDate);
+                // $(this).datepicker('option', 'minDate', minDate);
+            }
+        });
+
+        $('#CheckOut').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            container: container,
+            minDate: $('#CheckOut').val(),
+        });
+
+        //$("#CheckIn").datepicker("setDate", "0");
+        //$("#CheckOut").datepicker("setDate", "1");
+        $('#Guests').change(function () {
+            if ($('#Guests').val() == 1) {
+                $('#IsSolo').val("True");
+                $('#IsSolo').attr("disabled", false);
+            }
+            else {
+                $('#IsSolo').val("False");
+                $('#IsSolo').attr("disabled", true);
+            }
+        })
+
+    });
+
+</script>
+
+<div id="mainSlider" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        @{
+            var iterations = 0;
+            var iterationsLi = 0;
+        }
+        @if (Model.Count() > 0)
+        {
+            <ul class="carousel-indicators">
+                @foreach (var itemUl in Model)
+                {
+                    var activeli = iterationsLi == 0 ? "active" : "";
+                    <li data-target="#mainSlider" data-slide-to="@iterationsLi" class="@activeli"></li>
+                    iterationsLi++;
+                }
+            </ul>
+
+            foreach (var item in Model)
+            {
+                var active = iterations == 0 ? "active" : "";
+
+                <div class="carousel-item @active">
+                    <img src="@MvcApplication.BannerImagePath@item.ImageName" alt="Image" onerror="this.src='/images/no_image.jpg'">
+                    <div class="carousel-caption">
+                        <h3>@(((HSBM.EntityModel.SiteSettings.SiteSettings)(HSBM.Web.Models.LayoutModels.GetSiteSettingById((int)HSBM.Common.Enums.SiteSettingEnum.SliderHeader))).Value)</h3>
+                        <p>@(((HSBM.EntityModel.SiteSettings.SiteSettings)(HSBM.Web.Models.LayoutModels.GetSiteSettingById((int)HSBM.Common.Enums.SiteSettingEnum.SliderTitle))).Value)</p>
+                    </div>
+
+                </div>
+                iterations++;
+            }
+        }
+    </div>
+</div>
+<a data-slide="prev" href="#media" class="left carousel-control">‹</a>
+<a data-slide="next" href="#media" class="right carousel-control">›</a>
+@using (Html.BeginForm("Index", "FarmStays", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmSearchFarmstays" }))
+{
+    <div id="homeSearch">
+        <div class="srchFld">
+            <div class="form-group">
+                <label class="control-label" for="CheckIn">Arrival Date</label>
+                <div class="input-group-addon">
+                    <i class="calendar-ic"></i>
+                </div>
+                <input class="form-control enable" id="CheckIn" name="CheckIn" readonly required placeholder="Select Date" type="text" value="@DateTime.Now.AddDays(1).ToString(Helper.DefaultDateFormat(), System.Globalization. CultureInfo.InvariantCulture)" />
+            </div>
+        </div>
+
+        <div class="srchFld">
+            <div class="form-group">
+                <label class="control-label" for="CheckOut">Departure Date</label>
+                <div class="input-group-addon">
+                    <i class="calendar-ic"></i>
+                </div>
+                <input class="form-control enable" id="CheckOut" name="CheckOut" readonly required placeholder="Select Date" type="text" value="@DateTime.Now.AddDays(2).ToString(Helper.DefaultDateFormat(),System.Globalization.CultureInfo.InvariantCulture)" />
+            </div>
+        </div>
+
+        <div class="srchFld">
+            <label class="control-label" for="Guests">No. of People</label>
+            <div class="selectWrapper">
+                @Html.DropDownList("Guests", new List<SelectListItem>()
+                    { new SelectListItem() { Text = "1", Value = "1" },
+                      new SelectListItem() { Text = "2", Value = "2", Selected=true },
+                      new SelectListItem() { Text = "3", Value = "3"},
+                      new SelectListItem() { Text = "4", Value = "4"},
+                      new SelectListItem() { Text = "5", Value = "5"},
+                      new SelectListItem() { Text = "6", Value = "6"},
+                      new SelectListItem() { Text = "7", Value = "7"},
+                      new SelectListItem() { Text = "8", Value = "8"},
+                      new SelectListItem() { Text = "9", Value = "9"},
+                      new SelectListItem() { Text = "10", Value ="10"},
+                      new SelectListItem() { Text = "11", Value ="11"},
+                    })
+            </div>
+        </div>
+
+        <div class="srchFld">
+            <label class="control-label" for="IsSolo">Select Option</label>
+            <div class="selectWrapper">
+                @Html.DropDownList("IsSolo", new List<SelectListItem>() { new SelectListItem() { Text = "Exclusive", Value = false.ToString() }, new SelectListItem() { Text = "Solo", Value = true.ToString() } })
+            </div>
+        </div>
+
+        <div class="srchBtn">
+            <input class="btn" type="submit" id="btnSearch" value="Search Now">
+        </div>
+    </div>
+}
+<div class="container">
+    <div class="row">
+        <div class="welcom-cnt">
+            <h1>Welcome to Heaven on Earth</h1>
+            <h2>Himalayan Farmstays</h2>
+
+            @Html.Raw((((HSBM.EntityModel.CMSPageMaster.CMSPageMaster)(HSBM.Web.Models.LayoutModels.GetCMSPageByIdForFront((int)HSBM.Common.Enums.CMSPages.HomePageDescription))).Description))
+
+            @*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur consequat ipsum id orci rutrum consequat. Aliquam porttitor, ex et rhoncus cursus, magna mauris mollis diam, in ultrices justo lectus at nunc. Ut enim metus, cursus id tellus sed, placerat semper ipsum. Fusce at sapien vitae felis malesuada laoreet vel in quam.</p>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur consequat ipsum id orci rutrum consequat. Fusce at sapien vitae felis malesuada laoreet vel in quam.</p>*@
+        </div>
+    </div>
+</div>
+
+<div class="ur-comfort" ng-show="ListofFarmStay.length > 0" ng-controller="FarmStaysHomeController" ng-init="GetAllPopularFarmStay()">
+    <div class="row">
+        <div class="left-cnt col-sm">
+            <h2>Popular Farmstays</h2>
+            <div class="clear-fix"></div>
+            <div class="com-sm">
+                <h3>We Reimagined Your Comfort</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur consequat ipsum id orci rutrum consequat. Aliquam porttitor, ex et rhoncus cursus</p>
+            </div>
+        </div>
+        <div class="rgt-imgs col-sm">
+            <div class="row">
+                <div class="col-md-4" ng-repeat="FarmStay in ListofFarmStay">
+                    <a target="_blank" href="/FarmStaysDetail?FarmStayId={{FarmStay.Id}}&CheckIn={{FarmStay.CheckInDate}}&CheckOut={{FarmStay.CheckOutDate}}&Guests={{FarmStay.NoOfGuest}}&IsSolo={{FarmStay.IsSolo? 1 : 0}}" class="square-thumb">
+                        <figure>
+                            @*<img src="~/Content/NewTheme/images/blank.png" alt="" style="background-image: url(/Content/NewTheme/images/img-1.png);">*@
+                            <img ng-src="@MvcApplication.FarmStayImagePath{{FarmStay.ImageName}}" alt="Image" onerror="this.src='/images/no_image.jpg'">
+                        </figure>
+                        <figcaption>
+                            <div class="deals-container-text">
+                                <h3>{{FarmStay.FarmStayName}}</h3>
+                                <p ng-bind="Currencysymbols + convertToPrice( FarmStay.DiscountPrice>0? FarmStay.DiscountPrice: FarmStay.Price)"></p>
+                            </div>
+                        </figcaption>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="offer-deals" ng-show="ListofFarmStayDiscount.length > 0" ng-controller="FarmStaysHomeController" ng-init="GetAllFarmStaysDiscount()">
+    <div class="container deals-header">
+        <div class="row">
+            <div class="col-sm">
+                <h2>Discount Offer</h2>
+                <h3>Great Deals on Farmstays</h3>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur consequat ipsum id orci rutrum consequat. Aliquam porttitor, ex et rhoncus cursus, magna mauris mollis diam, in ultrices justo lectus at nunc.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="deals-container">
+        <div class="row">
+            <div class="col-md-3" ng-repeat="FarmStayDiscount in ListofFarmStayDiscount">
+                <a target="_blank" href="/FarmStaysDetail?FarmStayId={{FarmStayDiscount.Id}}&CheckIn={{FarmStayDiscount.CheckInDate}}&CheckOut={{FarmStayDiscount.CheckOutDate}}&Guests={{FarmStayDiscount.NoOfGuest}}&IsSolo={{FarmStayDiscount.IsSolo? 1 : 0}}" class="square-thumb">
+                    <figure>
+                        <img ng-src="@MvcApplication.FarmStayImagePath{{FarmStayDiscount.ImageName}}" alt="Image" onerror="this.src='/images/no_image.jpg'">
+                    </figure>
+                    <figcaption>
+                        <div class="deals-container-text">
+                            <h3>{{FarmStayDiscount.FarmStayName}}</h3>
+                            <p>{{Currencysymbols}} {{convertToPrice(FarmStayDiscount.DiscountedPrice)}}<strike>{{Currencysymbols}} {{convertToPrice(FarmStayDiscount.OrigionalPrice)}}</strike></p>
+                        </div>
+                    </figcaption>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="newsletter-contact row">
+    <div class="newsletter-block col-sm" ng-controller="CommonController">
+        <h2>To Get Hot Deals</h2>
+        <div class="block-wpr">
+            <form name="subForm" class="ng-pristine ng-valid ng-submitted">
+                <h3>Newsletter</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, Curabitur ipsum id orci rutrum consequat.</p>
+                <div class="newsletter-form">
+                    <div class="ns-ipt">
+                        @*<input ng-model="SubscribeEmail" class="form-control" placeholder="Email address" name="SubscribeEmail"
+                               ng-class="{ 'has-error' : subForm.SubscribeEmail.$valid && !subForm.SubscribeEmail.$pristine}" />*@
+                        <input ng-model="SubscribeEmail" class="form-control" ng-pattern="/^[^\s]+[^\s]+\.[^\s]{2,}$/" placeholder="Email address" name="SubscribeEmail" required ng-blur="IsError=true" ng-keydown="IsError=false" />
+                        
+                        <span style="color:Red" ng-show="subForm.SubscribeEmail.$dirty && subForm.SubscribeEmail.$error.pattern && IsError">Please Enter Valid Email</span>
+                        <label style="color: #fff">{{SubscribeMessage}}</label>
+                    </div>
+                    <div class="ns-btn">
+                        <button ng-disabled="subForm.$invalid" ng-click="SendSubscribeRequest()" class="btn">Subscribe</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="contact-block col-sm">
+        <h2>Get in Touch</h2>
+        <div class="block-wpr">
+            <h3>Contact Us</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, Curabitur ipsum id orci rutrum consequat.</p>
+            <div class="contact-dtl">
+                <i><img src="~/Content/NewTheme/images/call-ic.png" alt="" onerror="this.src='/images/no_image.jpg'"></i>
+                <p>Call us for Inquiry at <u>+91-111-222 333 1</u> <br> or Email us at <a href="mailto:info.himalayan@gmail.com">info.himalayan@gmail.com</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="blogs-main" ng-show="ListofBlogs.length > 0" ng-controller="FarmStaysHomeController" ng-init="GetAllBlogs()">
+    <div class="row">
+        <div class="left-cnt col-sm">
+            <h2>OurBlog</h2>
+            <div class="clear-fix"></div>
+            <div class="com-sm">
+                <h3>Latest Posts</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur consequat ipsum id orci rutrum consequat aliquam porttitor.</p>
+            </div>
+        </div>
+        <div class="rgt-blogs col-sm">
+            <div class="row">
+                <div class="col-md-4" ng-repeat="Blogs in ListofBlogs">
+                    <div class="blog-block">
+                        <figure>
+                            <a href="/Blogs/Detail?Id={{Blogs.Id}}">
+                                <img ng-src="@MvcApplication.BlogImagePath{{Blogs.Image}}" alt="" onerror="this.src='/images/no_image.jpg'">
+                            </a>
+                        </figure>
+                        <figcaption>
+                            @*<h5>{{Blogs.CreatedDate | date : 'MMMM d, y'}}</h5>*@
+                            <h5 ng-bind="formatDate(Blogs.CreatedDate) |  date:'MMMM d, y'"></h5>
+                            <a target="_blank" href="/Blogs/Detail?Id={{Blogs.Id}}">
+                                <h3 ng-bind="Blogs.Title"></h3>
+                            </a>
+                            <div class="blog-detial-text" ng-bind-html="Blogs.Description"> </div>
+                            @*<a href="#" class="read-more-lnk">Read More</a>*@
+                            <a target="_blank" href="/Blogs/Detail?Id={{Blogs.Id}}" class="read-more-lnk">Read More</a>
+                        </figcaption>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

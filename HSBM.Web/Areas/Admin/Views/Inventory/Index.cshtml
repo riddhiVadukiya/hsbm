@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Inventory";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script>
+    angular.module('app').controller('InventoryMasterController', ['$scope', '$compile', function ($scope, $compile) {
+        var TableName = "FarmStays";
+
+        $scope.SetSearchFromLocalStorage = function (localdata) {
+            if (typeof (localdata) != 'undefined') { }
+        }
+
+        $scope.Search = {}
+
+        $scope.SearchData = function () {
+            BindFarmStaysGrid();
+        };
+        $scope.ResetData = function () {
+            $scope.Search = {};
+            BindFarmStaysGrid();
+        };
+
+        function BindFarmStaysGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+
+            var Columns = [
+                        { data: 'Id', bVisible: false },
+                        { data: 'Name'},                        
+                        {
+                            bSortable: false,
+                            sClass: "action-cell",
+                            mRender: function (data, type, row, full) {
+                                return "<button class=\"btn green-btn\" onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/Inventory/Book/" + row.Id + "')\">Check Availability</button>";
+                            }
+                        }
+            ];
+            BindSearchGridData('FarmStays', Columns, '/Admin/FarmStays/GetAllFarmStaysBySearchRequest', $scope.Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+        }
+        
+
+        
+
+        var localdata = GettLocalStorageData(TableName);
+        if (localdata != null) {
+            BindFarmStaysGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+        } else {
+            BindFarmStaysGrid();
+        }
+
+        $scope.SetLocalStorage = function (url) {
+            SetLocalStorageData($scope.Search, TableName);
+            window.location = url;
+        }
+
+    }]);
+</script>
+
+<div class="main-wrapper">
+    <h3>Inventory</h3>
+    <div ng-controller="InventoryMasterController" class="inner-content filter-button-set">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Farm/Home Stay</label>
+                    <input type="text" ng-model="Search.Name" class="form-control" />
+                </div>
+            </div>
+            @*<div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="Search.IncludeIsDeleted" name="cc" ng-model="Search.IncludeIsDeleted" />
+                        <label for="Search.IncludeIsDeleted"><span></span>Include Deleted</label>
+                    </div>
+                </div>*@
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="buttongroup">
+                    <input type="button" ng-click="SearchData()" value="Search" class="btn green-btn" />
+                    <input type="button" ng-click="ResetData()" value="Reset" class="btn black-btn" />
+                </div>
+            </div>
+        </div>
+
+        <div class="ln_solid"></div>
+
+        <table id="FarmStays" class=" table table-bordered table-striped table-responsive row-border hover bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Farm/Home Stay</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="FarmStays_NoRecordFound" class="empty-grid">No records found</div>
+    </div>
+</div>
+

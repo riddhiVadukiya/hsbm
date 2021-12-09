@@ -1,0 +1,181 @@
+﻿@model HSBM.EntityModel.HotelMaster.SearchRequest
+@using HSBM.Common.Utils;
+@{
+    ViewBag.Title = "HotelDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    var HotelCodeString = '@Model.HotelCodeString';
+    var APIProvider = '@Model.APIProvider';
+    var DestinationId = '@Model.DestinationId';
+    var CheckIn = '@Model.StrCheckIn';
+    var CheckOut = '@Model.StrCheckOut';
+    var Rooms = [];
+    @if (Model.Rooms != null && Model.Rooms.Count > 0)
+    {
+        foreach (var r in Model.Rooms) {
+               @:Rooms.push(@Html.Raw(Json.Encode(r)));
+                }
+    }
+    var HotelCode = [];
+    @if (Model.HotelCode != null && Model.HotelCode.Count > 0)
+    {
+        foreach (var r in Model.HotelCode)
+        {
+            @:HotelCode.push("@r");
+                }
+    }
+</script>
+
+
+<div ng-controller="HotelDetailController">
+    <section class="product-detail">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="product-detail__info">
+                        <div class="product-title">
+                            <h2 ng-bind="HotelDetail.HotelName"></h2>
+
+                            <div class="hotel-star">
+                                <i class="fa fa-star" ng-repeat="star in range(HotelDetail.Stars) track by $index"></i>
+                            </div>
+
+                        </div>
+                        <div class="product-address">
+                            <span>{{HotelDetail.HotelName}} {{HotelDetail.CityName}} {{HotelDetail.PostalCode}} {{HotelDetail.CountryName}} | {{HotelDetail.Phone}}</span>
+                        </div>
+                        <div class="product-email">
+                            <i class="fa fa-envelope"></i>
+                            <a href="#">{{HotelDetail.Email}}</a>
+                        </div>
+                        <div class="product-descriptions">
+                            <div ng-repeat="Description in HotelDetail.Description">
+                                <p ng-bind-html="Description.Text"></p>
+                            </div>
+                        </div>
+
+                        <div class="property-highlights">
+                            <h3>Property highlights</h3>
+                            <div class="property-highlights__content">
+                                <div class="item" ng-repeat="Amenity in HotelDetail.Facilities">
+                                    <i class="awe-icon awe-icon-check"></i>
+                                    <span ng-bind="Amenity.Text"></span>
+                                </div>
+                                <div ng-show="!HotelDetail.Facilities.length">
+                                    <span>No property info found.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                        @*<div class="product-detail__gallery" ng-cloak>
+                        <div class="product-slider-wrapper">*@
+                    <div class="fotorama" data-allowfullscreen="true" data-nav="thumbs" data-auto="false">
+                        </div>
+                                @*<div class="product-slider">
+            <div class="item" ng-repeat="Image in HotelDetail.Images">
+                    <img ng-src="{{Image.Url}}" alt="{{Image.Caption}}" onerror="this.src ='@Helper.DefaultImageLocation'">
+                </div>
+            </div>
+            <div class="product-slider-thumb-row">
+                <div class="product-slider-thumb">
+                    <div class="item" ng-repeat="Image in HotelDetail.Images">
+                        <img ng-src="{{Image.ThumbnailUrl}}" alt="{{Image.Caption}}" onerror="this.src ='@Helper.DefaultImageLocation'">
+                    </div>
+                </div>
+            </div>*@
+                            </div>
+                            <div class="product-map" ng-if="
+                                 HotelDetail.Latitude!=null &&
+                                 HotelDetail.Latitude!='' &&
+                                 HotelDetail.Latitude!=0 &&
+                                 HotelDetail.Longitude!=null &&
+                                 HotelDetail.Longitude!='' &&
+                                 HotelDetail.Longitude!=0">
+                                <div data-latlong="{{HotelDetail.Latitude}}, {{HotelDetail.Longitude}}"></div>
+                            </div>
+                        @*</div>
+                    </div>*@
+              </div>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="product-tabs tabs">
+                            <ul>
+                                <li>
+                                    <a href="#tabs-1">Room detail</a>
+                                </li>
+                                @*<li>
+                                   <a href="#tabs-2">Facilities &amp; freebies</a>
+                                </li>
+                                <li>
+                                    <a href="#tabs-3">Good to know</a>
+                                </li>
+                                <li>
+                                    <a href="#tabs-4">Review &amp; rating</a>
+                                </li>*@
+                            </ul>
+                            <div class="product-tabs__content">
+                                <div id="tabs-1">
+                                    <table class="room-type-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="room-type">Room type</th>
+                                                <th class="room-people">Max</th>
+                                                <th class="room-condition">Condition</th>
+                                                <th class="room-price">Price</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="rm in HotelDetail.RoomDetail.Rooms">
+                                                <td class="room-type">
+                                                    @*<div class="room-thumb">
+                                                        <img src="images/thumb/1.jpg" alt="">
+                                                    </div>*@
+                                                    <div class="room-title">
+                                                        <h4>{{ rm.RoomName }}</h4>                                                    
+                                                        <h6>{{ rm.RoomType }}</h6>                                                    
+                                                        <h6>{{ rm.RoomClass }}</h6>
+                                                    </div>
+                                                    <div class="room-descriptions">
+                                                        <p ng-bind-html="rm.RoomDescription"></p>
+                                                    </div>
+                                                </td>
+                                                <td class="room-people">
+                                                    <i class="awe-icon awe-icon-users"></i>
+                                                </td>
+                                                <td class="room-condition">
+                                                    <ul ng-repeat="policy in rm.CancellationPolicy" class="list-condition">
+                                                        <li>{{ policy.CancellationCharge }}</li>
+                                                        <li>{{ policy.CancellationNote }}</li>
+                                                    </ul>
+                                                </td>
+                                                <td class="room-price">
+                                                    <div class="price">
+                                                        <span class="amount">@HSBM.Web.Helpers.SessionProxy.BaseCurrency {{ rm.Amount }}</span>
+                                                        @*<em>{{ rm.NoOfRoomAvailable }} available</em>*@
+                                                        @*<a href="room-type-popup.html" class="full-price-open-popup">Full price</a>*@
+                                                    </div>
+                                                </td>
+                                                <td class="room-price">
+                                                    <a ng-click="BookHotel(rm)" href="javascript:;" class="awe-btn">Book now</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+</div>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3"></script>
+<script type="text/javascript" src="js/lib/md-map-extend.js"></script>
+<script type="text/javascript" src="js/lib/jquery.owl.carousel.js"></script>

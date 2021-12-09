@@ -1,0 +1,244 @@
+﻿@model HSBM.EntityModel.OrdersMaster.OrdersMaster
+@{
+    ViewBag.Title = "View Order Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+@Html.AntiForgeryToken()
+
+<script>
+    angular.module('app').controller('OrderDetailController', ['$scope', '$rootScope',
+    function ($scope, $rootScope) {
+
+        $scope.Symbol = $rootScope.Currencysymbols
+    }]);
+</script>
+
+<div class="main-wrapper" ng-controller="OrderDetailController">
+    <h3>Order Detail</h3>
+    @*<h4>Customer Detail</h4>
+        <hr />*@
+    @Html.HiddenFor(model => model.Id)
+    <div class="inner-content  ">
+        <div class="order-details boldLabel">
+
+            <div class="row">
+                @*<div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UserName, new { @class = "control-label" })
+
+                        @Html.TextBoxFor(model => model.UserName, new { @readonly = "true" })
+                    </div>
+                </div>*@
+
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OrderNo, new { @class = "control-label" })
+                        <span>@Model.OrderNo</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OrderDate, new { @class = "control-label" })
+                        <span>@Model.strCreatedDate</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                        @*<span>@Model.Name (@Model.TypeName)</span>*@
+                        @foreach (var item in Model.inventoryList)
+                        {
+                            <span>@item.Name</span>
+                        }
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FarmStaysName, new { @class = "control-label" })
+                        <span>@Model.FarmStaysName</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @*<div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Telephone, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Telephone, new { @readonly = "true" })
+                    </div>
+                </div>*@
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CheckInDate, new { @class = "control-label" })
+                        <span>@Model.strCheckInDate</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CheckOutDate, new { @class = "control-label" })
+                        <span>@Model.strCheckOutDate</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NoOfPeople, new { @class = "control-label" })
+                        <span>@Model.NoOfPeople</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ExclusiveOrSolo, new { @class = "control-label" })
+                        <span>@Model.ExclusiveOrSolo</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-3">
+                    <div class="form-group">
+                        @*@Html.LabelFor(model => model., new { @class = "control-label", title = "Address" })
+                        @Html.TextBoxFor(model => model.NoOfPeople, new { @readonly = "true" })*@
+                    </div>
+                </div>
+            </div>
+            <div class="row total-amount">
+                <div class="form-group">
+                    <div class="col-xs-6 col-sm-6 col-md-3">
+                        @Html.LabelFor(model => model.Amount, new { @class = "control-label" })
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-3">
+                        <span> {{Symbol}} @Model.Amount</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row total-amount">
+                <div class="form-group">
+                    <div class="col-xs-6 col-sm-6 col-md-3">
+                        @Html.LabelFor(model => model.EBDAmount, new { @class = "control-label" })
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-3">
+                        <span>{{Symbol}} @Model.EBDAmount</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row total-amount">
+                <div class="form-group">
+                    <div class="col-xs-6 col-sm-6 col-md-3">
+                        @Html.LabelFor(model => model.DiscountAmount, new { @class = "control-label" })
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-3">
+                        <span>{{Symbol}} @Model.DiscountAmount</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row total-amount">
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        -----------------------------------------------------------
+                    </div>
+                </div>
+            </div>
+            <div class="row total-amount">
+                <div class="form-group">
+                    <div class="col-xs-6 col-sm-6 col-md-3">
+                        @Html.LabelFor(model => model.NetAmount, new { @class = "control-label" })
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-3">
+                        <span>{{Symbol}} @Model.NetAmount</span>
+                    </div>
+                </div>
+            </div>
+            <div class="AllTaxesIncluded">
+                All Taxes Included
+            </div>
+        </div>
+
+        <div class="order-details">
+            <div class="row">
+                <h3>Cancellation Policy </h3>
+            </div>
+            @if (Model.RefundAmount > 0)
+            {
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-10">
+                        <div class="form-group">
+                            @*@Html.LabelFor(model => model.CancellationPolicyIsNonRefundable, new { @class = "control-label", title = "Address" })*@
+                            <br /><label>₹ @Math.Round(Model.RefundAmount, 2) Refundable</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CancellationReason, new { @class = "control-label" })
+                            <span>@Html.Raw(Model.CancellationReason)</span>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                if (Model.IsApplyCancellationPolicy)
+                {
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-10 col-md-10">
+                            <div class="form-group">
+                                @*@Html.LabelFor(model => model.CancellationPolicyIsNonRefundable, new { @class = "control-label", title = "Address" })*@
+                                <br /><label>₹@Math.Round(Model.RefundAmount, 2) Refundable(@Model.RefundablePercentage% Refund if Cancelled Before @Model.RefundableBeforDays Days)</label>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="NoRefundPolicy">Non-Refundable</div>
+                }
+            }
+        </div>
+
+        <div class="order-details">
+            <div class="row">
+                <h3>Contact Details</h3>
+            </div>
+            <div class="row">
+                @*<div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Telephone, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Telephone, new { @readonly = "true" })
+                        </div>
+                    </div>*@
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
+                        <span>@Model.GuestFirstName  @Model.GuestLastName</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.GuestAddress, new { @class = "control-label" })
+                        <span>@Model.GuestAddress</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.GuestMobile, new { @class = "control-label" })
+                        <span>@Model.GuestMobile</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.GuestEmail, new { @class = "control-label" })
+                        <span>@Model.GuestEmail</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttongroup">
+            @Html.ActionLink("Back", "Index", null, new { @class = "btn black-btn" })
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,79 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/admincss")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @*<script src="~/signalr/hubs"></script>*@
+
+    @if (ViewBag.ToastrMSG != null)
+    {
+        <script>
+            $(document).ready(function () {
+                toastr["@Html.Raw(ViewBag.ToastrMSG.Type)"]("@Html.Raw(ViewBag.ToastrMSG.Message)", "@Html.Raw(ViewBag.ToastrMSG.ErrorTitle)")
+            });
+        </script>
+    }
+
+</head>
+<body ng-app="app">
+    <div class="sitemain">
+        <header id="header">
+            <div class="logo"><a href="/"><img src="@System.Configuration.ConfigurationManager.AppSettings["LogoPath"].ToString()" alt="@System.Configuration.ConfigurationManager.AppSettings["SiteName"].ToString()"></a></div>
+            <a href="@Url.Action("Index", "Flight")"><i class="fa fa-caret-right"></i><span>Hotel</span></a>
+            @if (SessionProxy.UserDetails != null && SessionProxy.UserDetails.Id != null && SessionProxy.UserDetails.Id >= 0)
+            {
+                <div class="pull-right p-15" id="ddltoogle">                    
+                  <a href="">@SessionProxy.UserDetails.UserName</a>  
+                </div>
+
+                <div class="pull-right" id="divtoogle">
+                    <div>  @Html.ActionLink("Profile", "Profile", "Customer") </div>
+                    <div>  @Html.ActionLink("Change Password", "ChangePassword", "Customer") </div>
+                    <div>  @Html.ActionLink("LogOut", "LogOut", "Customer") </div>                    
+                </div>
+            }
+            else
+            {
+                <div class="pull-right">
+                    @Html.ActionLink("Login", "Login", "Customer") | @Html.ActionLink("Register", "CustomerRegister", "Customer")
+                </div>
+            }
+
+
+        </header>
+        <section id="content">
+            <div class="col-md-12">
+                <h3>@ViewBag.Message</h3>
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                }
+                @RenderBody()
+            </div>
+        </section>
+    </div>
+    @Scripts.Render("~/bundles/footer-js")
+    <script type="text/javascript">
+        $('body').show();
+        $('.version').text(NProgress.version);
+        NProgress.start();
+        setTimeout(function () { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
+
+        $(document).ready(function () {
+            $('#divtoogle').hide();
+            $("#ddltoogle").click(function () {
+                $("#divtoogle").slideToggle();
+            });
+        });
+
+
+    </script>
+</body>
+</html>

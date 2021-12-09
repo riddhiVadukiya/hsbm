@@ -1,0 +1,76 @@
+﻿@using HSBM.Web.Helpers;
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@model IEnumerable<HSBM.EntityModel.BannerMaster.BannerMaster>
+
+@{
+    ViewBag.Title = "Banners(Master)";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    //UserAccess _UserAccess = (UserAccess)ViewBag.UserAccess;
+}
+<div class="main-wrapper">
+    <h3>Banners</h3>
+    <div ng-controller="BannerMasterController" class="inner-content">
+        <div class="row">
+            <div class="form-group col-md-6">
+                @*<label>Select Banner images</label>*@
+                @if (SessionProxy.CheckModuleAccess(Module.Banners, ModuleAccess.CanAdd))
+                {
+                    <div class="upload-btn">
+                        <input id="isAddMore" type="file" ngf-select ngf-multiple="true" ng-model="files" ngf-keep="false" name="file" accept="image/*" ngf-change="UploadPicImage($files)" title=" ">
+                        <button class="btn btn-default">Choose Images</button>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-55 hbImg" ng-repeat="Image in ListofBanner">
+                <div class="thumbnail">
+                    <div class="image view view-first">
+                        <img src="@MvcApplication.BannerImagePath{{Image.ImageName}}" alt="Image" />
+                        <div class="mask no-caption">
+                            <div class="tools tools-bottom">
+                                @if (SessionProxy.CheckModuleAccess(Module.Banners, ModuleAccess.CanView))
+                                {
+                                    <a href="javascript:;" title="View" ng-click="ViewImage((ListofBanner),$index)"><i class="fa fa-eye"></i></a>
+                                }
+                                @if (SessionProxy.CheckModuleAccess(Module.Banners, ModuleAccess.CanDelete))
+                                {
+                                    <a href="javascript:;" title="Delete" ng-click="DeleteBanner(Image.Id,Image.ImageName)"><i class="fa fa-trash cursorclass"></i></a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div id="ImagePopup" class="modal fade room-thumb-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <a href="javascript:;" data-dismiss="modal" class="close-btn">X</a>
+                        <div class="">
+                            <img alt="Image" src="@MvcApplication.BannerImagePath{{Images[ImageIndex].ImageName}}" class="large-img" />
+                        </div>
+                        <a class="controls prev" href="javascript:;" ng-click="((ImageIndex==0)?(ImageIndex=Images.length-1):(ImageIndex=ImageIndex-1) )"><</a>
+                        <a class="controls next" href="javascript:;" ng-click="((ImageIndex==Images.length-1)?(ImageIndex=0): (ImageIndex=ImageIndex+1))">></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="placeholderimage-listing">
+                <div class="row">
+                    <div ng-repeat="Banner1 in ListofBanner">
+                        <div class="col-xs-4 col-sm-4 col-md-3">
+                            <div >
+                                <img id="blah" src="/Uploaded/{{Banner1.ImageName}}" alt="your image" class="imgstyle" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>*@
+    </div>
+</div>

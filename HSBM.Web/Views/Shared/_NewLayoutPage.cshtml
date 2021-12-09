@@ -1,0 +1,322 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@using HSBM.Web.Models;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/frontjquery")
+    @Scripts.Render("~/bundles/frontEndScripts")
+
+    <!-- GOOGLE FONT -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,600,400,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+
+    <link id="colorreplace" rel="stylesheet" type="text/css" href="~/Content/css/colors/blue.css">
+
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
+
+    @*<script src="~/signalr/hubs"></script>*@
+
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+
+</head>
+
+<!--[if IE 7]> <body class="ie7 lt-ie8 lt-ie9 lt-ie10"> <![endif]-->
+<!--[if IE 8]> <body class="ie8 lt-ie9 lt-ie10"> <![endif]-->
+<!--[if IE 9]> <body class="ie9 lt-ie10"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<body ng-app="FrontApp">
+    <!--<![endif]-->
+
+    <div id="page-wrap">
+
+        <!-- PRELOADER -->
+        @*<div class="preloader"></div>*@
+        <!-- END / PRELOADER -->
+
+        <header id="header-page">
+
+            <div class="header-page__inner">
+                <div class="container">
+                    <div class="logo">
+                        <a href="/"><img src="~/Images/logo.png" alt="@System.Configuration.ConfigurationManager.AppSettings["SiteName"].ToString()"></a>
+                    </div>
+                </div>
+                <nav class="navigation awe-navigation" data-responsive="1200">
+                    <ul class="menu-list">
+                        <li class="menu-item-has-children current-menu-parent">
+                            <a href="/">Home</a>
+                        </li>
+                        @*<li class="menu-item-has-children">
+                                <a href="javascript:;">Hotels</a>
+                                <ul class="sub-menu">
+                                    <li><a href="/Hotel/@((int)HSBM.Common.Enums.SupplierApi.HotelBeds)/">HotelBeds</a></li>
+                                    <li><a href="/Hotel/@((int)HSBM.Common.Enums.SupplierApi.Amadeus)">Amadeus</a></li>
+                                    <li><a href="/Hotel/@((int)HSBM.Common.Enums.SupplierApi.RoomXML)">RoomsXML</a></li>
+                                    <li><a href="/Hotel/@((int)HSBM.Common.Enums.SupplierApi.Galileo)">Galileo</a></li>
+                                    <li><a href="/Hotel/@((int)HSBM.Common.Enums.SupplierApi.InHouseHotels)">In House</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="@Url.Action("Index", "Tour")">Tours</a>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="javascript:;">Rent a Car</a>
+                                <ul class="sub-menu">
+                                    <li><a href="@Url.Action("Index", "CarRental")">Car Rental</a></li>
+                                    <li><a href="/RentACar/Transfer">Book Transfer</a></li>
+                                </ul>
+                            </li>*@
+                        @*<li class="menu-item-has-children">
+                                <a href="@Url.Action("Index", "Blogs")">Blog</a>
+                            </li>*@
+                        @if (SessionProxy.UserDetails != null && SessionProxy.UserDetails.Id != null && SessionProxy.UserDetails.Id >= 0 && SessionProxy.UserDetails.UserType == (int)UserTypes.Customer)
+                        {
+                            <li class="menu-item-has-children">
+                                <a href="javascript:;">@SessionProxy.UserDetails.FirstName @SessionProxy.UserDetails.LastName</a>
+                                <ul class="sub-menu">
+                                    <li class="current-menu-item"><a href="@Url.Action("Profile", "Customer")">Profile</a></li>
+                                    @*<li><a href="@Url.Action("BookingHistory", "Customer")">Booking History</a></li>
+                                        <li><a href="@Url.Action("HotelWishlist", "Customer")">Hotel Wishlist</a></li>*@
+                                    <li><a href="@Url.Action("ChangePassword", "Customer")">Change Password</a></li>
+                                    <li><a href="@Url.Action("LogOut", "Customer")">Logout</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="menu-item-has-children">
+                                <a href="javascript:;">Login</a>
+                                <ul class="sub-menu">
+                                    <li class="current-menu-item"><a href="@Url.Action("Login", "Customer")">Login</a></li>
+                                    <li><a href="@Url.Action("CustomerRegister", "Customer")">Register</a></li>
+                                </ul>
+                            </li>
+                        }
+                        @*<div class="col-sm-2 col-xs-12 form-elements pull-right" ng-controller="CommonController">
+                                <div class="form-item" ng-init="CurrencySource">
+                                    <select id="Currency" class="form-control" ng-model="Search.Currency" ng-change="ChangeBaseCurrency()">
+                                        <option ng-repeat="f in CurrencySource" value="{{f.Value}}" ng-selected="f.Value==Search.Currency">{{f.Text}}</option>
+                                    </select>
+                                </div>
+                            </div>*@
+                    </ul>
+                </nav>
+
+
+            </div>
+
+
+        </header>
+
+
+        @*<section id="content">*@
+        @*<h3>@ViewBag.Message</h3>*@
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+        {
+            @Html.AntiForgeryToken()
+        }
+        @RenderBody()
+        @*</section>*@
+
+        <div class="modal fade in" id="myModal" role="dialog" ng-controller="CommonController">
+            <div class="modal-dialog login-modal">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form name="frmLogin" id="frmLogin" class="form-horizontal" novalidate>
+                            <input type="hidden" id="hdnRedirectUrl" value="" />
+                            <input id="antiForgeryToken" data-ng-model="antiForgeryToken" type="hidden" @*data-ng-init="antiForgeryToken='@TravelSnap.Web.Helpers.Utility.GetAntiForgeryToken()'"*@ />
+                            <fieldset>
+                                <div class="alert alert-danger" ng-if="ErrorMessage" id="ErrorMessage">
+                                    <p ng-bind="ErrorMessage"></p>
+                                </div>
+                                <div class="login-form">
+                                    <div class="form-group col-xs-12">
+                                        <div class="inner-addon right-addon ">
+                                            <i class="fa fa-envelope-o"></i>
+                                            <input id="txtEmail_Address" type="text" ng-model="LogInModel.UserName" class="form-control" placeholder="Username" required maxlength="250" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <div class="inner-addon right-addon ">
+                                            <i class="fa fa-lock "></i>
+                                            <input id="txtLoginPassword" type="password" ng-model="LogInModel.Password" class="form-control" placeholder="Password" required maxlength="50" />
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="register-button mb20">
+                                    <button type="submit" ng-click="Login_User(LogInModel)" class="btn btn-block btn-lg btn-success login-default-font margin-bottom15" ng-disabled='frmLogin.$invalid'>Login</button>
+                                </div>
+                                <div class="display-none">
+                                    <button type="button" data-dismiss="modal" id="btnCloseLogin">Close</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="display-none">
+                        <button type="button" data-dismiss="modal" id="btnCloseSignup">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @RenderSection("scripts", required: false)
+
+        <div class="clearfix"></div>
+        <!-- FOOTER PAGE -->
+        <footer id="footer-page">
+            <div class="container">
+                <div class="row">
+                    <!-- WIDGET -->
+                    <div class="col-md-3">
+                        <div class="widget widget_contact_info">
+                            <div class="widget_background">
+                                <div class="widget_background__half">
+                                    <div class="bg"></div>
+                                </div>
+                                <div class="widget_background__half">
+                                    <div class="bg"></div>
+                                </div>
+                            </div>
+                            <div class="logo">
+                                <img src="~/Images/logo-footer.png" alt="">
+                            </div>
+                            <div class="widget_content">
+                                @*<p>3rd Floor, Purusharth Plaza, Nr People's Bank, Amin Marg, Rajkot</p>
+                                    <p>+91-281-22446677</p>
+                                    <a href="#">info@brevitysoftware.com</a>*@
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END / WIDGET -->
+                    <!-- WIDGET -->
+                    <div class="col-md-2">
+                        <div class="widget widget_about_us">
+                            @*<h3>About Us</h3>
+                                <div class="widget_content">
+                                    <p>Brevity Software is a mobile application and website design & development company in India. It is an amalgam of talented designers, developers, project managers and business developers who work in co-ordination towards a single goal – Client Success. Our customer-centric approach enables us to make our client’s goals as ours and deliver scalable and measurable solutions. The awards we have achieved with our approach are the trust and long-term mutual commitment to our clients.</p>
+                                </div>*@
+                        </div>
+                    </div>
+                    <!-- END / WIDGET -->
+                    <!-- WIDGET -->
+                    @*<div class="col-md-2">
+                            <div class="widget widget_categories">
+                                <h3>Categiries</h3>
+                                <ul>
+                                    <li><a href="#">Countries</a></li>
+                                    <li><a href="#">Regions</a></li>
+                                    <li><a href="#">Cities</a></li>
+                                    <li><a href="#">Districts</a></li>
+                                    <li><a href="#">Countries</a></li>
+                                    <li><a href="#">Airports</a></li>
+                                    <li><a href="#">Hotels</a></li>
+                                    <li><a href="#">Places of interest</a></li>
+                                </ul>
+                            </div>
+                        </div>*@
+                    <!-- END / WIDGET -->
+                    <!-- WIDGET -->
+                    <div class="col-md-2" ng-init="GetCMSPages()" ng-controller="CommonController">
+                        <div class="widget widget_recent_entries">
+                            <h3>Search</h3>
+                            <ul>
+                                <li ng-repeat="p in CMSPages">
+                                    <a href="{{p.Link}}">{{p.Text}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END / WIDGET -->
+                    <!-- WIDGET -->
+                    <div class="col-md-3">
+                        <div class="widget widget_follow_us">
+                            <div class="widget_content">
+                                <p>Chat With Us</p>
+                                @*<span class="phone"><a href="skype:hardik.beeline">hardik.beeline</a></span>
+                                    <span class="phone"><a href="skype:bhavin.beeline">bhavin.beeline</a></span>*@
+                                <div class="awe-social">
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                    <a href="#"><i class="fa fa-pinterest"></i></a>
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                    <a href="#"><i class="fa fa-youtube-play"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" ng-controller="CommonController">
+                        <div class="widget widget_follow_us">
+                            <div class="widget_content">
+                                <form name="subForm" class="ng-pristine ng-valid ng-submitted" novalidate>
+                                    <p>Subscribe:</p>
+                                    <input ng-model="SubscribeEmail" class="form-control" validate-email name="SubscribeEmail" type="email"
+                                           ng-class="{ 'has-error' : subForm.SubscribeEmail.$error.email && !subForm.SubscribeEmail.$pristine}" />
+                                    <label>{{SubscribeMessage}}</label>
+                                    <button ng-click="SendSubscribeRequest()" class="form-control" ng-disabled="!subForm.SubscribeEmail.$error.email">Subscribe</button>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END / WIDGET -->
+                </div>
+                <div class="copyright">
+                    <p>Copyright © @System.DateTime.Now.Year , @System.Configuration.ConfigurationManager.AppSettings["SiteURL"].ToString() All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+        <!-- END / FOOTER PAGE -->
+
+    </div>
+
+    @Scripts.Render("~/bundles/footer-js")
+
+    <script type="text/javascript">
+        $('body').show();
+        $('.version').text(NProgress.version);
+        NProgress.start();
+        setTimeout(function () { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
+    </script>
+
+    <script type="text/javascript">
+        $('body').show();
+        $('.version').text(NProgress.version);
+        NProgress.start();
+        setTimeout(function () { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
+
+        $(document).ready(function () {
+            $('#divtoogle').hide();
+            $("#ddltoogle").click(function () {
+                $("#divtoogle").slideToggle();
+            });
+        });
+
+
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            //$('.stick').theiaStickySidebar({
+            //    //additionalMarginTop: 15
+            //});
+
+            $(".leftsection").stick_in_parent();
+            //$(".leftsection, #main_column").stick_in_parent();
+
+        });
+
+    </script>
+
+</body>
+</html>

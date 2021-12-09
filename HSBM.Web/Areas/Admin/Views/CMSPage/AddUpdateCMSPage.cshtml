@@ -1,0 +1,106 @@
+﻿@model HSBM.EntityModel.CMSPageMaster.CMSPageMaster
+
+@{
+   
+        ViewBag.Title = "Update Site Page";
+    
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+
+    $(document).ready(function () {
+        tinymce.init({ selector: '#Description', height: 200 });
+    });
+</script>
+
+
+<div class="main-wrapper">
+    <h3>@ViewBag.Title</h3>
+
+    @using (Html.BeginForm("AddUpdateCMSPage", "CMSPage", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="inner-content">
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.CMSPageId)
+        @Html.HiddenFor(model => model.CreatedBy)
+        @Html.HiddenFor(model => model.CreatedDate)
+        @Html.HiddenFor(model => model.UpdatedBy)
+        @Html.HiddenFor(model => model.UpdateDate)
+        @Html.HiddenFor(model => model.IsActive)
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group discount-value">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                    <span class="required-field ">*</span> 
+                    @Html.TextBoxFor(model => model.Name, new { maxlength = "50" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group discount-value">
+                    @Html.LabelFor(model => model.Title, new { @class = "control-label " })
+                    <span class="required-field ">*</span> 
+                    @Html.TextBoxFor(model => model.Title, new { maxlength = "250" })
+                    @Html.ValidationMessageFor(model => model.Title)
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group discount-value">
+                    @Html.LabelFor(model => model.Description, new { @class = "control-label " })
+                    <span class="required-field ">*</span> 
+                    @Html.TextAreaFor(model => model.Description)
+                    @Html.ValidationMessageFor(model => model.Description)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group discount-value">
+                    @Html.LabelFor(model => model.MetaTitle, new { @class = "control-label" })
+
+                    @Html.TextBoxFor(model => model.MetaTitle, new { maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.MetaTitle)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group discount-value">
+                    @Html.LabelFor(model => model.MetaKeywords, new { @class = "control-label" })
+
+                    @Html.TextAreaFor(model => model.MetaKeywords, new { maxlength = "255" })
+                    @Html.ValidationMessageFor(model => model.MetaKeywords)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group discount-value">
+                    @Html.LabelFor(model => model.MetaDescription, new { @class = "control-label" })
+
+                    @Html.TextAreaFor(model => model.MetaDescription, new { maxlength = "255" })
+                    @Html.ValidationMessageFor(model => model.MetaDescription)
+                </div>
+            </div>
+        </div>
+
+<!--        <div class="ln_solid"></div>-->
+        <div class="buttongroup">
+
+            <input type="submit" value="Save" class="btn btn-success" />
+            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-primary" })
+
+        </div>
+    </div>
+    }
+
+</div>

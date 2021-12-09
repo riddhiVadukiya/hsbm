@@ -1,0 +1,227 @@
+﻿@model HSBM.EntityModel.RoleMaster.RoleMaster
+
+@{
+    if (Model.Id > 0)
+    {
+        ViewBag.Title = "Update Role";
+    }
+    else
+    {
+        ViewBag.Title = "Add Role";
+    }
+
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="main-wrapper">
+    <h3>@ViewBag.Title</h3>
+    @using (Html.BeginForm("AddUpdateRole", "RoleManagement", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="inner-content">
+            @*<h4>Role</h4>*@
+            @*<hr />*@
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RoleName, new { @class = "control-label" })
+                        <span class="required-field ">*</span>
+                        @Html.TextBoxFor(model => model.RoleName)
+                        @Html.ValidationMessageFor(model => model.RoleName)
+                    </div>
+                </div>
+                @if (Model.Isdefault)
+                {
+                    @Html.HiddenFor(model => model.IsActive)
+                }
+                else
+                {
+
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group checkbox">
+                            @Html.CheckBoxFor(model => model.IsActive)
+                            @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
+                            @Html.ValidationMessageFor(model => model.IsActive)
+                        </div>
+                    </div>}
+                <div class="clearfix"></div>
+                <div class="col-xs-12 col-sm-12 col-md-12 update-role-edit">
+                    <table class="table mt20">
+                        <tr>
+                            <th>#</th>
+                            <th>Module Name</th>
+                            <th class=""><div class="form-group checkbox" style="margin: 0 !important;"><input type="checkbox" id="chkAddSelectAll" class="form-control" /> <label for="chkAddSelectAll">Select all</label></div></th>
+                            <th class=""><div class="form-group checkbox" style="margin: 0 !important;"><input type="checkbox" id="chkUpdateSelectAll" class="form-control chk" /> <label for="chkUpdateSelectAll">Select all</label></div></th>
+                            <th class=""><div class="form-group checkbox" style="margin: 0 !important;"><input type="checkbox" id="chkDeleteSelectAll" class="form-control chk" /> <label for="chkDeleteSelectAll">Select all</label></div></th>
+                            <th class=""><div class="form-group checkbox" style="margin: 0 !important;"><input type="checkbox" id="chkViewSelectAll" class="form-control chk" /> <label for="chkViewSelectAll">Select all</label></div></th>
+                        </tr>
+
+                        @if (Model != null && Model.RoleMasterDetails != null)
+                        {
+                            for (int i = 0; i < Model.RoleMasterDetails.Count; i++)
+                            {
+                                <tr>
+                                    <td>@Html.Label((i + 1).ToString())</td>
+                                    <td>
+                                        @Html.HiddenFor(model => model.RoleMasterDetails[i].Id)
+                                        @Html.HiddenFor(model => model.RoleMasterDetails[i].RoleMasterID)
+                                        @Html.HiddenFor(model => model.RoleMasterDetails[i].RoleModuleID)
+                                        @Html.Label(Model.RoleMasterDetails[i].RoleModule.ModuleName)
+                                    </td>
+                                    <td class="">
+                                        <div class="form-group checkbox">
+                                            @Html.CheckBoxFor(model => model.RoleMasterDetails[i].CanAdd, new { id = ("chkAdd." + i), @class = "form-control chk chkAdd" }) <label for="@Html.Raw("chkAdd." + i)">Add</label>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="form-group checkbox">
+                                            @Html.CheckBoxFor(model => model.RoleMasterDetails[i].CanUpdate, new { id = ("chkUpdate." + i), @class = "form-control chk chkUpdate" }) <label for="@Html.Raw("chkUpdate." + i)">Update</label>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="form-group checkbox">
+                                            @Html.CheckBoxFor(model => model.RoleMasterDetails[i].CanDelete, new { id = ("chkDelete." + i), @class = "form-control chk chkDelete" }) <label for="@Html.Raw("chkDelete." + i)">Delete</label>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="form-group checkbox">
+                                            @Html.CheckBoxFor(model => model.RoleMasterDetails[i].CanView, new { id = ("chkView." + i), @class = "form-control chk chkView" }) <label for="@Html.Raw("chkView." + i)">View</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="buttongroup">
+                <div class="col-md-12 text-center">
+                    <input type="submit" value="Save" class="btn btn-success" />
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('.chk').click(function () {
+            var obj = this;
+            if (obj.name.indexOf("CanAdd") > 0 || obj.name.indexOf("CanUpdate") > 0 || obj.name.indexOf("CanDelete") > 0) {
+                if (obj.checked) {
+                    document.getElementById("chkView." + obj.id.split(".")[1]).checked = true;
+                }
+            }
+            else {
+                if (obj.checked == false) {
+                    document.getElementById("chkAdd." + obj.id.split(".")[1]).checked = false;
+                    document.getElementById("chkUpdate." + obj.id.split(".")[1]).checked = false;
+                    document.getElementById("chkDelete." + obj.id.split(".")[1]).checked = false;
+                }
+            }
+
+            //SelectAll();
+        });
+
+
+
+        function ChangeSelectAll() {
+            
+            if ($('.chkAdd:checked').length == $('.chkAdd').length) {
+                $("#chkAddSelectAll").prop('checked', true);
+            } else {
+                $("#chkAddSelectAll").prop('checked', false);
+            }
+
+            if ($('.chkUpdate:checked').length == $('.chkUpdate').length) {
+                $("#chkUpdateSelectAll").prop('checked', true);
+            } else {
+                $("#chkUpdateSelectAll").prop('checked', false);
+            }
+
+            if ($('.chkDelete:checked').length == $('.chkDelete').length) {
+                $("#chkDeleteSelectAll").prop('checked', true);
+            } else {
+                $("#chkDeleteSelectAll").prop('checked', false);
+            }
+
+            if ($('.chkView:checked').length == $('.chkView').length) {
+                $("#chkViewSelectAll").prop('checked', true);
+            } else {
+                $("#chkViewSelectAll").prop('checked', false);
+            }
+        }
+
+        $("#chkAddSelectAll").change(function () {
+            $(".chkAdd").prop('checked', $(this).prop("checked"));
+
+            if ($(this).prop("checked")) {
+                $(".chkView").prop('checked', $(this).prop("checked"));
+                $("#chkViewSelectAll").prop('checked', true);
+            }
+        });
+
+        $('.chkAdd').change(function () {
+            if (false == $(this).prop("checked")) { $("#chkAddSelectAll").prop('checked', false); }
+            ChangeSelectAll();
+        });
+
+        $("#chkUpdateSelectAll").change(function () {
+            $(".chkUpdate").prop('checked', $(this).prop("checked"));
+            if ($(this).prop("checked")) {
+                $(".chkView").prop('checked', $(this).prop("checked"));
+                $("#chkViewSelectAll").prop('checked', true);
+            }
+        });
+        $('.chkUpdate').change(function () {
+            if (false == $(this).prop("checked")) {
+                $("#chkUpdateSelectAll").prop('checked', false);
+            }
+            ChangeSelectAll();
+
+        });
+
+        $("#chkDeleteSelectAll").change(function () {
+            $(".chkDelete").prop('checked', $(this).prop("checked"));
+            if ($(this).prop("checked")) {
+                $(".chkView").prop('checked', $(this).prop("checked"));
+                $("#chkViewSelectAll").prop('checked', true);
+            }
+        });
+        $('.chkDelete').change(function () {
+            if (false == $(this).prop("checked")) {
+                $("#chkDeleteSelectAll").prop('checked', false);
+            }
+            ChangeSelectAll();
+        });
+
+        $("#chkViewSelectAll").change(function () {
+            $(".chkView").prop('checked', $(this).prop("checked"));
+        });
+        $('.chkView').change(function () {
+            if (false == $(this).prop("checked")) {
+                $("#chkViewSelectAll").prop('checked', false);
+            }
+            ChangeSelectAll();
+
+        });
+
+
+    });
+
+</script>

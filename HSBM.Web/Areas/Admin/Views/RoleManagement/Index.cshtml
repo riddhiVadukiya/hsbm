@@ -1,0 +1,116 @@
+﻿@model IEnumerable<HSBM.EntityModel.RoleMaster.RoleMaster>
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Role Masters";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-wrapper">
+    <h3>Roles</h3>
+    <div ng-controller="RoleMasterController" class="inner-content filter-button-set">
+        <script>
+
+            function BindRoleMasterGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+                var Columns = [
+                            { data: 'Id', bVisible: false },
+                            { data: 'RoleName' },
+                            {
+                                @if (SessionProxy.CheckModuleAccess(Module.Roles, ModuleAccess.CanUpdate) ||
+                                        SessionProxy.CheckModuleAccess(Module.Roles, ModuleAccess.CanDelete))
+                                {
+                                @: bVisible: true,
+                                }
+                                else
+                                {
+                                @: bVisible: false,
+                                }
+                                bSortable: false,
+                                sClass: "action-cell",
+                                mRender: function (data, type, row, full) {
+
+                                    var btn = '';
+                                    @if (SessionProxy.CheckModuleAccess(Module.Roles, ModuleAccess.CanUpdate))
+                                    {
+                                     @: btn += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/RoleManagement/Edit/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-pencil'> </a> &nbsp;";
+                                                                        }
+                                    @if (SessionProxy.CheckModuleAccess(Module.Roles, ModuleAccess.CanDelete))
+                                    {
+
+                                    @:  if (!row.Isdefault) { if (!row.IsActive) { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',true)\" href='javascript:void(0);' title='Restore' class='glyphicon glyphicon-refresh'></a>"; } else { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',false)\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>"; } } else { btn += "<a href='javascript:void(0);' title='Do not allow to delete this role' class='glyphicon glyphicon-ban-circle'></a>"; }
+
+                                    }
+
+                                    return btn;
+                                }
+                            }
+                                    //{
+                                    //    bSortable: false,
+                                    //    sClass: "action-cell",
+                                    //    mRender: function (data, type, row, full) {
+                                    //        if (!row.IsActive) {
+                                    //            return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>ACTIVE</button></div>";
+                                    //        }
+                                    //        else {
+                                    //            return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>ACTIVE</button></div>";
+                                    //        }
+                                    //    }
+                                    //},
+                                    //{
+                                    //    bSortable: false,
+                                    //    sClass: "action-cell",
+                                    //    mRender: function (data, type, row, full) {
+
+                                    //        var column = "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/RoleManagement/Edit/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-edit'> </a> ";
+                                    //        if (!row.Isdefault) {
+                                    //            column += "| <a onclick=\"angular.element(this).scope().Delete('/Admin/RoleManagement/Delete/" + row.Id + "')\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>";
+                                    //        }
+                                    //        return column;
+                                    //    }
+                                    //}
+                ];
+                BindSearchGridData('RoleMaster', Columns, '/Admin/RoleManagement/GetAllRolesForGrid', $('[ng-controller="RoleMasterController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+            }
+        </script>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Role Name</label>
+                    <input type="text" ng-model="Search.RoleName" class="form-control" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="Search.IncludeIsDeleted" name="cc" ng-model="Search.IncludeIsDeleted" />
+                    <label for="Search.IncludeIsDeleted"><span></span>Include Deleted</label>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="buttongroup">
+                    <input type="button" ng-click="SearchData()" value="Search" class="btn green-btn" />
+                    <input type="button" ng-click="ResetData()" value="Reset" class="btn black-btn" />
+                </div>
+            </div>
+        </div>
+        <div class="ln_solid"></div>
+        @if (SessionProxy.CheckModuleAccess(Module.Roles, ModuleAccess.CanAdd))
+        {
+            <div class="buttongroup  pos-rel">
+                @Html.ActionLink("Add Role", "Add", "RoleManagement", null, new { @class = "btn green-btn" })
+            </div>
+        }
+        <div class="grid-btn-set">
+            <table id="RoleMaster" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Role Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="RoleMaster_NoRecordFound" class="empty-grid">No records found</div>
+        </div>
+        </div>
+</div>

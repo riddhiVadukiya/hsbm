@@ -1,0 +1,72 @@
+D:\FarmStay\HSBM.Repository\obj\Debug\HSBM.Repository.csprojResolveAssemblyReference.cache
+D:\FarmStay\HSBM.Repository\bin\Debug\HSBM.Repository.dll.config
+D:\FarmStay\HSBM.Repository\bin\Debug\HSBM.Repository.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\HSBM.Repository.pdb
+D:\FarmStay\HSBM.Repository\bin\Debug\BLToolkit.4.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\DocumentFormat.OpenXml.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\HSBM.Common.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\HSBM.EntityModel.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\Less.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\Microsoft.Web.Infrastructure.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\Newtonsoft.Json.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\Ninject.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\Ninject.Extensions.Conventions.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\Ninject.Web.Common.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\System.Net.Http.Formatting.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\System.Web.Http.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\System.Web.Mvc.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\log4net.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\Microsoft.WindowsAzure.Configuration.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\PushSharp.Apple.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\PushSharp.Core.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\PushSharp.Google.dll
+D:\FarmStay\HSBM.Repository\bin\Debug\HSBM.Common.pdb
+D:\FarmStay\HSBM.Repository\bin\Debug\HSBM.EntityModel.pdb
+D:\FarmStay\HSBM.Repository\bin\Debug\Less.pdb
+D:\FarmStay\HSBM.Repository\bin\Debug\Newtonsoft.Json.xml
+D:\FarmStay\HSBM.Repository\bin\Debug\Ninject.xml
+D:\FarmStay\HSBM.Repository\bin\Debug\Ninject.Extensions.Conventions.xml
+D:\FarmStay\HSBM.Repository\bin\Debug\Ninject.Web.Common.xml
+D:\FarmStay\HSBM.Repository\bin\Debug\System.Net.Http.Formatting.xml
+D:\FarmStay\HSBM.Repository\bin\Debug\System.Web.Http.xml
+D:\FarmStay\HSBM.Repository\bin\Debug\System.Web.Mvc.xml
+D:\FarmStay\HSBM.Repository\bin\Debug\log4net.xml
+D:\FarmStay\HSBM.Repository\bin\Debug\Microsoft.WindowsAzure.Configuration.xml
+D:\FarmStay\HSBM.Repository\obj\Debug\HSBM.Repository.dll
+D:\FarmStay\HSBM.Repository\obj\Debug\HSBM.Repository.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\HSBM.Repository.dll.config
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\HSBM.Repository.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\HSBM.Repository.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\BLToolkit.4.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\DocumentFormat.OpenXml.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\HSBM.Common.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\HSBM.EntityModel.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Less.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Microsoft.Web.Infrastructure.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Newtonsoft.Json.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Ninject.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Ninject.Extensions.Conventions.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Ninject.Web.Common.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\System.Net.Http.Formatting.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\System.Web.Http.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\System.Web.Mvc.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\log4net.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Microsoft.WindowsAzure.Configuration.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\PushSharp.Apple.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\PushSharp.Core.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\PushSharp.Google.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\HSBM.Common.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\HSBM.EntityModel.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Less.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Newtonsoft.Json.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Ninject.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Ninject.Extensions.Conventions.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Ninject.Web.Common.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\System.Net.Http.Formatting.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\System.Web.Http.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\System.Web.Mvc.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\log4net.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\bin\Debug\Microsoft.WindowsAzure.Configuration.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\obj\Debug\HSBM.Repository.csprojResolveAssemblyReference.cache
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\obj\Debug\HSBM.Repository.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Repository\obj\Debug\HSBM.Repository.pdb

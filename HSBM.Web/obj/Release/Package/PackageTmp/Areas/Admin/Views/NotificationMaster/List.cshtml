@@ -1,0 +1,24 @@
+﻿@model IEnumerable<HSBM.EntityModel.Notification.Notification>
+
+@{
+    ViewBag.Title = "Notification";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Notification</h2>
+<div ng-controller="NotificationController">
+    <p>
+        @Html.ActionLink("Add Notification", "AddNotification", null, new { @class = "btn btn-primary pull-right" })
+    </p>
+    <table id="NotificationTable" class="table table-bordered table-striped table-responsive row-border hover bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="NotificationTable_NoRecordFound" class="empty-grid">No records found</div>
+</div>

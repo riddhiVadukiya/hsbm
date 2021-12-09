@@ -1,0 +1,190 @@
+﻿@model IEnumerable<HSBM.EntityModel.Blogs.Blogs>
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+
+@{
+    ViewBag.Title = "Blogs Listing";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-wrapper">
+    <h3>Blogs</h3>
+    <div ng-controller="BlogsController" class="inner-content filter-button-set">
+        <script>
+            function BindBlogsMasterGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+                
+                var Columns = [
+                            { data: 'Id', bVisible: false },
+                            { data: 'Title', sClass: "wordbreak" },
+                            //{ data: 'CreatedDate' },
+                            {
+                                bSortable: false,
+                                sClass: "action-cell comments-count",
+                                mRender: function (data, type, row, full) {
+                                    var btn = '';
+                                    @if (SessionProxy.CheckModuleAccess(Module.BlogsComment, ModuleAccess.CanView))
+                                    {
+                                    @: btn += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/Blogs/Comments/" + row.Id + "')\" href='javascript:void(0);' title='Comments' >" + row.BlogCommentCount + " </a>";
+                                                                                                                                                                                        }
+                                    else
+                                    {
+                                    @: btn += "<a href='javascript:void(0);' title='Comments' >" + row.BlogCommentCount + " </a>";
+                                                                                                                                                            }
+                                    return btn;
+                                }
+                            },
+                                    //{ data: 'CreatedDate' },
+                                    //{
+                                    //    bSortable: false,
+                                    //    sClass: "action-cell",
+                                    //    mRender: function (data, type, row, full) {
+                                    //        if (row.IsPopulerPost)
+                                    //            return "<span class='glyphicon glyphicon-ok'></span>";
+                                    //        else
+                                    //            return "<span></span>";
+                                    //    }
+                                    //},
+                                    //{
+                                    //    bSortable: false,
+                                    //    sClass: "action-cell",
+                                    //    mRender: function (data, type, row, full) {
+                                    //        if (!row.IsActive) {
+                                    //            return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>ACTIVE</button></div>";
+                                    //        }
+                                    //        else {
+                                    //            return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>ACTIVE</button></div>";
+                                    //        }
+                                    //    }
+                                    //},
+                                    {
+                                        @if (SessionProxy.CheckModuleAccess(Module.Blogs, ModuleAccess.CanUpdate) ||
+                             SessionProxy.CheckModuleAccess(Module.Blogs, ModuleAccess.CanDelete) )
+                        {
+                        @: bVisible: true,
+                                                                }
+                        else
+                        {
+                        @: bVisible: false,
+                                                                }
+                                        bSortable: false,
+                                        sClass: "action-cell",
+                                        mRender: function (data, type, row, full) {
+
+                                            var btn = '';
+                                            @if (SessionProxy.CheckModuleAccess(Module.Blogs, ModuleAccess.CanUpdate))
+                                    {
+                                        @: btn += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/Blogs/UpdateBlog/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-pencil'> </a>";
+                                                                                                                                                        }
+
+                                            @if (SessionProxy.CheckModuleAccess(Module.Blogs, ModuleAccess.CanDelete))
+                                    {
+                                        @: if (row.IsActive) btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',false)\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>"; else btn +=  "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',true)\" href='javascript:void(0);' title='Restore' class='glyphicon glyphicon-repeat'></a>";
+                                                                                }
+
+                                            return btn;
+                                        }
+                                    }
+                ];                
+            BindSearchGridData('Blogs', Columns, '/Admin/Blogs/GetAllBlogsBySearchRequest', $('[ng-controller="BlogsController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+            }
+
+        </script>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <label> Blog Title</label>
+                    <input type="text" ng-model="Search.Title" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-2 col-md-2 firt-ceck">
+                <div class="form-group checkbox">
+
+                    <input type="checkbox" ng-model="Search.IncludeIsDeleted" id="Search.IncludeIsDeleted" />
+                    <label for="Search.IncludeIsDeleted"><span></span>Include Deleted</label>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="form-group checkbox">
+
+                    <input type="checkbox" ng-model="Search.Popular" id="Search.Popular" />
+                    <label for="Search.Popular"><span></span>Include Popular Blogs</label>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="buttongroup">
+                    <button type="button" class="btn green-btn" ng-click="SearchData()">Search</button>
+                    <button type="button" class="btn black-btn" ng-click="ResetData()">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ln_solid"></div>
+        @if (SessionProxy.CheckModuleAccess(Module.Blogs, ModuleAccess.CanAdd))
+{
+    <div class="buttongroup  pos-rel">
+        @Html.ActionLink("Add Blog", "AddBlog", null, new { @class = "btn green-btn" })
+    </div>
+}<div class="grid-btn-set">
+    <table id="Blogs" class="table table-bordered table-striped table-responsive row-border hover bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                    <th style="text-overflow:ellipsis">Blog Title</th>
+                @*<th>Date</th>*@
+                <th class="comments">Comments</th>
+                @*<th>Status</th>*@
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="Blogs_NoRecordFound" class="empty-grid">No records found</div>
+</div>
+</div>
+
+
+
+
+
+</div>
+
+
+@*<table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MetaTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MetaKeyword)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MetaTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MetaKeyword)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "UpdateBlog", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "DeleteBlog", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+    </table>*@

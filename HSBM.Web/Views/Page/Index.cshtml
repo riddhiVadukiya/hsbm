@@ -1,0 +1,25 @@
+﻿@using HSBM.EntityModel.CMSPageMaster;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        var _link = window.location.href.split('/');
+        $('#' + _link[4]).addClass('active');
+    })
+</script>
+<div ng-controller="CommonController" ng-init="GetCMSPageDescription(@Newtonsoft.Json.JsonConvert.SerializeObject(Model))">
+
+    <section class="blog-page">
+        <div class="container page-min-height">
+            <div class="row">
+                <div ng-bind-html="CMSPageDescription"></div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+

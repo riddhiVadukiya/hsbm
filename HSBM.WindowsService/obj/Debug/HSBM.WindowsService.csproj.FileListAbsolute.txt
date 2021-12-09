@@ -1,0 +1,15 @@
+D:\FarmStay\HSBM.WindowsService\bin\Debug\HSBM.WindowsService.exe
+D:\FarmStay\HSBM.WindowsService\bin\Debug\HSBM.WindowsService.pdb
+D:\FarmStay\HSBM.WindowsService\obj\Debug\HSBM.WindowsService.HimalayanFarmstayService.resources
+D:\FarmStay\HSBM.WindowsService\obj\Debug\HSBM.WindowsService.ProjectInstaller.resources
+D:\FarmStay\HSBM.WindowsService\obj\Debug\HSBM.WindowsService.csproj.GenerateResource.Cache
+D:\FarmStay\HSBM.WindowsService\obj\Debug\HSBM.WindowsService.exe
+D:\FarmStay\HSBM.WindowsService\obj\Debug\HSBM.WindowsService.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.WindowsService\bin\Debug\HSBM.WindowsService.exe
+D:\FarmStay Main Folder\FarmStay\HSBM.WindowsService\bin\Debug\HSBM.WindowsService.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.WindowsService\obj\Debug\HSBM.WindowsService.csprojResolveAssemblyReference.cache
+D:\FarmStay Main Folder\FarmStay\HSBM.WindowsService\obj\Debug\HSBM.WindowsService.HimalayanFarmstayService.resources
+D:\FarmStay Main Folder\FarmStay\HSBM.WindowsService\obj\Debug\HSBM.WindowsService.ProjectInstaller.resources
+D:\FarmStay Main Folder\FarmStay\HSBM.WindowsService\obj\Debug\HSBM.WindowsService.csproj.GenerateResource.Cache
+D:\FarmStay Main Folder\FarmStay\HSBM.WindowsService\obj\Debug\HSBM.WindowsService.exe
+D:\FarmStay Main Folder\FarmStay\HSBM.WindowsService\obj\Debug\HSBM.WindowsService.pdb

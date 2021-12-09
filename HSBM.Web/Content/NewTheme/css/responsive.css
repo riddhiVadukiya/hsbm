@@ -1,0 +1,311 @@
+@media only screen and (max-width:1200px) {
+    body { font-size: 15px; }
+    .container { max-width: 96%; }
+    .header-right { padding: 10px 0 5px 0; }
+    #mainSlider .carousel-caption h3 { font-size: 50px; }
+    #mainSlider .carousel-caption p { font-size: 40px; }
+    #mainSlider .carousel-item { height: 550px; }
+    .welcom-cnt h1 { font-size: 70px; line-height: 50px; }
+    .welcom-cnt h2 { font-size: 35px; }
+    .welcom-cnt p { font-size: 15px; }
+    .square-thumb figure { height: 190px; }
+    .square-thumb figcaption h3 { font-size: 20px; }
+    .square-thumb figcaption p { font-size: 14px; }
+    .ur-comfort .left-cnt h2 { font-size: 70px; }
+    .ur-comfort .left-cnt h3 { font-size: 30px; }
+    .offer-deals .deals-header h2 { font-size: 60px; line-height: 50px; }
+    .offer-deals .deals-header h3 { font-size: 35px; }
+    .offer-deals .deals-header p { font-size: 15px; }
+    .newsletter-contact h2 { font-size: 65px; }
+    .newsletter-contact h3 { font-size: 35px; }
+    .newsletter-contact p { font-size: 15px; }
+    .blogs-main .left-cnt h2 { font-size: 75px; }
+    .blogs-main .left-cnt h3 { font-size: 35px; }
+    .blog-block figure { height: 170px; }
+    .blog-block figcaption h5 { font-size: 13px; }
+    .blog-block figcaption h3 { font-size: 18px; }
+    .blog-block figcaption p { font-size: 15px; line-height: 22px; height: 88px; }
+    
+    /**/
+    .right-sidebar .search-bar, .right-sidebar .archives-listing { padding:15px; }
+    .blogs-main.blog-listing .left-cnt .right-sidebar h3 { font-size:28px; }
+    .right-sidebar .search-bar input { padding:0 45px 0 10px; }
+    .title-block h3, .blogdetail-title h3 { font-size:36px; }
+    .blog-detail .blog-img img { height:400px; }
+    /**/
+
+    .search-body .gridbox {min-width: auto;}
+    .search-body .gridbox .list-dtl {padding: 10px;}
+    .search-body .gridbox .list-dtl .list-title h3{font-size: 21px;}
+    .search-body .gridbox .list-dtl .boxrooms {font-size: 14px;padding: 7px 0;}
+    .search-body .gridbox .list-dtl .dealslable a {font-size: 13px;}
+    .list-dtl.thr-row-hig {min-height: 224px;}
+    .search-body .col-md-4{padding: 0 5px;max-width: 50%;flex: 30 0 43.333%;}
+    
+    .farmstay-title-left {width: 60%;}
+
+}
+
+@media only screen and (max-width:992px) {
+    
+    .navbar-nav .nav-link { font-size: 14px; }
+    #mainNav.navbar .navbar-brand img { width: 120px; height: 95px; }
+    .btn { font-size: 14px; }
+    #mainSlider .carousel-caption h3 { font-size: 40px; }
+    #mainSlider .carousel-caption p { font-size: 30px; }
+    #mainSlider .carousel-item { height: 500px; }
+    #homeSearch .srchFld { padding: 7px; font-size: 14px; }
+    .form-control { font-size: 13px; }
+    #homeSearch .srchBtn input.btn { font-size: 22px; margin-top: 5px; line-height: normal; width: 90px; }
+    .welcom-cnt h1 { font-size: 55px; line-height: 30px; }
+    .welcom-cnt h2 { font-size: 30px; padding-bottom: 20px; margin-bottom: 20px; }
+    .welcom-cnt p { font-size: 13px; line-height: 22px; }
+    .ur-comfort > .row { flex-flow: column; }
+    .ur-comfort .left-cnt { flex: 3; width: auto; }
+    .offer-deals .deals-header h2 { font-size: 50px; line-height: 40px; }
+    .offer-deals .deals-header h3 { font-size: 27px; }
+    .offer-deals .deals-header p { font-size: 14px; }
+    .newsletter-contact h2 { font-size: 40px; line-height: 30px; }
+    .newsletter-contact h3 { font-size: 30px; }
+    .newsletter-contact p { font-size: 14px; }
+    .blogs-main > .row { flex-direction: column; }
+    .blogs-main .left-cnt { flex: 3; width: 100%; }
+    .blogs-main .left-cnt h2 { font-size: 60px; }
+    .blogs-main .left-cnt h3 { font-size: 30px; }
+    .ur-comfort .left-cnt h2 { font-size: 55px; line-height: 45px; }
+    
+    .searchMain .showHide-filters { display: block; margin-bottom: 30px; margin-top: -30px; }
+    .searchMain .filterby { display: none; position: absolute; z-index: 10; background: #fff; box-shadow: 0px 0px 13px rgba(0,0,0,.3); }
+    .search-container { margin-left: 0; }
+    .listing-searchbar .srchFld { padding: 7px; font-size: 14px; }
+    
+    /**/
+    .modal-title { font-size:32px; }    
+    .modal-body .form-group input { font-size:16px; height:45px; }
+    .modal-body .custom-form input[type="checkbox"] + label, .modal-body .custom-form a { font-size:16px; }
+    .modal-body button { font-size:16px; line-height: 45px; }
+    
+    .blogs-main.blog-listing .left-cnt { margin:0px; }
+    .title-block h3, .blogdetail-title h3 { font-size:30px; }
+    .blogs-main.blog-listing .left-cnt .right-sidebar h3 { font-size: 24px; }
+    .right-sidebar .search-bar .form-group a { top:10px; }
+    .right-sidebar .search-bar input { height:45px; font-size:14px; }
+    .blog-detail .comment-box { margin:30px 0px; }
+    .blog-detail .blogetail-text, .blog-detail .comment-list .comment-title, .blog-detail .comment-box .comment-title { padding:0px 15px; }
+    .blog-detail .comment-list .comment-title h4, .blog-detail .comment-box .comment-title h4 { font-size:18px; }
+    .blog-detail .comment-list .single-comment, .blog-detail .comment-box form { padding:20px; }
+    .blog-detail .comment-list .comment-text .user-name h5 { font-size: 14px; }
+    .blog-detail .comment-list .comment-text .user-name .date { font-size:12px; }
+    .blog-detail .comment-box form button { line-height: 40px; font-size: 14px; }
+    /**/
+     /**/
+    .farmstay-title-left p{font-size: 16px;padding-left: 26px;line-height: 21px;}
+    .about-detail li {width: 50%;}
+    .farmstay-title-left {width: 50%;}
+    .roome-tipe-box{padding: 15px 15px;}
+    .amenities li{width: 33.33%;}
+    /**/
+
+    .search-body .gridbox {min-width: auto;}
+    .search-body .gridbox .list-dtl {padding: 10px;}
+    .search-body .gridbox .list-dtl .list-title h3{font-size: 21px;}
+    .search-body .gridbox .list-dtl .boxrooms {font-size: 14px;padding: 4px 0;}
+    .search-body .gridbox .list-dtl .dealslable a {font-size: 13px;}
+    .list-dtl.thr-row-hig {min-height: 224px;}
+    .search-body .col-md-4{flex: 0 0 33.333333%;max-width: 33.333333%;padding:0 15px;}
+    
+    /** 11th May, 2018 **/
+    .thankyou-page h1 { font-size:80px; }
+    footer .footer-bottom { text-align: center; }
+    footer .footer-bottom .ftr-links a { float:none; margin: 5px 8px; font-size: 14px; }
+    #share-buttons { float:none; margin: 20px 0 0; }
+    /****/
+
+}
+
+@media only screen and (max-width:767px) {
+    .navbar-expand-md .navbar-nav .nav-link { text-align: center;padding: 8px;border-bottom: 1px solid #e9e9e9; }
+    nav.navbar .navbar-toggler { background: #b38e62; border-radius: 2px; position: relative; height: 40px; width: 50px; padding: 0; }
+    nav.navbar .navbar-toggler span.navbar-toggler-icon { width: 25px; height: 3px; background: #fff; border-radius: 2px; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); }
+    nav.navbar .navbar-toggler span.navbar-toggler-icon::before { content: ''; width: 25px; height: 3px; background: #fff; border-radius: 2px; position: absolute; top: -6px; left: 0; }
+    nav.navbar .navbar-toggler span.navbar-toggler-icon::after { content: ''; width: 25px; height: 3px; background: #fff; border-radius: 2px; position: absolute; top: 6px; left: 0; }
+    #mainNav.navbar { padding: 5px 15px; }
+    #mainNav.navbar .navbar-collapse { border-top: 1px solid rgba(0,0,0,.1); }
+    #mainSlider .carousel-caption h3 { font-size: 30px; }
+    #mainSlider .carousel-caption p { font-size: 22px; }
+    #mainSlider .carousel-item { height: 450px; }
+    #homeSearch { flex-direction: column; }
+    #homeSearch .srchFld { width: 100%; padding: 15px; border: none; }
+    #homeSearch .srchBtn input.btn { width: auto; margin: 0 auto; display: inherit; }
+    .welcom-cnt h1 { font-size: 30px; line-height: 25px; }
+    .welcom-cnt h2 { font-size: 22px; }
+    .ur-comfort .rgt-imgs .row { flex-flow: column; flex-direction: column; }
+    .ur-comfort .rgt-imgs .row .col-sm { flex: 3; }
+    .square-thumb figure { margin-bottom: 20px !important; }
+    .offer-deals .deals-header h2 { font-size: 40px; line-height: 30px; }
+    .offer-deals .deals-header h3 { font-size: 22px; }
+    .offer-deals .deals-header p { font-size: 13px; }
+    .newsletter-contact { flex-direction: column; }
+    .newsletter-block { flex: 3; text-align: left; }
+    .contact-block { flex: 3; }
+    .newsletter-contact .block-wpr { max-width: 100%; }
+    .newsletter-block h3::after { left: 0; right: auto; }
+    .blogs-main .left-cnt h2 { font-size: 50px; }
+    .blogs-main .left-cnt h3 { font-size: 22px; }
+    .blogs-main .rgt-blogs > .row { flex-direction: column; }
+    .blogs-main .rgt-blogs > .row .col-sm { flex: 3; margin-bottom: 20px; }
+    footer .footer-top > .row, footer .footer-bottom > .row { flex-direction: column; text-align: center; }
+    footer .footer-top > .row .col-sm, footer .footer-bottom > .row .col-sm { flex: 3; margin-bottom: 20px; text-align: center; }
+    .ur-comfort .left-cnt h2 { font-size: 45px; line-height: 35px; }
+    .header-right .currency .dropdown-menu-right { left: 0; right: auto; }
+    
+    .listing-searchbar { flex-direction: column; }
+    .listing-searchbar .srchFld { width: 100%; padding: 15px; border: none; }
+    .listing-searchbar .srchBtn input.btn { width: auto; margin: 0 auto; display: inherit; }
+    .search-header .hdrtop { flex-direction: column; }
+    .search-header .active-filters { flex-direction: column; }
+    .search-header .active-filters .clear-link { margin-top: 10px; }
+    .searchMain .filterby { width: 100%; max-width: 280px; }
+    
+    .listViewContainer { display: none; }
+    
+    /**/
+    .modal-dialog { padding: 40px 15px 20px; }
+    .modal-header button.close { width: 25px; height: 25px; top: -35px; }
+    .modal-title { font-size: 28px; }
+    .modal-body .form-group input, .modal-header p, .modal-body .custom-form input[type="checkbox"] + label, .modal-body .custom-form a { font-size:14px; }
+    .modal-body .form-group { margin-bottom: 15px; }
+    .modal-body { padding: 0 20px 20px; }
+    
+    .blogdetail-title h3 { font-size:26px; }
+    .blog-detail .blogetail-text p, .blog-detail .blogetail-text ul li { font-size:14px; }
+    .blog-detail .comment-list .comment-title, .blog-detail .comment-box .comment-title { padding: 0 10px; }
+    .blog-detail .comment-list .comment-title h4, .blog-detail .comment-box .comment-title h4 { font-size: 16px; line-height: 50px; }
+    .blog-detail .comment-list .comment-title .total-comments { font-size:12px; line-height: 50px; }
+    .blog-detail .blog-img img { height: 300px; }
+    .blog-detail .comment-list .single-comment.comment-reply { padding-left: 50px; }
+    .blog-detail .comment-list .user-img { width:80px; height:80px; }
+    .blog-detail .comment-list .comment-text { padding-left: 20px; width: calc(100% - 80px); }
+    .blog-detail .comment-list .comment-text p, .blog-detail .comment-box form label, .blog-detail .comment-box form textarea { font-size: 14px; }
+     /**/
+    .amenities li{width: 33.33%;font-size: 14px;padding-bottom: 10px;}
+    .amenities li::after {font-size: 13px;top: 2px;}
+    .rules-policy-box{margin-top: 30px;}
+    .rules-policy-box .nav-tabs li a{padding: 11px 30px;font-size: 17px;}
+    .rules-policy-box .tab-content p{font-size: 14px;line-height: 24px;}
+    .rules-policy-box .tab-content li{font-size: 14px;line-height: 24px;}
+    .book-room a {width: 100%;}
+    .book-room .boxprice{padding: 9px 0;}
+    /**/
+
+    footer .footer-bottom .ftr-links a{float: none;}
+    .list-dtl.thr-row-hig {min-height: auto;}
+    .list-dtl.thr-row-hig .booknow-btn.ng-scope {position: relative;bottom: 0;width: auto;margin-top: 10px;}
+    .search-body .col-md-4{flex: auto;max-width: initial;padding: 0 15px;}
+    
+    .rules-policy-box .tab-content li{font-size: 14px;line-height: 24px;}
+    .book-room a {width: 100%;}
+    .book-room .boxprice{padding: 9px 0;}
+    /**/
+     #homeSearch .srchBtn{margin-bottom: 15px;}
+
+     .blog-block figure img{object-fit: contain;}
+    
+    /** 11th May, 2018 **/
+    .thankyou-page { padding: 40px 0px 0px; }
+    .thankyou-page h1 { font-size:60px; }
+    /****/
+
+}
+
+@media screen and (max-width:480px) {
+    .modal-header { padding:10px 10px 20px; }
+    .modal-title { font-size: 26px; }
+    .modal-title span { display: block; } 
+    .modal-header p br { display: none; }
+    .modal-body { padding: 0 15px 15px; }
+    .modal-body .custom-form { text-align: center; }
+    .modal-body .custom-form .checkbox { float:none; margin-bottom: 10px; }
+    .modal-body .custom-form a { float:none; }
+    
+    .blog-detail .blog-img img { height: 200px; }
+    .blog-detail .blogetail-text .date { font-size: 12px; padding: 10px 0px; }
+    .blog-detail .blogetail-text { padding:0px; }
+    .blog-detail .comment-list .single-comment { position:relative; }
+    .blog-detail .comment-list .user-img { float: none; margin: auto; }
+    .blog-detail .comment-list .comment-text { padding: 20px 0 0 0; width: 100%; }
+    .blog-detail .comment-list .comment-text p { width:100%; }
+    .blog-detail .comment-list .comment-text .reply-btn { position:absolute; right:15px; top:15px; }
+    .blog-detail .comment-list .single-comment, .blog-detail .comment-list .single-comment.comment-reply, .blog-detail .comment-box form { padding:15px; }
+    .blog-detail .comment-box form button{margin: 0 0 10px 10px;}
+    footer .footer-bottom .ftr-links a{float: none;}
+    .list-dtl.thr-row-hig {min-height: auto;}
+    .list-dtl.thr-row-hig .booknow-btn.ng-scope {position: relative;bottom: 0;width: auto;margin-top: 10px;}
+
+    .map-open-grid .list-thumb {width: auto;float:none;}
+    .map-open-grid .list-dtl{width: auto;float:none;}
+    
+    /**/
+    .farmstay-title-left p{font-size: 14px;padding-left: 22px;background-position: left top;line-height: 18px;}
+    .about-detail li {width: 100%;padding: 6px 5px;font-size: 15px;}
+    .about-detail li label {font-size: 15px;}
+    .title-block h3, .blogdetail-title h3{font-size: 28px;}
+    .farmstay-title-left {width: 100%;}
+    .farmstay-title-right {width: auto;float: left;margin-top:10px;}
+    .farmstay-title-right .boxprice{padding:0 0 10px 0;font-size: 17px;width: 100%;}
+    .about-detail p{font-size: 14px;line-height: 24px;margin-bottom: 15px;}
+    .about-detail ul{padding: 10px;}
+    .select-room{padding: 25px 0 30px 0;}
+    .select-room-hed h6{font-size: 28px;}
+    .roome-tipe-box{padding: 10px 15px;}
+    .roome-tipe-name h6 {font-size: 20px;}
+    .roome-tipe-name h6 span {font-size: 14px;}
+    .book-room {width: 100%;float: left;}
+    .book-room button{float: right;}
+    .details-map{padding: 30px 15px;}
+    .amenities h6 {font-size: 28px;}
+    .amenities{padding: 15px 0 10px 0;}
+    .amenities li{width:100%;font-size: 14px;padding-bottom: 10px;}
+    .amenities li::after {font-size: 13px;top: 2px;}
+    .rules-policy-box{margin-top: 30px;}
+    .rules-policy-box .nav-tabs li a{padding: 10px 18px;font-size: 15px;}
+    .rules-policy-box .tab-content p{font-size: 14px;line-height: 24px;}
+    .rules-policy-box .tab-content li{font-size: 14px;line-height: 24px;}
+    .rules-policy-box .nav-link.active::before {left: 12%;}
+    .farmstay-title-right button{float: left;font-size: 13px;}
+    .rules-policy-box .tab-content {padding: 15px 20px;}
+    #carousel .slides li{width: 70px !important;margin-right: 10px !important;height: 70px;}
+    #carousel{bottom: 80px;padding: 0 5px;}
+    .overview-slider-box{height: 280px;}
+    .about-detail{padding: 20px 15px;}
+    .over-right .form-group label {font-size: 18px;}
+    .over-right .form-control{font-size: 14px;height: 40px;}
+    .selectWrapper select{font-size: 14px;height:38px;}
+    .over-right .form-group {margin-bottom: 10px;}
+    .over-right .srchBtn input.btn{font-size: 25px;}
+    .book-room .boxprice{font-size: 13px;padding: 2px 0;width: 100%;}
+    .book-room .boxprice s{font-size: 13px;}
+    .book-room .boxprice p{font-size: 14px;}
+    .book-room button{float:left !important;padding: 6px 22px !important;font-size: 13px !important;margin-top: 5px;}
+    .map-sub-box #googleMap {height: 400px;}
+    /**/
+
+    #homeSearch .srchBtn{margin-bottom: 15px;}
+    #mainSlider .carousel-caption{top:160px;}
+
+    .overview-slider-teb{text-align: center;}
+    .overview-slider-teb ul{margin:0px;padding-top: 4px;}
+    .overview-slider-teb li { width: auto;float: none;display: inline-block;}
+    .overview-slider-teb li a{font-size: 14px;padding: 8px 7px;}
+    
+    /** 11th May, 2018 **/
+    .thankyou-page { padding: 20px 0px 0px; }
+    .thankyou-page h1 { font-size:50px; }
+    .thankyou-page p { line-height: 24px; font-size: 14px; }
+/*    footer .footer-bottom .ftr-links a, footer .copyright-text .ftr-copyright { font-size: 13px; }*/
+    /****/
+
+    
+    
+    
+}

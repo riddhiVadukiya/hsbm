@@ -1,0 +1,161 @@
+﻿@model IEnumerable<HSBM.EntityModel.RegionMaster.RegionMaster>
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Region";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Region</h2>
+<div ng-controller="RegionController">
+    <script>
+    function BindRegionMasterGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+        var Columns = [
+                    { data: 'Id', bVisible: false },
+                    { data: 'CountryName' },
+                    { data: 'RegionName' },
+                    { data: 'Code' },
+                    {
+                        bSortable: false,
+                        sClass: "action-cell",
+                        mRender: function (data, type, row, full) {
+                            if (!row.IsActive) {
+                                return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>ACTIVE</button></div>";
+                            }
+                            else {
+                                return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>ACTIVE</button></div>";
+                            }
+                        }
+                    },
+                    {
+                        bSortable: false,
+                        sClass: "action-cell",
+                        mRender: function (data, type, row, full) {
+
+                            var buttons = "";
+                                @*@if (SessionProxy.CheckModuleAccess(Module.Location, ModuleAccess.CanAdd))
+                                {
+                                    @:buttons += "<a onclick=\"angular.element(this).scope().CloneRegion('" + full.row + "')\" href='javascript:void(0);' title='Clone' class='glyphicon glyphicon-copy'></a>&nbsp;";
+                                }
+                                @if (SessionProxy.CheckModuleAccess(Module.Location, ModuleAccess.CanUpdate))
+                                {
+                                    @:buttons += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/Locations/UpdateRegion/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-edit'> </a>&nbsp;";
+                                }
+                                @if (SessionProxy.CheckModuleAccess(Module.Location, ModuleAccess.CanDelete))
+                                {
+                                    @:buttons += "<a onclick=\"angular.element(this).scope().Delete('/Admin/Locations/DeleteRegion/" + row.Id + "')\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>";
+                                }*@
+
+                                buttons += "<a onclick=\"angular.element(this).scope().CloneRegion('" + full.row + "')\" href='javascript:void(0);' title='Clone' class='glyphicon glyphicon-copy'></a>&nbsp;";
+                                buttons += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/Locations/UpdateRegion/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-edit'> </a>&nbsp;";
+                                buttons += "<a onclick=\"angular.element(this).scope().Delete('/Admin/Locations/DeleteRegion/" + row.Id + "')\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>";
+                                return buttons;
+
+                            }
+                        }
+            ];
+            BindSearchGridData('RegionMaster', Columns, '/Admin/Locations/GetAllRegionBySearchRequest', $('[ng-controller="RegionController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+            $('[ng-controller="RegionController"]').scope().ClonedRegion = {}
+        }
+    </script>
+    @*@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+    {
+        @Html.AntiForgeryToken()
+    }*@
+    <p>
+        @Html.ActionLink("Add Region", "AddRegion", null, new { @class = "btn btn-primary pull-right" })
+    </p>
+    <table id="RegionMaster" class="table table-bordered table-striped table-responsive row-border hover bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Country</th>
+                <th>Region</th>
+                <th>Code</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="RegionMaster_NoRecordFound" class="empty-grid">No records found</div>
+</div>
+
+<script type="text/ng-template" id="CloneTemp">
+    <tr class="clonetr">
+        <td>
+            <div>
+                <select data-ng-model="ClonedRegion.CountryMasterId"
+                        data-ng-options="c.Value as c.Text for c in Country" class="select2_single form-control">
+                    <option value="">-- Select Region --</option>
+                </select><br />
+
+                @*<input type="text" class="form-control" name="CountryName" ng-model="ClonedRegion.CountryName" />*@
+            </div>
+        </td>
+        <td>
+            <div>
+                <input type="text" class="form-control" name="CountryName" ng-model="ClonedRegion.RegionName" />
+            </div>
+        </td>
+        <td>
+            <div>
+                <input type="text" class="form-control" name="Code" ng-model="ClonedRegion.Code" />
+            </div>
+        </td>
+        <td>
+            <div>
+                <input type="checkbox" ng-checked="ClonedRegion.IsActive"> Is Active
+            </div>
+        </td>
+        <td class="action-cell">
+            <div>
+                <button type="button" ng-click="SaveClonedRegion()" class="btn btn-success">Save</button>
+                <button type="button" ng-click="CancleClonedRegion()" class="btn btn-primary">Cancel</button>
+            </div>
+        </td>
+    </tr>
+</script>
+
+@*<p>
+        @Html.ActionLink("Create New", "AddRegion")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                Country
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegionName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CountryMaster.CountryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegionName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "UpdateRegion", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "DeleteRegion", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+    </table>*@

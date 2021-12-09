@@ -1,0 +1,188 @@
+﻿@model HSBM.EntityModel.Front.FrontOrdersMaster
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+
+}
+<div>
+
+    <div class="booking-process-top">
+        <div class="thankyou-page">
+            <i>
+                <svg x="0" y="0" viewBox="0 0 96 96">
+                    <path d="M48.000,96.000 C21.533,96.000 -0.000,74.468 -0.000,48.000 C-0.000,21.532 21.533,-0.000 48.000,-0.000 C74.466,-0.000 96.000,21.532 96.000,48.000 C96.000,74.468 74.466,96.000 48.000,96.000 ZM48.000,3.692 C23.570,3.692 3.692,23.570 3.692,48.000 C3.692,72.430 23.570,92.308 48.000,92.308 C72.430,92.308 92.308,72.430 92.308,48.000 C92.308,23.570 72.430,3.692 48.000,3.692 ZM43.842,63.995 C43.479,64.405 42.971,64.615 42.461,64.615 C42.055,64.615 41.647,64.482 41.308,64.211 L22.846,49.442 C22.050,48.805 21.921,47.644 22.558,46.846 C23.193,46.052 24.358,45.921 25.152,46.558 L42.246,60.233 L70.619,28.313 C71.298,27.548 72.463,27.480 73.228,28.159 C73.990,28.835 74.058,30.004 73.381,30.764 L43.842,63.995 Z" />
+                </svg>
+            </i>
+            <h1>Thank You</h1>
+            <p>Your booking has been completed successfully.</p>
+        </div>
+
+        <div class="thankyou-wpr">
+            <div class="ty-row">
+                <div class="ty-col">
+                    <div class="ty-lbl">Order ID</div>
+                    <div class="ty-vl">@Model.OrderNo</div>
+                </div>
+                <div class="ty-col">
+                    <div class="ty-lbl">Room Name</div>
+                    <div class="ty-vl">@Model.Name</div>
+                </div>
+                <div class="ty-col">
+                    <div class="ty-lbl">Rate Plan</div>
+                    <div class="ty-vl">@Model.RatePlanName</div>
+                </div>
+                
+            </div>
+
+            <div class="ty-row">
+                <div class="ty-col">
+                    <div class="ty-lbl">Type Name</div>
+                    <div class="ty-vl">@Model.TypeName</div>
+                </div>
+                <div class="ty-col">
+                    <div class="ty-lbl">Farm Stays</div>
+                    <div class="ty-vl">@Model.FarmStaysName</div>
+                </div>
+                <div class="ty-col">
+                    <div class="ty-lbl">CheckIn Date</div>
+                    <div class="ty-vl">@Model.strCheckInDate</div>
+                </div>
+                
+            </div>
+
+            <div class="ty-row">
+                <div class="ty-col">
+                    <div class="ty-lbl">CheckOut Date</div>
+                    <div class="ty-vl">@Model.strCheckOutDate</div>
+                </div>
+                <div class="ty-col">
+                    <div class="ty-lbl">No. Of People</div>
+                    <div class="ty-vl">@Model.NoOfPeople</div>
+                </div>
+                <div class="ty-col">
+                    <div class="ty-lbl">Exclusive/Solo</div>
+                    <div class="ty-vl">@Model.ExclusiveOrSolo</div>
+                </div>
+                
+        
+            </div>
+
+            <div class="ty-row">
+                <div class="ty-col">
+                    <div class="ty-lbl">Amount</div>
+                    <div class="ty-vl">@Model.Amount</div>
+                </div>
+
+                <div class="ty-col">
+                    <div class="ty-lbl">Net Amount</div>
+                    <div class="ty-vl">@Model.NetAmount</div>
+                </div>
+                @if (Model.EBDAmount != null)
+                    {
+                    <div class="ty-col">
+                        <div class="ty-lbl">Early Bird Discount</div>
+                        <div class="ty-vl">₹ @Model.EBDAmount</div>
+                    </div>
+              }
+                 @if (Model.DiscountAmount != null)
+                {
+                <div class="ty-col">
+                    <div class="ty-lbl">Discount Amount</div>
+                    <div class="ty-vl"> @*<i ng-bind="Currencysymbols"></i>*@ ₹@Model.DiscountAmount</div>
+                </div>
+                }
+               
+            </div>
+        </div>
+
+        @*<div class="row">
+            <div class="col-md">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-3 col-md-3">
+                        <div class="form-group order-detail">
+                            @Html.LabelFor(model => model.OrderNo, new { @class = "control-label" })
+                            <span>@Model.OrderNo</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3">
+                        <div class="form-group order-detail">
+                            @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                            <span>@Model.Name (@Model.TypeName)</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3">
+                        <div class="form-group order-detail">
+                            @Html.LabelFor(model => model.FarmStaysName, new { @class = "control-label" })
+                            <span>@Model.FarmStaysName</span>
+                        </div>
+                    </div>
+                   
+                    <div class="col-xs-12 col-sm-3 col-md-3">
+                        <div class="form-group order-detail">
+                            @Html.LabelFor(model => model.CheckInDate, new { @class = "control-label" })
+                            <span>@Model.strCheckInDate</span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-3 col-md-3">
+                        <div class="form-group order-detail">
+                            @Html.LabelFor(model => model.CheckOutDate, new { @class = "control-label" })
+                            <span>@Model.strCheckOutDate</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3">
+                        <div class="form-group order-detail">
+                            @Html.LabelFor(model => model.NoOfPeople, new { @class = "control-label" })
+                            <span>@Model.NoOfPeople</span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-3 col-md-3">
+                        <div class="form-group order-detail">
+                            @Html.LabelFor(model => model.ExclusiveOrSolo, new { @class = "control-label" })
+                            <span>@Model.ExclusiveOrSolo</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3">
+                        <div class="form-group order-detail">
+                            @Html.LabelFor(model => model.Amount, new { @class = "control-label" })
+                            <span>₹ @Model.Amount</span>
+                        </div>
+                    </div>
+                    @if (Model.EBDAmount != null)
+                    {
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <div class="form-group order-detail">
+                                @Html.LabelFor(model => model.EBDAmount, new { @class = "control-label" })
+                                <span> ₹ @Model.EBDAmount</span>
+                            </div>
+                        </div>
+                    }
+                    @if (Model.DiscountAmount != null)
+                    {
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <div class="form-group order-detail">
+                                @Html.LabelFor(model => model.DiscountAmount, new { @class = "control-label" })
+                                <span>  ₹ @Model.DiscountAmount</span>
+                            </div>
+                        </div>
+                    }
+                    <div class="col-xs-12 col-sm-3 col-md-3">
+                        <div class="form-group order-detail">
+                            @Html.LabelFor(model => model.NetAmount, new { @class = "control-label" })
+                            <span>  ₹ @Model.NetAmount</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+
+

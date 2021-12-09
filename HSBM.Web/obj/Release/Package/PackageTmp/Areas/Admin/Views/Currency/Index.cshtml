@@ -1,0 +1,111 @@
+﻿@model IEnumerable<HSBM.EntityModel.CurrencyMaster.CurrencyMaster>
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="main-wrapper">
+    <h3>Currency</h3>
+    @*@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+        {
+            @Html.AntiForgeryToken()
+        }*@
+
+    <div ng-controller="CurrencyController" class="inner-content">
+        <script>
+        function BindCurrencyGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+            var Columns = [
+                        { data: 'Id', bVisible: false },
+                        { data: 'CurrencyName' },
+                        { data: 'CurrencyCode' },
+                        { data: 'Value' },
+                        {
+                            @if (SessionProxy.CheckModuleAccess(Module.MultiCurrency, ModuleAccess.CanDelete) )
+                        {
+                        @: bVisible: true,
+                                                                            }else{
+                        @: bVisible: false,
+                                                    }
+                            bSortable: false,
+                            sClass: "action-cell",
+                            mRender: function (data, type, row, full) {
+                                if (row.IsBaseCurrency) {
+                                    return "Base";
+                                } else {
+                                    var btn = "";
+                                    @if (SessionProxy.CheckModuleAccess(Module.MultiCurrency, ModuleAccess.CanDelete))
+                                     {
+                                     @: if (!row.IsActive) { btn = "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',true)\" href='javascript:void(0);' title='Restore' class='glyphicon glyphicon-refresh'></a>"; }
+                                                                             @: else { btn = "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "',false)\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>"; }
+                                                                         }
+                                    return btn;
+                                }
+                            }
+                        }
+            ];
+            BindSearchGridData('Currencies', Columns, '/Admin/Currency/GetAllCurrencyBySearchRequest', $('[ng-controller="CurrencyController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+        }
+        </script>
+
+
+        @*<p>
+                @Html.ActionLink("Add Currency", "AddCurrency", null, new { @class = "btn btn-primary pull-right" })
+            </p>*@
+        @if (SessionProxy.CheckModuleAccess(Module.MultiCurrency, ModuleAccess.CanUpdate))
+        {
+        <div class="buttongroup pos-rel">
+            <a class="btn green-btn" ng-click="UpdateLatestCurrencyRate()">Update Latest Currency Rate</a>
+        </div>
+        }
+        <div class="grid-btn-set">
+            <table id="Currencies" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Currency Name</th>
+                        <th>Currency Code</th>
+                        <th>Value</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="Currencies_NoRecordFound" class="empty-grid">No records found</div>
+        </div>
+    </div>
+
+</div>
+    @*<table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.CurrencyName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Value)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </th>
+                <th></th>
+            </tr>
+
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CurrencyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "UpdateCurrency", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "DeleteCurrency", new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+        </table>*@

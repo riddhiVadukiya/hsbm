@@ -1,0 +1,252 @@
+﻿@*@model HSBM.EntityModel.SubscriptionMaster.SubscriptionMaster*@
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Orders(Master)";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script>
+
+    angular.module('app').controller('OrdersController', ['$scope', '$compile', '$rootScope', function ($scope, $compile, $rootScope) {
+        var TableName = "Orders";
+        
+
+        $scope.Search = {};
+        $scope.SearchReplica = {};
+
+        $scope.SetSearchFromLocalStorage = function (localdata) {
+            if (typeof (localdata) != 'undefined') {
+                $scope.SearchReplica.CreatedDateFrom = $scope.Search.CreatedDateFrom = localdata.CreatedDateFrom;
+                $scope.SearchReplica.CreatedDateTo = $scope.Search.CreatedDateTo = localdata.CreatedDateTo;
+                $scope.SearchReplica.OrderNo = $scope.Search.OrderNo = localdata.OrderNo;
+                $scope.SearchReplica.CustomerName = $scope.Search.CustomerName = localdata.CustomerName;
+                $scope.SearchReplica.Farmstaysid = $scope.Search.Farmstaysid = localdata.Farmstaysid;
+                $scope.SearchReplica.OrderStatusId = $scope.Search.OrderStatusId = localdata.OrderStatusId;
+
+                $('#CreatedDateFrom').val(localdata.CreatedDateFrom);
+                $('#CreatedDateTo').val(localdata.CreatedDateTo);
+                $('#OrderNo').val(localdata.OrderNo);
+                $('#CustomerName').val(localdata.CustomerName);
+                $('#ddlFrontFarmStays').val(localdata.Farmstaysid);
+                $('#ddlOrderStatus').val(localdata.OrderStatusId);
+
+            }
+        }
+
+        $scope.PrepareDataForLocalStorage = function () {
+            $scope.SearchReplica.CreatedDateFrom = $scope.Search.CreatedDateFrom = $('#CreatedDateFrom').val();
+            $scope.SearchReplica.CreatedDateTo = $scope.Search.CreatedDateTo = $('#CreatedDateTo').val();
+            $scope.SearchReplica.OrderNo = $scope.Search.OrderNo = $('#OrderNo').val();
+            $scope.SearchReplica.CustomerName = $scope.Search.CustomerName = $('#CustomerName').val();
+            $scope.SearchReplica.Farmstaysid = $scope.Search.Farmstaysid = $('#ddlFrontFarmStays').val();
+            $scope.SearchReplica.OrderStatusId = $scope.Search.OrderStatusId = $('#ddlOrderStatus').val();
+
+        }
+        $scope.SearchData = function () {
+            $scope.PrepareDataForLocalStorage();
+            BindOrdersGrid();
+        };
+
+        $scope.ResetData = function () {
+            $scope.Search = {};
+            $('#CreatedDateFrom').val('');
+            $('#CreatedDateTo').val('');
+            $('#OrderNo').val('');
+            $('#CustomerName').val('');
+            $('#ddlFrontFarmStays').val('');
+            $('#ddlOrderStatus').val('');
+            $('#Subscription_NoRecordFoundButton').show();
+            $scope.PrepareDataForLocalStorage();
+            BindOrdersGrid();
+            $('#CreatedDateTo').datepicker('option', 'minDate', '');
+            $('#CreatedDateFrom').datepicker('option', 'maxDate', '');
+        };
+        $('#CreatedDateFrom').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            onSelect: function (date) {
+                var dt2 = $('#CreatedDateTo');
+                var Date = $(this).datepicker('getDate');
+                dt2.datepicker('option', 'minDate', Date);
+                $scope.Search.CreatedDateFrom = $("#CreatedDateFrom").val();
+            }
+        });
+        $('#CreatedDateTo').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            onSelect: function (date) {
+                var dt2 = $('#CreatedDateFrom');
+                var maxDate = $(this).datepicker('getDate');
+                dt2.datepicker('option', 'maxDate', maxDate);
+                $scope.Search.CreatedDateTo = $("#CreatedDateTo").val();
+            }
+        });
+        $scope.OpenCalender = function (id) {
+            document.getElementById(id).focus();
+        }
+
+        $(document).ready(function () {
+
+            var localdata = GettLocalStorageData(TableName);
+            if (localdata != null) {
+
+                $scope.SetSearchFromLocalStorage(localdata);
+                BindOrdersGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+                ResetLocalStorage(TableName);
+            } else {
+                $scope.PrepareDataForLocalStorage();
+                BindOrdersGrid();
+
+
+            }
+        });
+
+        function BindOrdersGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+            var Columns = [
+                        { data: 'Id', bVisible: false },
+                        { data: 'OrderNo', bSortable: false, },
+                        { data: 'strCreatedDate', bSortable: false, },
+                        { data: 'OTA'},
+                       {
+                           bSortable: false,
+                           mRender: function (data, type, row, full) {
+                               return row.GuestFirstName + ' ' + row.GuestLastName;
+                           }
+                       },
+                        { data: 'FarmStaysName' },
+                        //{ data: 'NetAmount', bSortable: false, },
+                        {
+                            bSortable: false,
+                            mRender: function (data, type, row, full) {
+                                return $rootScope.Currencysymbols + convertToPrice(row.NetAmount);
+                            }
+                        },
+                        { data: 'StatusName', bSortable: false, },
+                        {
+                            @if (SessionProxy.CheckModuleAccess(Module.Orders, ModuleAccess.CanUpdate))
+                        {
+                    @: bVisible: true,
+                                                                                                                                                                                                                                                                                                                            }
+            else
+            {
+                @: bVisible: false,
+                                        }
+                                    bSortable: false,
+                                    sClass: "action-cell",
+                                    mRender: function (data, type, row, full) {
+                                        var btn = "";
+                                        @if (SessionProxy.CheckModuleAccess(Module.Orders, ModuleAccess.CanView))
+            {
+                //@: if (!row.IsActive) { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" href='javascript:void(0);' title='Unsubscribe' class='glyphicon glyphicon-ok grayColor'></a> " } else { btn += "<a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" href='javascript:void(0);' title='Subscribe' class='glyphicon glyphicon-ok'></a> " }
+                @: btn += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/Orders/ViewOrderDetail/" + row.Id + "')\" href='javascript:void(0);' title='View Order' class='glyphicon glyphicon-eye-open'></a>";
+                                            }
+                                        return btn;
+                                    }
+                                }
+            ];
+
+            BindSearchGridData('Orders', Columns, '/Admin/Orders/GetAllOrdersBySearchRequest', $('[ng-controller="OrdersController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+        }
+        $scope.SetLocalStorage = function (url) {
+            SetLocalStorageData($scope.SearchReplica, TableName);
+            window.location = url;
+        }
+    }]);
+
+    $(document).ready(function () { $("#ddlFrontFarmStays").val('@ViewBag.farmstaysid'); });
+</script>
+<div class="main-wrapper">
+    <h3>Orders</h3>
+    <div ng-controller="OrdersController" class="inner-content" ng-init="getorderstatus()">        
+        @Html.AntiForgeryToken()
+        @using (Html.BeginForm("Export", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <label>From Date</label>
+                    <div class="input-group date">
+                        <input type="text" class="form-control" ng-model="Search.CreatedDateFrom" id="CreatedDateFrom" name="CreatedDateFrom" />
+                        <span class="input-group-addon" ng-click="OpenCalender('CreatedDateFrom')">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <label>To Date</label>
+                    <div class="input-group date">
+                        <input type="text" class="form-control" ng-model="Search.CreatedDateTo" id="CreatedDateTo" name="CreatedDateTo" />
+                        <span class="input-group-addon" ng-click="OpenCalender('CreatedDateTo')">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        <label> Order Id</label>
+                        <input type="text" ng-model="Search.OrderNo" id="OrderNo" alphanumericcharacters-only />
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        <label> Customer Name</label>
+                        <input type="text" ng-model="Search.CustomerName" id="CustomerName" alphanumericcharacters-only />
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        <label>Farm / Home Stays</label>
+                        @*<select ng-model="Search.Farmstaysid">
+                                <option value="">Select Status</option>
+                                <option ng-repeat="item in FarmStaysList" value="{{item.Id}}">
+                                    {{item.Name}}
+                                </option>
+                            </select>*@
+                        @*@Html.DropDownList("ddlFrontFarmStays", ViewBag.FrontFarmStays as IEnumerable<SelectListItem>, "Select Farm / Home Stays", new { id = "ddlFrontFarmStays", @class = "form-control" })*@
+                        <input type="text" class="form-control" ng-model="Search.FarmStaysName" id="FarmStaysName" name="FarmStaysName" />
+                       </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        <label>Order Status</label>
+                        @*<select ng-model="Search.OrderStatusId">
+                                <option value="">Select Status</option>
+                                <option ng-repeat="item in OrderStatus" value="{{item.Value}}">
+                                    {{item.Text}}
+                                </option>
+                            </select>*@
+                        @Html.DropDownList("ddlOrderStatus", (IEnumerable<SelectListItem>)ViewBag.OrderStatus, "Select Order Status", new { id = "ddlOrderStatus", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="buttongroup" style="margin:5px 0 0;">
+                        <input type="button" ng-click="SearchData()" value="Search" class="btn green-btn" />
+                        <input type="button" ng-click="ResetData()" value="Reset" class="btn black-btn" />
+                    </div>
+                </div>
+            </div>
+            <div class="ln_solid"></div>
+            <div id="Orders_NoRecordFoundButton" class="buttongroup" style="margin:0px;"></div>            
+            <table id="Orders" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Order Id</th>
+                        <th>Order Date</th>
+                        <th>OTA</th>
+                        <th>Customer</th>
+                        <th>Farm/Home Stays Name</th>
+                        <th>Amount</th>
+                        <th>Order Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        <div id="Orders_NoRecordFound" class="empty-grid noData">No records found</div>
+        }
+    </div>
+</div>

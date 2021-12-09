@@ -1,0 +1,11 @@
+﻿@using HSBM.Common.Utils
+@using System.Globalization;
+@model DateTime?
+@{
+    var value = "";
+    if (Model.HasValue) {
+        value = String.Format("{0:d}", Model.Value.ToString(Helper.DefaultDateFormat(), CultureInfo.InvariantCulture));
+    }
+}
+@Html.TextBox("", value, new { type = "text",@class = "form-control" })
+

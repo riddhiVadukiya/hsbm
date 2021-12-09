@@ -1,0 +1,193 @@
+﻿.sticky {
+    position: fixed;
+    top: 0;
+    z-index: 0;
+}
+
+.col-x-fluid {
+    width: 100% !important;
+}
+.booking-info-pax {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #0091ea;
+    border-radius: 5px 5px;
+    padding: 5px 10px;
+    padding-bottom: 0;
+    z-index: 9;
+    margin-top: 10px;
+    width: 240px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.175);
+    background-clip: padding-box;
+    z-index: 999;
+}
+.booking-info-pax:before {
+    content: '';
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent transparent #0091ea transparent;
+    position: absolute;
+    top: -16px;
+}
+.booking-info-pax:after {
+    content: '';
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent transparent #0091ea transparent;
+    position: absolute;
+    top: -16px;
+}
+.booking-info-pax a.removeRoom {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    border: 1px solid #f00404;
+    border-radius: 50%;
+    color: #f00404;
+    vertical-align: middle;
+    font-size: 12px;
+    line-height: 20px;
+    text-decoration: none;
+    padding-left: 1px;
+}
+.booking-info-pax h5 {
+    margin: 0px;
+}
+.pax-details {
+    box-sizing: border-box;
+    color: #333;
+    width: auto;
+}
+.pax-details a.dropdown-toggleselect {
+    cursor: pointer;
+}
+.pax-details .form-control span {
+    display: inline-block !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #555 !important;
+    margin: 0 !important;
+}
+.pax-details .font-icon {
+    float: right;
+    font-size: 20px;
+    top: 34px;
+    right: 8px;
+    color: #333;
+    width: 1em;
+    text-align: center;
+}
+.pax-limit {
+    width: 100%;
+    margin-bottom:5px;
+}
+.pax-limit ~ .pax-limit {
+    border-top: 1px solid #d9d9d9 !important;
+    clear: both;
+    margin-bottom: 10px;
+}
+.pax-limit .pax-title {
+    float: left !important;
+    font-size: 1em !important;
+    margin-top: 5px !important;
+    color: #333 !important;
+}
+.pax-limit .pax-num-adult {
+    float: left !important;
+    font-size: 1em !important;
+    margin-top: 0px !important;
+    color: #333 !important;
+}
+.pax-limit .pax-title .pax-num-title {
+    color: #8a8a8a !important;
+    font-size: .786em !important;
+    margin-left: 6px;
+}
+.pax-limit .pax-count {
+    float: right !important;
+    margin: 0;
+}
+.pax-limit .pax-count-div {
+    padding: 0;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+.pax-limit .pax-count .pax-count-div .pax-count-plus {
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #cccccc;
+    line-height: 30px;
+    text-align: center;
+    float: right;
+    color: #333;
+}
+.pax-limit .pax-count .pax-count-div .pax-count-minus {
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #cccccc;
+    line-height: 30px;
+    text-align: center;
+    float: right;
+    margin-right: -1px;
+}
+.pax-limit ul,
+.pax-limit li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.select-child-ages {
+    padding: 0;
+}
+.select-child-ages .fl {
+    float: left;
+}
+.select-child-ages.pax-limit .childageselect {
+    width: 25%;
+    margin: 9px;
+    float: left;
+}
+.add-del-room {
+    clear: both;
+    margin: 12px 0;
+}
+.add-del-room a {
+    color: #666;
+    font-size: .85714em;
+    border: 1px solid #e3e6ea;
+    border-radius: 3px;
+    padding: 5px 10px;
+    text-decoration: none;
+    font-weight: 400;
+    background-color: #e3e6ea;
+}
+.add-del-room a.active {
+    color: #ffffff;
+    border: 1px solid #0091ea;
+    background: #0091ea;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+}
+
+.cursorPointer {
+    cursor: pointer;
+}
+.booking-info .title {
+    max-width : 150px;
+}
+.booking-info hr {
+    margin:10px 0 10px 0;
+}
+
+.has-error {
+    border: solid 1px red !important;
+}

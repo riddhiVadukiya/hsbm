@@ -1,0 +1,830 @@
+﻿@using HSBM.Web.Helpers;
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <link href="~/Content/morris/morris.css" rel="stylesheet" />
+    <script src="~/Scripts/morris/raphael-min.js"></script>
+    <script src="~/Scripts/morris/morris.js"></script>
+    <script>
+        function SelectedIndexChanged(val) {
+            var URL = "/Admin/Home/BindFarmStaySummary?FarmstayId=" + val
+            $.ajax({
+                type: "POST",
+                url: URL,
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: "true",
+                cache: "false",
+                success: function (result) {
+                    $("#FarmHomeStaySummeryChart").empty();
+                    config = {
+                        data: result,
+                        xLabelMargin: 0,
+                        xkey: 'MonthYear',
+                        ykeys: ['TotalEarning', 'TotalComplete', 'TotalCancel'],
+                        labels: ['Total Earning (₹)', 'Total Booked (₹)', 'Total Cancel (₹)'],
+                        fillOpacity: 0.6,
+                        hideHover: 'auto',
+                        behaveLikeLine: true,
+                        pointFillColors: ['#ffffff'],
+                        pointStrokeColors: ['black'],
+                        lineColors: ['gray', '#4090g3', '#4090c3'],
+                        parseTime: false
+
+                    };
+                    config.element = 'FarmHomeStaySummeryChart';
+                    Morris.Bar(config);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+        angular.module('app').controller('HomeAdminController', ['$scope', '$compile', '$rootScope', function ($scope, $compile, $rootScope) {
+
+            $scope.Currency = $rootScope.Currencysymbols
+
+            function BindGeneralCalculation() {
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/Home/BindGeneralCalculation",
+                    data: "{}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: "true",
+                    cache: "false",
+                    success: function (result) {
+                        $("#ConfirmedBooking").html(result.ConfirmedBooking);
+                        $("#Totalcustomer").html(result.Totalcustomer);
+                        $("#TotalTransaction").html(result.TotalTransaction);
+                        $("#TotalEarning").html(result.TotalEarning);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            function NewCustomer() {
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/Home/NewCustomers",
+                    data: "{}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: "true",
+                    cache: "false",
+                    success: function (result) {
+                        var area = new Morris.Bar({
+                            element: 'NewCustomerBarChart',
+                            resize: true,
+                            data: result,
+                            xkey: 'MonthYear',
+                            ykeys: ['TotalCount'],
+                            labels: ['TotalCount'],
+                            fillOpacity: 0.6,
+                            hideHover: 'auto',
+                            behaveLikeLine: true,
+                            resize: true,
+                            pointFillColors: ['#ffffff'],
+                            pointStrokeColors: ['black'],
+                            lineColors: ['gray', 'red'],
+                            stacked: false,
+                            parseTime: false,
+                            xLabelAngle: 70
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            function HighestBooked() {
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/Home/BindHighestBooked",
+                    data: "{}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: "true",
+                    cache: "false",
+                    success: function (result) {
+                        var area = Morris.Pie({
+                            element: 'HighestBookedPieChart',
+                            data: result,
+                        });
+                        result.forEach(function (data, i) {
+                            var HighestBookedName = $('<div class="lgnd-bx">').text(data.label + " (" + data.value + ")").css('color', area.options.colors[i])
+                            var Span = $('<span class="BoxSpan"></span>').css('background', area.options.colors[i])
+                            var EndDiv = $('</div>')
+                            $('#HighestBookedName').append(HighestBookedName)
+                            $('#HighestBookedName').append(Span)
+                            $('#HighestBookedName').append(EndDiv)
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            function FarmStaySummary() {
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/Home/BindFarmStaySummary",
+                    data: "{}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: "true",
+                    cache: "false",
+                    success: function (result) {
+                        config = {
+                            data: result,
+                            xLabelMargin: 0,
+                            xkey: 'MonthYear',
+                            ykeys: ['TotalEarning', 'TotalComplete', 'TotalCancel'],
+                            labels: ['Total Earning (₹)', 'Total Booked (₹)', 'Total Cancel (₹)'],
+                            fillOpacity: 0.6,
+                            hideHover: 'auto',
+                            behaveLikeLine: true,
+                            pointFillColors: ['#ffffff'],
+                            pointStrokeColors: ['black'],
+                            lineColors: ['gray', '#4090g3', '#4090c3'],
+                            parseTime: false
+
+                        };
+                        config.element = 'FarmHomeStaySummeryChart';
+                        Morris.Bar(config);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            function TotalBooking(frequency) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/Home/BindTotalBooking",
+                    data: { Frequency: frequency, dateRange: $("#DateRange").val() },
+                    dataType: "json",
+                    async: "true",
+                    cache: "false",
+                    success: function (result) {
+                        $("#TotalBookingChart").empty();
+                        config = {
+                            data: result,
+                            xLabelMargin: 0,
+                            xkey: 'strDate',
+                            ykeys: ['Cancelled', 'Booked'],
+                            labels: ['Cancelled', 'Booked'],
+                            fillOpacity: 0.6,
+                            hideHover: 'auto',
+                            behaveLikeLine: true,
+                            resize: true,
+                            pointFillColors: ['#ffffff'],
+                            pointStrokeColors: ['black'],
+                            lineColors: ['gray', '#4090g3'],
+                            parseTime: false,
+                            xLabelAngle: 40
+
+                        };
+                        config.element = 'TotalBookingChart';
+                        Morris.Bar(config);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            function RecentOrders() {
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/Home/RecentOrders",
+                    data: "{}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: "true",
+                    cache: "false",
+                    success: function (result) {
+                        //console.log(result);
+                        SuccessRecentOrders(result);
+                    },
+                    error: function (xhr, status, error) {
+                    }
+                });
+
+                function SuccessRecentOrders(response) {
+                    $('#Homes').DataTable({                        
+                        paging: false,
+                        data: response,
+                        bInfo: false,
+                        searching: false,
+                        aaSorting: [],
+                        columns: [
+                            { title: "Id", data: 'id', bVisible: false, bSortable: false },
+                            { title: "Order Date", data: 'strOrderDate', bSortable: false },
+                            { title: "Customer Name", data: 'Customer', bSortable: false },
+                            { title: "Farm Stays Name", data: 'FarmStaysName', bSortable: false },
+                            { title: "Phone Number", data: 'GuestMobile', bSortable: false },
+                            {
+                                title: "Amount",
+                                bSortable: false,
+                                mRender: function (data, type, row, full) {
+                                    return '₹ ' + convertToPrice(row.Amount);
+                                }
+                            },
+                            { title: "OrderNo", data: 'OrderNo', bVisible: false },
+                            { title: "Order Status", data: 'StatusName', bSortable: false },
+                            {
+                                title: "Action",
+                                bSortable: false,
+                                sClass: "action-cell",
+                                mRender: function (data, type, row, full) {
+                                    return "<a href='/Admin/Orders/ViewOrderDetail/" + row.id + "' title='View' target='_blank' class='glyphicon glyphicon-eye-open'></a>";
+                                }
+                            }
+                        ]
+                    });
+                }
+            }
+
+            function TotalEarning(frequency) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/Home/BindTotalEarning",
+                    data: { Frequency: frequency, dateRange: $("#DateRangeEarning").val() },
+                    dataType: "json",
+                    async: "true",
+                    cache: "false",
+                    success: function (result) {
+                        
+                        console.log(result);
+                        $("#line-chart").empty();
+                        config = {
+                            data: result,
+                            xLabelMargin: 0,
+                            xkey: 'strDate',
+                            ykeys: ['TotalEarning'],
+                            labels: ['TotalEarning (₹)'],
+                            fillOpacity: 0.6,
+                            hideHover: 'auto',
+                            behaveLikeLine: true,
+                            resize: true,
+                            pointFillColors: ['#ffffff'],
+                            pointStrokeColors: ['black'],
+                            lineColors: ['gray'],
+                            parseTime: false,
+                            xLabelAngle: 40
+
+                        };
+                        config.element = 'line-chart';
+                        Morris.Bar(config);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                if ($(".frequency:checked").val() != "5") {
+                    $("#DateRange").val('');
+                    $("#DateRangeEarning").val('');
+                    var selectedtimespan = 1;
+                }
+                $(".frequency").on("change", function () {
+
+                    if ($(".frequency:checked").val() != "5") {
+                        selectedtimespan = $(".frequency:checked").val();
+                        $("#custom-dt").addClass('hide');
+                        $("#Bookinglbl").text($('input[name=frequency]:checked').attr('title'));
+                        clearDateRange();
+                        $(".pull-right .radio-btnb").removeClass('active');
+                        $(".frequency:checked").parent().addClass('active');
+                        TotalBooking($(".frequency:checked").val());
+                    }
+                    else {
+                        $("#lblenderror").text('');
+                        $("#lblstarterror").text('');
+                        $("#custom-dt").removeClass('hide');
+                    }
+                });
+                $("#frequencycustom").on("click", function () {
+
+                    if ($(".frequency:checked").val() == "5") {
+
+                        $("#lblenderror").text('');
+                        $("#lblstarterror").text('');
+                        $("#custom-dt").removeClass('hide');
+                    }
+                });
+                $("#btnCancel").click(function () {
+                    if (selectedtimespan != 5) {
+                        $('.frequency[value="' + selectedtimespan + '"]').prop('checked', true);
+                    }
+                    $("#custom-dt").addClass('hide');
+                    clearDateRange();
+                });
+                $("#btnApply").click(function () {
+                    if ($('input[name="daterangepicker_start"]').val() == null || $('input[name="daterangepicker_start"]').val() == '') {
+                        $("#lblstarterror").text("Please enter From Date");
+                    }
+                    if ($('input[name="daterangepicker_end"]').val() == null || $('input[name="daterangepicker_end"]').val() == '') {
+                        $("#lblenderror").text("Please enter To Date");
+                    }
+                    else {
+                        
+                        $(".pull-right .radio-btnb").removeClass('active');
+                        $(".frequency:checked").parent().addClass('active');
+                        $("#custom-dt").addClass('hide');
+                        $("#DateRange").val($('input[name="daterangepicker_start"]').val() + "-" + $('input[name="daterangepicker_end"]').val());
+                        TotalBooking($(".frequency:checked").val());
+                        var start = formatedate($('input[name="daterangepicker_start"]').val());
+                        var end = formatedate($('input[name="daterangepicker_end"]').val());
+                        $("#Bookinglbl").text(start + " to " + end);
+                    }
+                });
+                function formatedate(date) {
+                    var array = date.split('/').reverse().join("-");
+                    var date = new Date(array);
+                    var GMTString = date.toGMTString();
+                    var result = GMTString.substring(GMTString.indexOf(" ") + 1).replace('00:00:00 GMT', '');
+                    return result;
+                }
+
+                function ResetChart() {
+                    CheckAdminLogin(function (callback) {
+                        if (callback) {
+                            $('#DateRange').val('');
+                        }
+                    });
+                }
+                function clearDateRange() {
+                    $('input[name="daterangepicker_start"]').val('').datepicker('setDate', null);
+                    $('input[name="daterangepicker_end"]').val('').datepicker('setDate', null);
+                    $("#DateRange").val('');
+                }
+
+                //
+                // Code for Total Earning
+                //
+                if ($(".frequencyEarning:checked").val() != "5") {
+                    $("#DateRangeEarning").val('');
+                    $("#DateRange").val('');
+                }
+                $(".frequencyEarning").on("change", function () {
+                    if ($(".frequencyEarning:checked").val() != "5") {
+                        selectedtimespan = $(".frequencyEarning:checked").val();
+                        $("#Earninglbl").text($('input[name=frequencyEarning]:checked').attr('title'));
+                        $("#custom-dt-Earning").addClass('hide');
+                        clearDateRange();
+                        $(".pull-right .radio-btn").removeClass('active');
+                        $(".frequencyEarning:checked").parent().addClass('active');
+                        $("#line-chart").empty();
+                        TotalEarning($(".frequencyEarning:checked").val());
+                    }
+                    else {
+                        $("#lblstarterrorEarning").text('');
+                        $("#lblenderrorEarning").text('');
+                        $("#custom-dt-Earning").removeClass('hide');
+                    }
+                });
+                $("#frequencyEarningcustom").on("click", function () {
+                    if ($(".frequencyEarning:checked").val() == "5") {
+                        $("#lblstarterrorEarning").text('');
+                        $("#lblenderrorEarning").text('');
+                        $("#custom-dt-Earning").removeClass('hide');
+                    }
+                });
+                $("#btnCancelEarning").click(function () {
+                    if (selectedtimespan != 5) {
+                        $('.frequencyEarning[value="' + selectedtimespan + '"]').prop('checked', true);
+                    }
+                    $("#custom-dt-Earning").addClass('hide');
+                    clearDateRange();
+                });
+                $("#btnApplyEarning").click(function () {
+                    if ($('input[name="daterangepickerEarning_start"]').val() == null || $('input[name="daterangepickerEarning_start"]').val() == '') {
+                        $("#lblstarterrorEarning").text("Please enter From Date");
+                    }
+                    if ($('input[name="daterangepickerEarning_end"]').val() == null || $('input[name="daterangepickerEarning_end"]').val() == '') {
+                        $("#lblenderrorEarning").text("Please enter To Date");
+                    }
+                    else {
+                        $(".pull-right .radio-btn").removeClass('active');
+                        $(".frequencyEarning:checked").parent().addClass('active');
+                        $("#custom-dt-Earning").addClass('hide');
+                        $("#DateRangeEarning").val($('input[name="daterangepickerEarning_start"]').val() + "-" + $('input[name="daterangepickerEarning_end"]').val());
+                        TotalEarning($(".frequencyEarning:checked").val());
+                        var start = formatedate($('input[name="daterangepickerEarning_start"]').val());
+                        var end = formatedate($('input[name="daterangepickerEarning_end"]').val());
+                        $("#Earninglbl").text(start + " to " + end);
+                    }
+                });
+                function ResetChart() {
+                    CheckAdminLogin(function (callback) {
+                        if (callback) {
+                            $('#DateRangeEarning').val('');
+                        }
+                    });
+                }
+                function clearDateRange() {
+                    $('input[name="daterangepickerEarning_start"]').val('').datepicker('setDate', null);
+                    $('input[name="daterangepickerEarning_end"]').val('').datepicker('setDate', null);
+                    $("#DateRangeEarning").val('');
+                    $('input[name="daterangepicker_start"]').val('').datepicker('setDate', null);
+                    $('input[name="daterangepicker_end"]').val('').datepicker('setDate', null);
+                    $("#DateRange").val('');
+                }
+
+                $("#line-chart").empty();
+                $("#TotalBookingChart").empty();
+                $("#HighestBookedPieChart").empty();
+                $("#NewCustomerBarChart").empty();
+                $("#FarmHomeStaySummeryChart").empty();
+                var frequency = $('input[name=frequency]:checked').val();
+                var frequencyEarning = $('input[name=frequencyEarning]:checked').val();
+                var dateRange = $("#DateRange").val();
+                BindGeneralCalculation();
+                TotalEarning(frequencyEarning);
+                TotalBooking(frequency);
+                RecentOrders();
+                HighestBooked();
+                NewCustomer();
+                FarmStaySummary();
+            });
+
+            $('input[name="daterangepicker_start"]').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+                dateFormat: DefaultDateFormatsForDatePicker,
+                onSelect: function (date) {
+                    var dt2 = $('input[name="daterangepicker_end"]');
+                    var Date = $(this).datepicker('getDate');
+                    dt2.datepicker('option', 'minDate', Date);
+                }
+            });
+            $('input[name="daterangepicker_end"]').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+                dateFormat: DefaultDateFormatsForDatePicker,
+                onSelect: function (date) {
+                    var dt2 = $('input[name="daterangepicker_start"]');
+                    var maxDate = $(this).datepicker('getDate');
+                    dt2.datepicker('option', 'maxDate', maxDate);
+                }
+            });
+
+            $('input[name="daterangepickerEarning_start"]').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+                dateFormat: DefaultDateFormatsForDatePicker,
+                onSelect: function (date) {
+                    var dt2 = $('input[name="daterangepickerEarning_end"]');
+                    var Date = $(this).datepicker('getDate');
+                    dt2.datepicker('option', 'minDate', Date);
+                }
+            });
+            $('input[name="daterangepickerEarning_end"]').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+                dateFormat: DefaultDateFormatsForDatePicker,
+                onSelect: function (date) {
+                    var dt2 = $('input[name="daterangepickerEarning_start"]');
+                    var maxDate = $(this).datepicker('getDate');
+                    dt2.datepicker('option', 'maxDate', maxDate);
+                }
+            });
+            $('#ExportTypeExcelEarnings').change(function (event) {
+                if ($('#ExportTypeExcelEarnings').val() == "-1") {
+                    $('#btnExportEarnings').attr('disabled', 'disabled');
+                }
+                else {
+                    event.preventDefault();
+                    $('#btnExportEarnings').removeAttr("disabled")
+                }
+            });
+            $('#ExportTypeExcelBookings').change(function (event) {
+
+                if ($('#ExportTypeExcelBookings').val() == "-1") {
+                    $('#btnExportBookings').attr('disabled', 'disabled');
+                }
+                else {
+                    event.preventDefault();
+                    $('#btnExportBookings').removeAttr("disabled")
+                }
+            });
+            $('#ExportTypeExcelHighest').change(function (event) {
+
+                if ($('#ExportTypeExcelHighest').val() == "-1") {
+                    $('#btnExportHighest').attr('disabled', 'disabled');
+                }
+                else {
+                    event.preventDefault();
+                    $('#btnExportHighest').removeAttr("disabled")
+                }
+            });
+            $('#ExportTypeExcelCustomers').change(function (event) {
+
+                if ($('#ExportTypeExcelCustomers').val() == "-1") {
+                    $('#btnExportCustomers').attr('disabled', 'disabled');
+                }
+                else {
+                    event.preventDefault();
+                    $('#btnExportCustomers').removeAttr("disabled")
+                }
+            });
+            $('#ExportTypeExcelSummary').change(function (event) {
+
+                if ($('#ExportTypeExcelSummary').val() == "-1") {
+                    $('#btnExportSummary').attr('disabled', 'disabled');
+                }
+                else {
+                    event.preventDefault();
+                    $('#btnExportSummary').removeAttr("disabled")
+                }
+            });
+        }]);
+    </script>
+
+}
+
+
+<div class="main-wrapper" ng-controller="HomeAdminController">
+    <h3>Welcome to @System.Configuration.ConfigurationManager.AppSettings["SiteName"].ToString()</h3>
+    <input type="hidden" id="hdBaseCurrency" value="{{Currencysymbols}}" />
+    <div class="inner-content">
+        <div class="row">
+            <div class="booking-details">
+                <ul>
+                    <li>
+                        <div class="single-block-details">
+                            <i class="confirm-icon"></i>
+                            <div class="text">
+                                <h4 id="ConfirmedBooking"></h4>
+                                <label>Completed Booking</label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="single-block-details">
+                            <i class="rupee-icon"></i>
+                            <div class="text">
+                                <h4 id="TotalTransaction"></h4>
+                                <label>Total Transactions</label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="single-block-details">
+                            <i class="rupee-icon"></i>
+                            <div class="text">
+                                <h4 id="TotalEarning"></h4>
+                                <label>Total Earning</label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="single-block-details">
+                            <i class="customer-icon"></i>
+                            <div class="text">
+                                <h4 id="Totalcustomer"></h4>
+                                <label>Total Customers</label>
+                            </div>
+                        </div>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                @using (Html.BeginForm("ExportTotalEarning", "Home", FormMethod.Post, new { @class = "chart-wrapper", role = "form1" }))
+                {
+                    <h4 class="sec-title">Total Earnings</h4>
+                    <div class="color-box">
+                        <ul>
+                            <li><span style="background:#0b62a4;"></span>Earning</li>
+
+                        </ul>
+                    </div>
+                    <div class="pull-right side-export-bar">
+                        <div class="srtbtn date-filter pull-right deviceFreq">
+                            <label class="radio-btn active"><input type="radio" class="frequencyEarning" name="frequencyEarning" title="Day" value="@Convert.ToInt32(1)" checked />Day</label>
+                            <label class="radio-btn"><input type="radio" class="frequencyEarning" name="frequencyEarning" title="Week" value="@Convert.ToInt32(2)" />Week</label>
+                            <label class="radio-btn"><input type="radio" class="frequencyEarning" name="frequencyEarning" title="Month" value="@Convert.ToInt32(3)" />Month</label>
+                            <label class="radio-btn"><input type="radio" class="frequencyEarning" name="frequencyEarning" title="Year" value="@Convert.ToInt32(4)" />Year</label>
+                            <label class="radio-btn"><input type="radio" id="frequencyEarningcustom" class="frequencyEarning" name="frequencyEarning" title="Month" value="@Convert.ToInt32(5)" />Custom <i class="fa fa-calendar"></i></label>
+                            <div class='input-group date hide new-ticki-form' id="custom-dt-Earning">
+                                <input type="hidden" name="name" id="DateRangeEarning" class="form-control" />
+                                <div class="date-picker input-daterange">
+                                    <div class="input-group">
+                                        <lable id="lblstarterrorEarning" title="" style="color:red"></lable>
+                                        <div class="desk-date">
+                                            <input type="text" class="input-mini form-control" placeholder="From Date" name="daterangepickerEarning_start">
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <lable id="lblenderrorEarning" title="" style="color:red"></lable>
+                                        <div class="desk-date">
+                                            <input type="text" class="input-mini form-control" placeholder="To Date" name="daterangepickerEarning_end">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="buttongroup">
+                                    <div class="btn green-btn" id="btnApplyEarning" title="Apply">Apply</div>
+                                    <div class="btn black-btn" id="btnCancelEarning" title="Cancel">Cancel</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="export-btn pull-right">
+                            <select id="ExportTypeExcelEarnings" name="ExportTypeExcelEarning">
+                                <option selected value="-1">Export To</option>
+                                <option value="0">CSV</option>
+                                <option value="1">Excel</option>
+                            </select>
+                            <input type="submit" disabled="disabled" id="btnExportEarnings" name="btnExportEarnings" value="Export" />
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="vertical-label line-chart-label"><span> Earnings (₹)</span></div>
+                        <div id="line-chart" class="line-chart"></div>
+                        <div class="horizental-label"><span id="Earninglbl">Day</span></div>
+                    </div>
+                }
+            </div>
+            <div class="col-xs-12">
+                @using (Html.BeginForm("ExportTotalBooking", "Home", FormMethod.Post, new { @class = "chart-wrapper", role = "form" }))
+                {
+                    <h4 class="sec-title">Total Bookings</h4>
+                    <div class="color-box">
+                        <ul>
+                            <li><span style="background:#7a92a3;"></span>Booked</li>
+                            <li><span style="background:#0b62a4;"></span>Cancelled</li>
+                        </ul>
+                    </div>
+    <div class="pull-right side-export-bar">
+        <div class="srtbtn date-filter pull-right deviceFreq">
+            <label class="radio-btnb active"><input type="radio" class="frequency" name="frequency" title="Day" value="@Convert.ToInt32(1)" checked />Day</label>
+            <label class="radio-btnb"><input type="radio" class="frequency" name="frequency" title="Week" value="@Convert.ToInt32(2)" />Week</label>
+            <label class="radio-btnb"><input type="radio" class="frequency" name="frequency" title="Month" value="@Convert.ToInt32(3)" />Month</label>
+            <label class="radio-btnb"><input type="radio" class="frequency" name="frequency" title="Year" value="@Convert.ToInt32(4)" />Year</label>
+            <label class="radio-btnb"><input type="radio" id="frequencycustom" class="frequency" name="frequency" title="Month" value="@Convert.ToInt32(5)" />Custom <i class="fa fa-calendar"></i></label>
+            <div class='input-group date hide new-ticki-form' id="custom-dt">
+                <input type="hidden" name="name" id="DateRange" class="form-control" />
+                <div class="date-picker input-daterange">
+                    <div class="input-group">
+                        <lable id="lblstarterror" title="" style="color:red"></lable>
+                        <div class="desk-date">
+                            <input type="text" class="input-mini form-control" placeholder="From Date" name="daterangepicker_start">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <lable id="lblenderror" title="" style="color:red"></lable>
+                        <div class="desk-date">
+                            <input type="text" class="input-mini form-control" placeholder="To Date" name="daterangepicker_end">
+                        </div>
+                    </div>
+                </div>
+                <div class="buttongroup">
+                    <div class="btn green-btn" id="btnApply" title="Apply">Apply</div>
+                    <div class="btn black-btn" id="btnCancel" title="Cancel">Cancel</div>
+                </div>
+            </div>
+        </div>
+        <div class="export-btn pull-right">
+            <select id="ExportTypeExcelBookings" name="ExportTypeExcel" required>
+                <option selected value="-1">Export To</option>
+                <option value="0">CSV</option>
+                <option value="1">Excel</option>
+            </select>
+            <input type="submit" disabled="disabled" id="btnExportBookings" name="btnExportBookings" value="Export" />
+        </div>
+    </div>
+                    <div class="">
+                        <div class="vertical-label booking-chart-label"><span>No. of Bookings</span></div>
+                        <div id="TotalBookingChart" class="TotalBookingChart"></div>
+                        <div class="horizental-label"><span id="Bookinglbl">Day</span></div>
+                    </div>
+
+                }
+            </div>
+            <div class="col-xs-12">
+                <div class="chart-wrapper rect-order">
+                    <h4 class="sec-title">Recent Orders</h4>
+                    <div class="grid-btn-set recent-order-mrg">
+                        <table id="Homes" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-6 same-size-box">
+                        @using (Html.BeginForm("ExportHighestBooked", "Home", FormMethod.Post, new { @class = "chart-wrapper", role = "form" }))
+                        {
+                            <h4 class="sec-title">Highest Booked Farm/Home Stays</h4>
+                            <div class="export-btn pull-right side-export-bar">
+                                <select id="ExportTypeExcelHighest" name="ExportTypeExcel" @*ng-model="Search.ExportTypeExcel"*@ required>
+                                    <option selected value="-1">Export To</option>
+                                    <option value="0">CSV</option>
+                                    <option value="1">Excel</option>
+                                </select>
+                                <input type="submit" disabled="disabled" id="btnExportHighest" name="btnExportHighest" value="Export" />
+                            </div>
+                            <div class="highest-chart">
+                                <div id="HighestBookedName"></div>
+                                <div id="HighestBookedPieChart" class="HighestBookedPieChart"></div>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 same-size-box">
+                        @using (Html.BeginForm("ExportNewCustomers", "Home", FormMethod.Post, new { @class = "chart-wrapper", role = "form" }))
+                        {
+                            <h4 class="sec-title">New Customers</h4>
+                            <div class="export-btn pull-right side-export-bar">
+                                <select id="ExportTypeExcelCustomers" name="ExportTypeExcel" @*ng-model="Search.ExportTypeExcel"*@ required>
+                                    <option selected value="-1">Export To</option>
+                                    <option value="0">CSV</option>
+                                    <option value="1">Excel</option>
+                                </select>
+                                <input type="submit" disabled="disabled" id="btnExportCustomers" name="btnExportCustomers" value="Export" />
+                            </div>
+                            <div class="">
+                                <div class="vertical-label customer-chart-label"><span>No. of Customers</span></div>
+                                <div id="NewCustomerBarChart" class="NewCustomerBarChart"></div>
+                                <div class="horizental-label"><span>Month/Year</span></div>
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12">
+                @using (Html.BeginForm("ExportFarmStaySummary", "Home", FormMethod.Post, new { @class = "chart-wrapper", role = "form", id = "SummaryForm" }))
+                {
+                    <h4 class="sec-title">Farm/Home Stay Summary</h4>
+                    <div class="color-box">
+                        <ul>
+                            <li><span style="background:#0b62a4;"></span>Earning</li>
+                            <li><span style="background:#7a92a3;"></span>Booked</li>
+                            <li><span style="background:#4da74d;"></span>Cancelled</li>
+                        </ul>
+                    </div>
+                    <div class="summary-last-box">
+                        <div class="col-xs-3 col-sm-3 pull-right side-export-bar-last">
+                            @Html.DropDownList("ddlFrontFarmStays",
+                                                                ViewBag.FrontFarmStays as IEnumerable<SelectListItem>, "Select Farm / Home Stays",
+                                                                new { id = "ddlFrontFarmStays", @class = "form-control", onchange = "SelectedIndexChanged(this.value)" })
+                        </div>
+                        <div class="export-btn pull-right summary-top-btn side-export-bar-last-tow">
+                            <select id="ExportTypeExcelSummary"
+                                    name="ExportTypeExcel"
+                                    required>
+                                <option selected value="-1">Export To</option>
+                                <option value="0">CSV</option>
+                                <option value="1">Excel</option>
+                            </select>
+                            <input type="submit" disabled="disabled" id="btnExportSummary" name="btnExportSummary" value="Export" />
+                        </div>
+                    </div>
+                                    <div class="">
+                        <div class="vertical-label farmstay-summary"><span>Amount (₹)</span></div>
+                        <div id="FarmHomeStaySummeryChart" class="FarmHomeStaySummeryChart"></div>
+                        <div class="horizental-label"><span>Month/Year</span></div>
+                    </div>
+
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div id="visitor-over-time">
+            </div>
+            <div id="no-record-visitor-overtime" class="norecord-box" style="display:none">
+                No record found.
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

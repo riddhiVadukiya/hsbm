@@ -1,0 +1,89 @@
+﻿@model HSBM.EntityModel.CategoryMaster.CategoryMaster
+
+@{
+    if (Model.Id > 0)
+    {
+        ViewBag.Title = "Update Category";
+    }
+    else
+    {
+        ViewBag.Title = "Add Category";
+    }
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+}
+
+<script>
+
+    $(document).ready(function () {
+        $("#CategoryFile").change(function () {
+            readURL(this);
+        });
+    });
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#CategoryImage').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+</script>
+
+
+
+<div class="main-wrapper">
+    <h3>@ViewBag.Title</h3>
+    @using (Html.BeginForm("AddOrUpdateCategoryMaster", "CategoryMaster", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="inner-content">
+
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.CreatedBy)
+            @Html.HiddenFor(model => model.CreatedDate)
+            @Html.HiddenFor(model => model.UpdatedBy)
+            @Html.HiddenFor(model => model.UpdatedDate)
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CategoryName, new { @class = "control-label" })
+                        <span class="required-field ">*</span>
+                        @Html.TextBoxFor(model => model.CategoryName)
+                        @Html.ValidationMessageFor(model => model.CategoryName)
+                    </div>
+                </div>
+
+
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group checkbox">
+
+                        @Html.CheckBoxFor(model => model.IsActive)                        
+                        @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })                        
+                        @Html.ValidationMessageFor(model => model.IsActive)
+
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="buttongroup">
+                <input type="submit" value="Save" class="btn green-btn" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn black-btn" })
+            </div>
+
+
+        </div>
+    }
+
+</div>
+
+
+

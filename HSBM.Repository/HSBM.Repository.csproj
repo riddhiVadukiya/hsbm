@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1A2CF5A3-076A-46BC-8EE6-764A05C82807}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HSBM.Repository</RootNamespace>
+    <AssemblyName>HSBM.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BLToolkit.4">
+      <HintPath>..\packages\BLToolkit.4.3.6\lib\net40\BLToolkit.4.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Less, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Less.3.0\lib\Less.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Conventions">
+      <HintPath>..\packages\Ninject.Extensions.Conventions.3.2.0.0\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common">
+      <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Contracts\ICityMasterRepository.cs" />
+    <Compile Include="Contracts\ICountryMasterRepository.cs" />
+    <Compile Include="Contracts\IRepository.cs" />
+    <Compile Include="Contracts\IRegionMasterRepository.cs" />
+    <Compile Include="Contracts\ISystemUsersRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\FarmStaysRatingsAndReviewRepository.cs" />
+    <Compile Include="Repositories\OutstandingRepository.cs" />
+    <Compile Include="Repositories\AccountStatementRepository.cs" />
+    <Compile Include="Repositories\AccountSummaryRepository.cs" />
+    <Compile Include="Repositories\CategoryMasterRepository.cs" />
+    <Compile Include="Repositories\BannerMasterRepository.cs" />
+    <Compile Include="Repositories\BaseRepository.cs" />
+    <Compile Include="Repositories\AmenityMasterRepository.cs" />
+    <Compile Include="Repositories\BlogCategoryRepository.cs" />
+    <Compile Include="Repositories\BlogsMasterRepository.cs" />
+    <Compile Include="Repositories\CityMasterRepository.cs" />
+    <Compile Include="Repositories\CMSPageMasterRepository.cs" />
+    <Compile Include="Repositories\CountryMasterRepository.cs" />
+    <Compile Include="Repositories\CurrencyMasterRepository.cs" />
+    <Compile Include="Repositories\CustomerRepository.cs" />
+    <Compile Include="Repositories\DiscountMasterRepository.cs" />
+    <Compile Include="Repositories\EmailTemplatesRepository.cs" />
+    <Compile Include="Repositories\FarmStaysRepository.cs" />
+    <Compile Include="Repositories\FrontFarmStaysBookingRepository.cs" />
+    <Compile Include="Repositories\FrontFarmStaysReviewRepository.cs" />
+    <Compile Include="Repositories\FrontFarmStaysSearchRepository.cs" />
+    <Compile Include="Repositories\FrontFarmStaysDetailRepository.cs" />
+    <Compile Include="Repositories\FrontFarmStaysHomeRepository.cs" />
+    <Compile Include="Repositories\FrontOrdersMasterRepository.cs" />
+    <Compile Include="Repositories\HomeRepository.cs" />
+    <Compile Include="Repositories\InventoryMasterRepository.cs" />
+    <Compile Include="Repositories\MethodInfoHelpers.cs" />
+    <Compile Include="Repositories\NotificationMasterRepository.cs" />
+    <Compile Include="Repositories\OrdersMasterRepository.cs" />
+    <Compile Include="Repositories\RegionMasterRepository.cs" />
+    <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Repositories\RoleMasterRepository.cs" />
+    <Compile Include="Repositories\SiteSettingsRepository.cs" />
+    <Compile Include="Repositories\SubscriptionMasterRepository.cs" />
+    <Compile Include="Repositories\SupplierMasterRepository.cs" />
+    <Compile Include="Repositories\SystemUsersRepository.cs" />
+    <Compile Include="RepositoryModule.cs" />
+    <Compile Include="SqlHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HSBM.Common\HSBM.Common.csproj">
+      <Project>{3abec989-8d0b-4843-8461-0e1059c802df}</Project>
+      <Name>HSBM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HSBM.EntityModel\HSBM.EntityModel.csproj">
+      <Project>{03a04524-8d33-40cb-87cd-d34be42bdf7f}</Project>
+      <Name>HSBM.EntityModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

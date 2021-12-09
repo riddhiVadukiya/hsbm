@@ -1,0 +1,53 @@
+﻿@model HSBM.EntityModel.Blogs.BlogCategory
+
+@{
+    if (Model.Id > 0)
+    {
+        ViewBag.Title = "Update Blog Category";
+    }
+    else
+    {
+        ViewBag.Title = "Add Blog Category";
+    }
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";    
+
+}
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("AddUpdateBlogCategory", "BlogCategory"))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal x_panel">
+        @*<h4>BlogPageMaster</h4>
+            <hr />*@
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group mt10">
+            @Html.LabelFor(model => model.Category, new { @class = "control-label col-md-2 col-sm-2 col-xs-12" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Category, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Category)
+            </div>
+        </div>       
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-2 col-sm-2 col-xs-12" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.IsActive, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IsActive)
+            </div>
+        </div>
+
+        <div class="ln_solid"></div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success"  />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+}
+

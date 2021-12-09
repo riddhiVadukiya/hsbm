@@ -1,0 +1,238 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    @*<link href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700" rel="stylesheet">*@
+
+    <script>
+    //DO NOT REMOVE EVER Comman date formate
+        var DefaultDateFormat = '@Html.Raw(HSBM.Common.Utils.Helper.DefaultDateFormat())'
+        var DefaultDateFormatsForDatePicker = '@Html.Raw(HSBM.Common.Utils.Helper.DefaultDateFormatsForDatePicker())'
+
+        
+    </script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/adminScripts")
+    @Scripts.Render("~/bundles/footer-js")
+    @Styles.Render("~/Content/admincss")
+
+    <script>
+
+        $(document).ready(function () {
+            $('.awe-calendar').each(function () {
+                $(this).datepicker({
+                    showOtherMonths: true,
+                    selectOtherMonths: true,
+                    dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+                    dateFormat: DefaultDateFormatsForDatePicker
+                });
+            });
+        });
+    </script>
+    <script>
+        //base currency
+        angular.module('app').run(function ($rootScope) {
+            $rootScope.Currencysymbols = '$';
+        });
+    </script>
+    @if (ViewBag.ToastrMSG != null)
+    {
+        <script>
+            $(document).ready(function () {
+                toastr["@Html.Raw(ViewBag.ToastrMSG.Type)"]("@Html.Raw(ViewBag.ToastrMSG.Message)", "@Html.Raw(ViewBag.ToastrMSG.ErrorTitle)")
+            });
+        </script>
+    }
+
+    @*<script src="~/signalr/hubs"></script>*@
+</head>
+
+<body ng-app="app" class="nav-md">
+    <script>
+        (function () {
+            
+            
+        if (Boolean(sessionStorage.getItem('sidebar-toggle-collapsed'))) {
+            var body = document.getElementsByTagName('body')[0];
+            body.className = 'nav-sm';
+        }
+    })();
+    </script>
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title no-border">
+                        <a href="/Admin" class="site_title"> <img src="@System.Configuration.ConfigurationManager.AppSettings["LogoPath"].ToString()" alt="@System.Configuration.ConfigurationManager.AppSettings["SiteName"].ToString()"></a>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <!-- sidebar menu -->
+                    @Html.Partial("_PartialMenu")
+                    <!-- /sidebar menu -->
+                    <!-- /menu footer buttons -->
+                    <!-- /menu footer buttons -->
+                </div>
+            </div>
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <nav>
+                        <div class="nav toggle">
+                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                            @*<div class="dropdown">
+                                    <span class="dropdown-toggle active-flag" data-toggle="dropdown">
+                                        <div class="flag flags-american"></div>
+                                    </span>
+
+                                    <ul class="dropdown-menu list-langs">
+                                        <li><a href="javascript:;"><div class="flag flags-american"></div> English</a></li>
+                                        <li><a href="javascript:;"><div class="flag flags-spain"></div> Español</a></li>
+                                        <li><a href="javascript:;"><div class="flag flags-japan"></div> 日本語</a></li>
+                                        <li><a href="javascript:;"><div class="flag flags-china"></div> 中文</a></li>
+                                        <li><a href="javascript:;"><div class="flag flags-portugal"></div> Portugal</a></li>
+                                        <li><a href="javascript:;"><div class="flag flags-russia"></div> Русский язык</a></li>
+                                    </ul>
+                                </div>*@
+                        </div>
+
+                        @*<div class="col-md-3 margin-top5">
+                                                    <div style="padding:5px;color:white;" ng-controller="CommonController">
+                                        <select id="Currency" class="form-control" ng-model="Search.Language" ng-change="ChangeLanguage(Search.Language)">
+                                            <option ng-repeat="f in LanguageSource" value="{{f.LanguageFullName}}" ng-selected="f.LanguageFullName==Search.Language">{{f.LanguageFullName}}</option>
+                                        </select>
+                                    </div>
+                            </div>*@
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    &nbsp;Hi,   @HSBM.Web.Helpers.SessionProxy.UserDetails.FirstName @HSBM.Web.Helpers.SessionProxy.UserDetails.LastName
+                                    <span class=" fa fa-angle-down"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    <li><a href="@Url.Action("Profile","Account")"> My Profile</a></li>
+                                    <li>
+                                        <a href="@Url.Action("ChangePassword", "Account")">
+                                            <span>Change Password</span>
+                                        </a>
+                                    </li>
+                                    <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out pull-right"></i> Logout</a></li>
+                                </ul>
+                                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                { }
+                            </li>
+
+                            @*<li role="presentation" class="dropdown">
+                                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-bell-o"></i>
+                                    <span class="badge bg-green">5</span>
+                                </a>
+                                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                    <li>
+                                        <a>
+                                            <span class="image"><i class="fa fa-bell-o"></i></span>
+                                            <span>
+                                                <span>New tasks needs to be done</span>
+                                                <span class="time">2 mins ago</span>
+                                            </span>                                          
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <span class="image"><i class="fa fa-bell-o"></i></span>
+                                            <span>
+                                                <span>Change your password</span>
+                                                <span class="time">3 hours ago</span>
+                                            </span>                                           
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <span class="image"><i class="fa fa-bell-o"></i></span>
+                                            <span>
+                                                <span>New feature added</span>
+                                                <span class="time">9 hours ago</span>
+                                            </span>                                            
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="text-center">
+                                            <a>
+                                                <strong>Show all notifications.</strong>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>*@
+
+
+
+
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+            <!-- page content -->
+
+            <div class="right_col" role="main">
+                @*<h3>@ViewBag.Message</h3>*@
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+                {
+                @Html.AntiForgeryToken()
+                }
+                @RenderBody()
+                @RenderSection("scripts", required: false)
+            </div>
+            <!-- /page content -->
+            <!-- footer content -->
+            @*<footer>
+                    <div class="pull-right">
+                        Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </footer>*@
+            <!-- /footer content -->
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        $('body').show();
+        $('.version').text(NProgress.version);
+        NProgress.start();
+        setTimeout(function () { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
+    </script>
+    <script src="~/Areas/Admin/Content/JS/custom.js"></script>
+
+    <div class="WaitScreen">
+    </div>
+    
+    <script type="text/javascript">
+
+        $body = $("body");
+
+        $(document).on({
+            ajaxStart: function () { $body.addClass("loading"); },
+            ajaxStop: function () { $body.removeClass("loading"); }
+        });
+
+
+    </script>
+
+</body>
+
+
+
+</html>

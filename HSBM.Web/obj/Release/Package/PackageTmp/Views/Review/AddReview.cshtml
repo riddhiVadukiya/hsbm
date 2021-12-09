@@ -1,0 +1,220 @@
+﻿@model HSBM.EntityModel.FrontReview.AddReviewModel
+
+@{
+    ViewBag.Title = "AddReview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="profile-main-box addreview-page">
+    <div class="container">
+        <div class="row">
+            <div class="title-block">
+                <h3>Add Review</h3>
+            </div>
+        </div>
+        @using (Html.BeginForm("AddReviewPopup", "Review", FormMethod.Post, new { @id = "frmAddReviewPopup" }))
+        {
+            <div style="display:none;">
+                @Html.HiddenFor(m => m.IsFromEmail)
+                @Html.HiddenFor(m => m.Rating)
+                @Html.HiddenFor(m => m.Customerid)
+                @Html.HiddenFor(m => m.OrderNo, new {Name="OrderName"})
+                @Html.HiddenFor(m => m.FarmStyasId)
+                @Html.HiddenFor(m => m.FarmStaysRatingsAndReviewGUID)
+                @Html.HiddenFor(m => m.IsInserted)
+                @Html.HiddenFor(m => m.Rating)
+            </div>
+            <div class="col-xs-12 m-t20">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <div id="dvAddReviewPopupMessage" class="error-message"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="subtitle">
+                        <h5>@Model.FarmStyasName</h5>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Reviews)<span class="require-star">&nbsp;*</span>
+                        @*@Html.TextAreaFor(m => m.Reviews, new { @Value = @Model.Reviews, @required = "required", @class = "form-control", @maxlength = 1000, @rows = 7 })
+                            @Html.ValidationMessageFor(m => m.Reviews, "", new { @class = "text-danger" })*@
+                        @Html.TextAreaFor(m => m.Reviews, new { @Value = @Model.Reviews, @class = "form-control", @maxlength = 1000, @rows = 7 })
+                        @Html.ValidationMessageFor(m => m.Reviews)
+                    </div>
+                </div>
+                @*<div class="col-xs-12">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Rating)
+                        <input id="rating-input" value="@Model.Rating" type="number" class="rating" min=0 max=5 step=0.5 data-size="sm">
+                    </div>
+                </div>*@
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Location)
+                            <input id="Location" value="@Model.Location" type="number" class="rating" min=0 max=5 step=1 data-size="sm">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Cleanliness)
+                            <input id="Cleanliness" value="@Model.Cleanliness" type="number" class="rating" min=0 max=5 step=1 data-size="sm">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ValueForMoney)
+                            <input id="ValueForMoney" value="@Model.ValueForMoney" type="number" class="rating" min=0 max=5 step=1 data-size="sm">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Hospitality)
+                            <input id="Hospitality" value="@Model.Hospitality" type="number" class="rating" min=0 max=5 step=1 data-size="sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-12" id="ReviewError">
+
+                    </div>
+                </div>
+
+                @*<div class="col-xs-12">
+                        <div class="star-rating">
+                            <span class="fa fa-star-o" data-rating="1"></span>
+                            <span class="fa fa-star-o" data-rating="2"></span>
+                            <span class="fa fa-star-o" data-rating="3"></span>
+                            <span class="fa fa-star-o" data-rating="4"></span>
+                            <span class="fa fa-star-o" data-rating="5"></span>
+                            <input type="hidden" name="hdVal" class="rating-value" value="0">
+                        </div>
+                    </div>*@
+
+                <div class="buttongroup">
+                    @if (!ViewBag.IsView) { 
+                    <button class="btn btn-primary"  type="button" onclick="javascript: return ValidateReviewPopup()">Save</button>
+                    }
+                    <button class="btn btn-default grey-btn"  type="button" onclick="javascript: return Back()">Back</button>
+                </div>
+
+            </div>
+        }
+    </div>
+</section>
+<div class="clearfix"></div>
+@*<script src="~/Areas/Admin/Content/JS/bootstrap.min.js"></script>
+    <link href="~/Areas/Admin/Content/CSS/bootstrap.min.css" rel="stylesheet" />*@
+@*<link href="~/Content/NewTheme/css/style.css" rel="stylesheet" />*@
+<script src="~/Scripts/NewTheme/star-rating.js"></script>
+<link href="~/Content/NewTheme/css/star-rating.css" rel="stylesheet" />
+
+
+@*<script src="~/Scripts/star-rating.min.js"></script>
+    <link href="~/Content/star-rating.min.css" rel="stylesheet" />*@
+<script>
+    $(document).ready(function () {
+
+        $("#frmAddReview").keypress(function (e) {
+            if (e.which == 13) {
+                $("#frmAddReview").submit();
+            }
+        });
+        $("#ReviewTitle").val("");
+        $('#rating-input').rating({
+            value: 0,
+            min: 0,
+            max: 5,
+            step: 1,
+            size: 'sm',
+            showClear: false,
+        });
+    });
+    //$("#Reviews").blur(function () {
+    //    var name = $('#Reviews').val();
+    //    if (name.length == 0) {
+    //        $('#Reviews').after('<div class="text-danger">All Reviews field are required.</div>');
+    //    }
+    //    else {
+    //        $('#Reviews').next(".red").remove();
+    //        return true;
+    //    }
+    //});
+    function ValidateReviewPopup() {
+
+        //var Reviews = $('#Reviews').val();
+        if ($('#Location').val() == 0 || $('#Cleanliness').val() == 0 || $('#ValueForMoney').val() == 0 || $('#Hospitality').val() == 0) {
+            $('#ReviewError').after('<div class="text-danger ReviewError">All Reviews field are required.</div>');
+        }
+        else {
+            $('#ReviewError').next(".red").remove();
+           // $("#Rating").val($('#rating-input').val());
+
+            var isValid = true;
+            isValid = $("#frmAddReviewPopup").valid();
+            if (isValid) {
+                $.ajax({
+                    url: '/Review/JsonAddReviewPopup',
+                    type: 'GET',
+                    cache: false,
+                    datatype: "json",
+                    data: {
+                        OrderNo: $("#OrderNo").val(), description: $("#Reviews").val(), rating: $("#Rating").val()
+                        , Location: $("#Location").val(), Cleanliness: $("#Cleanliness").val(), ValueForMoney: $("#ValueForMoney").val(), Hospitality: $("#Hospitality").val(), IsFromEmail: $("#IsFromEmail").val()
+                    },
+                    success: function (data) {
+                        if (data.Data == true) {
+
+                            var IsFromEmail = $("#IsFromEmail").val();
+                            if (IsFromEmail > 0) {
+                                window.location.href = "/ReviewThankYou";
+                            //    var FarmStyasId = $("#FarmStyasId").val();
+                            //    var date = new Date();
+                            //    var CheckIn = date.setDate(date.getDate() + 1);
+                            //    var CheckOut = date.setDate(date.getDate() + 2);
+                            //    window.location.href = "/FarmStaysDetail?FarmStayId=" + FarmStyasId + "&CheckIn=" + CheckIn + "&CheckOut=" + CheckOut + "&Guests=2&IsSolo=False";
+                            }
+                            else {
+
+                                window.location.href = "/Orders";
+                            }
+                        }
+                        else {
+                            $("#dvAddReviewPopupMessage").html(data.Message);
+                            $("#dvAddReviewPopupMessage").show();
+                            return false;
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        return false;
+                    }
+                });
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
+
+    function Back() {
+
+        var isValid = true;
+        isValid = $("#frmAddReviewPopup").valid();
+        var IsFromEmail = $("#IsFromEmail").val();
+        if (IsFromEmail > 0) {
+
+            var FarmStyasId = $("#FarmStyasId").val();
+            var date = new Date();
+            var CheckIn = date.setDate(date.getDate() + 1);
+            var CheckOut = date.setDate(date.getDate() + 2);
+            window.location.href = "/FarmStaysDetail?FarmStayId=" + FarmStyasId + "&CheckIn=" + CheckIn + "&CheckOut=" + CheckOut + "&Guests=2&IsSolo=False";
+        }
+        else {
+
+            window.location.href = "/Orders";
+        }
+    }
+
+</script>
+

@@ -1,0 +1,114 @@
+﻿@model IEnumerable<HSBM.EntityModel.CountryMaster.CountryMaster>
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Country";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Country</h2>
+<div ng-controller="CountryController">
+
+    <script>
+
+        function BindCountryMasterGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+            var Columns = [
+                        { data: 'Id', bVisible: false },
+                        { data: 'CountryName' },
+                        { data: 'Code' },
+                        {
+                            bSortable: false,
+                            sClass: "action-cell",
+                            mRender: function (data, type, row, full) {
+                                if (!row.IsActive) {
+                                    return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>ACTIVE</button></div>";
+                                }
+                                else {
+                                    return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>ACTIVE</button></div>";
+                                }
+                            }
+                        },
+                        {
+                            bSortable: false,
+                            sClass: "action-cell",
+                            mRender: function (data, type, row, full) {
+
+                                @*var buttons = "";
+                                @if (SessionProxy.CheckModuleAccess(Module.Location, ModuleAccess.CanAdd))
+                                {
+                                    @:buttons += "<a onclick=\"angular.element(this).scope().CloneCountry('" + full.row + "')\" href='javascript:void(0);' title='Clone' class='glyphicon glyphicon-copy'></a>&nbsp;";
+                                                                }
+                                @if (SessionProxy.CheckModuleAccess(Module.Location, ModuleAccess.CanUpdate))
+                                {
+                                    @:buttons += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/Locations/UpdateCountry/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-edit'> </a>&nbsp;";
+                                                                }
+                                @if (SessionProxy.CheckModuleAccess(Module.Location, ModuleAccess.CanDelete))
+                                {
+                                    @:buttons += "<a onclick=\"angular.element(this).scope().Delete('/Admin/Locations/DeleteCountry/" + row.Id + "')\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>";
+                                                                }*@
+                                var buttons = "";
+                                buttons += "<a onclick=\"angular.element(this).scope().CloneCountry('" + full.row + "')\" href='javascript:void(0);' title='Clone' class='glyphicon glyphicon-copy'></a>&nbsp;";
+                                buttons += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/Locations/UpdateCountry/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-edit'> </a>&nbsp;";
+                                buttons += "<a onclick=\"angular.element(this).scope().Delete('/Admin/Locations/DeleteCountry/" + row.Id + "')\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>";
+                                return buttons;
+                            }
+                        }
+            ];
+            BindSearchGridData('CountryMaster', Columns, '/Admin/Locations/GetAllCountriesBySearchRequest', $('[ng-controller="CountryController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+                        
+            $('[ng-controller="CountryController"]').scope().ClonedCountry = {}
+
+        }
+
+    </script>
+    @*@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+    {
+        @Html.AntiForgeryToken()
+    }*@
+
+    <p>
+        @Html.ActionLink("Add Country", "AddCountry", null, new { @class = "btn btn-primary pull-right" })
+    </p>
+
+
+    <table id="CountryMaster" class="table table-bordered table-striped table-responsive row-border hover bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Country</th>
+                <th>Code</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="CountryMaster_NoRecordFound" class="empty-grid">No records found</div>
+</div>
+<script type="text/ng-template" id="CloneTemp">
+    <tr class="clonetr">
+        <td>
+            <div>
+                <input type="text" class="form-control" name="CountryName" ng-model="ClonedCountry.CountryName" />
+            </div>
+        </td>
+        <td>
+            <div>
+                <input type="text" class="form-control" name="Code" ng-model="ClonedCountry.Code" />
+            </div>
+        </td>
+        <td>
+            <div>
+                <input type="checkbox" ng-checked="ClonedCountry.IsActive"> Is Active
+            </div>
+        </td>
+        <td class="action-cell">
+            <div>
+                <button type="button" ng-click="SaveClonedCountry()" class="btn btn-success">Save</button>
+                <button type="button" ng-click="CancleClonedCountry()" class="btn btn-primary">Cancel</button>
+            </div>
+        </td>
+    </tr>
+</script>
+
+

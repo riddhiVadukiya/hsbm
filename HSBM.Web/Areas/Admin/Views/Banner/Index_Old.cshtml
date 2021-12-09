@@ -1,0 +1,90 @@
+﻿@using HSBM.Web.Helpers;
+
+@model IEnumerable<HSBM.EntityModel.BannerMaster.BannerMaster>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    //UserAccess _UserAccess = (UserAccess)ViewBag.UserAccess;
+}
+<div class="main-wrapper">
+    <h3>Banner Master</h3>
+    <div ng-controller="BannerMasterController" class="inner-content">
+        @*@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+            {
+                @Html.AntiForgeryToken()
+            }*@
+        @*<input type="hidden" id="hdnUserAccess" value="@Newtonsoft.Json.JsonConvert.SerializeObject(_UserAccess)" />*@
+
+        <div class="buttongroup">
+            @Html.ActionLink("Add Banner", "AddBanner", null, new { @class = "btn green-btn" })
+        </div>
+
+        <table id="BannerMaster" class="table table-bordered table-striped table-responsive row-border hover bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    @*<th>Image Orignal Name</th>
+                        <th>Alt</th>
+                        <th>Order Index</th>
+                        <th>Status</th>*@
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="BannerMaster_NoRecordFound" class="empty-grid">No records found</div>
+
+
+    </div>
+</div>
+
+@*<p>
+    @Html.ActionLink("Create New", "AddBanner")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageOrignalName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Alt)
+        </th>       
+        <th>
+            @Html.DisplayNameFor(model => model.OrderIndex)
+        </th>       
+        <th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            <img src="/Uploaded/@item.ImageName" alt="@item.Alt" style="width:100px;" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ImageOrignalName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Alt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderIndex)
+        </td>        
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "UpdateBanner", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "DeleteBanner", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>*@

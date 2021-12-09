@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{03A04524-8D33-40CB-87CD-D34BE42BDF7F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HSBM.EntityModel</RootNamespace>
+    <AssemblyName>HSBM.EntityModel</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BLToolkit.4">
+      <HintPath>..\packages\BLToolkit.4.3.6\lib\net40\BLToolkit.4.dll</HintPath>
+    </Reference>
+    <Reference Include="Less, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Less.3.0\lib\Less.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountSummary\Outstanding.cs" />
+    <Compile Include="AccountSummary\AccountSummaryRequest.cs" />
+    <Compile Include="AccountSummary\AccountStatement.cs" />
+    <Compile Include="AccountSummary\AccountSummaryResponse.cs" />
+    <Compile Include="AxisRooms\AxisBookingRequest.cs" />
+    <Compile Include="AxisRooms\AxisRoom.cs" />
+    <Compile Include="AxisRooms\AxisRoomInventoryRequest.cs" />
+    <Compile Include="AxisRooms\GetResponseByOrderId.cs" />
+    <Compile Include="Blogs\FrontBlogArchivesResponse.cs" />
+    <Compile Include="CategoryMaster\CategoryMaster.cs" />
+    <Compile Include="CategoryMaster\CategoryMasterRequest.cs" />
+    <Compile Include="CategoryMaster\CategoryMasterResponse.cs" />
+    <Compile Include="AmenityMaster\AmenityMasterRequest.cs" />
+    <Compile Include="AmenityMaster\AmenityMasterResponse.cs" />
+    <Compile Include="BannerMaster\BannerMaster.cs" />
+    <Compile Include="BannerMaster\BannerMasterRequest.cs" />
+    <Compile Include="BannerMaster\BannerMasterResponse.cs" />
+    <Compile Include="AmenityMaster\AmenityMaster.cs" />
+    <Compile Include="Blogs\BlogCategory.cs" />
+    <Compile Include="Blogs\BlogComment.cs" />
+    <Compile Include="Blogs\Blogs.cs" />
+    <Compile Include="Blogs\BlogsResponse.cs" />
+    <Compile Include="Blogs\BlogsRequest.cs" />
+    <Compile Include="Blogs\FrontBlogRequest.cs" />
+    <Compile Include="Blogs\FrontBlogResponse.cs" />
+    <Compile Include="Common\CommonRequest.cs" />
+    <Compile Include="Common\CurrencyLayer.cs" />
+    <Compile Include="Common\KeyValueDto.cs" />
+    <Compile Include="BookingPassengerDetail\BookingPassengerDetail.cs" />
+    <Compile Include="DiscountMaster\DiscountHistoryResponse.cs" />
+    <Compile Include="FarmStays\DayClass.cs" />
+    <Compile Include="FarmStays\AddSeasonResponse.cs" />
+    <Compile Include="FarmStays\IdName.cs" />
+    <Compile Include="FarmStays\FarmStay.cs" />
+    <Compile Include="FarmStays\FarmStaysRatingsAndReview.cs" />
+    <Compile Include="FarmStays\FarmStaysRequest.cs" />
+    <Compile Include="FarmStays\FarmStaysAmenities.cs" />
+    <Compile Include="DiscountMaster\DiscountMaster.cs" />
+    <Compile Include="DiscountMaster\DiscountMasterRequest.cs" />
+    <Compile Include="DiscountMaster\DiscountMasterResponse.cs" />
+    <Compile Include="FarmStays\FarmStaysImages.cs" />
+    <Compile Include="FarmStays\FarmStaysRooms.cs" />
+    <Compile Include="FarmStays\FarmStaysSeasons.cs" />
+    <Compile Include="FarmStays\InventoryMaster.cs" />
+    <Compile Include="FarmStays\Plans.cs" />
+    <Compile Include="FarmStays\PlanValue.cs" />
+    <Compile Include="FarmStays\PriceWithDates.cs" />
+    <Compile Include="FarmStays\RatePlan.cs" />
+    <Compile Include="FarmStays\SeasonListResponse.cs" />
+    <Compile Include="FarmStays\SeasonRequest.cs" />
+    <Compile Include="FrontReview\AddReviewModel.cs" />
+    <Compile Include="FrontReview\FarmStaysRatingsAndReviewRequest.cs" />
+    <Compile Include="FrontReview\FarmStaysRatingsAndReviewResponse.cs" />
+    <Compile Include="Front\DiscountDto.cs" />
+    <Compile Include="Front\FarmStaysBlogResponse.cs" />
+    <Compile Include="Front\FarmStaysBookingDetail.cs" />
+    <Compile Include="Front\FarmStaysDetail.cs" />
+    <Compile Include="Front\FarmStaysDetailForHome.cs" />
+    <Compile Include="Front\FarmStaysDiscountRequest.cs" />
+    <Compile Include="Front\FarmStaysDiscountResponse.cs" />
+    <Compile Include="Front\FarmStaysHomeResponse.cs" />
+    <Compile Include="Front\FrontFarmStays.cs" />
+    <Compile Include="Front\FrontOrdersMaster.cs" />
+    <Compile Include="Front\FrontOrdersMasterRequest.cs" />
+    <Compile Include="Front\FrontOrdersMasterResponse.cs" />
+    <Compile Include="Front\ImageDto.cs" />
+    <Compile Include="Front\SearchFarmStays.cs" />
+    <Compile Include="Front\FarmStaysPopularFarmstayRequest.cs" />
+    <Compile Include="Front\FarmStaysPopularFarmstayResponse.cs" />
+    <Compile Include="HomeMaster\FarmStaySummary.cs" />
+    <Compile Include="HomeMaster\GeneralCalculation.cs" />
+    <Compile Include="HomeMaster\HighestBookedFarmStay.cs" />
+    <Compile Include="HomeMaster\NewCustomersResponse.cs" />
+    <Compile Include="HomeMaster\RecentOrder.cs" />
+    <Compile Include="HomeMaster\TotalBooking.cs" />
+    <Compile Include="HomeMaster\TotalEarnings.cs" />
+    <Compile Include="InventoryMaster\InventoryMaster.cs" />
+    <Compile Include="InventoryMaster\InventoryMasterRequest.cs" />
+    <Compile Include="InventoryMaster\InventoryMasterResponse.cs" />
+    <Compile Include="OrdersMaster\OrdersMaster.cs" />
+    <Compile Include="OrdersMaster\OrdersMasterResponse.cs" />
+    <Compile Include="OrdersMaster\OrdersMasterRequest.cs" />
+    <Compile Include="PaymentGetWay\AuthorizeNetRequest.cs" />
+    <Compile Include="PaymentGetWay\CCAvenueRequest.cs" />
+    <Compile Include="CityMaster\CityMaster.cs" />
+    <Compile Include="CityMaster\CityMasterRequest.cs" />
+    <Compile Include="CityMaster\CityMasterResponse.cs" />
+    <Compile Include="CMSPageMaster\CMSPageMaster.cs" />
+    <Compile Include="CMSPageMaster\CMSPageMasterRequest.cs" />
+    <Compile Include="CMSPageMaster\CMSPageMasterResponse.cs" />
+    <Compile Include="Common\GridDataResponse.cs" />
+    <Compile Include="Common\JsonResponse.cs" />
+    <Compile Include="Common\Newsletter.cs" />
+    <Compile Include="CountryMaster\CountryMaster.cs" />
+    <Compile Include="CountryMaster\CountryMasterRequest.cs" />
+    <Compile Include="CountryMaster\CountryMasterResponse.cs" />
+    <Compile Include="CurrencyMaster\CurrencyMaster.cs" />
+    <Compile Include="CurrencyMaster\CurrencyMasterResponse.cs" />
+    <Compile Include="CurrencyMaster\CurrencyMasterRequest.cs" />
+    <Compile Include="EmailTemplates\EmailTemplates.cs" />
+    <Compile Include="EmailTemplates\EmailTemplatesResponse.cs" />
+    <Compile Include="EmailTemplates\EmailTemplatesRequest.cs" />
+    <Compile Include="EntityBase.cs" />
+    <Compile Include="ForgotPassword\ForgotPasswordModel.cs" />
+    <Compile Include="ForgotPassword\ResetPasswordModel.cs" />
+    <Compile Include="IEntity.cs" />
+    <Compile Include="Notification\Notification.cs" />
+    <Compile Include="Notification\NotificationDetail.cs" />
+    <Compile Include="Notification\NotificationResponse.cs" />
+    <Compile Include="Notification\UserDeviceDetail.cs" />
+    <Compile Include="PaymentGetWay\CryptoRandom.cs" />
+    <Compile Include="PaymentGetWay\PaymentGetWayRequest.cs" />
+    <Compile Include="PaymentGetWay\PaypalPaymentRequest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegionMaster\RegionMasterResponse.cs" />
+    <Compile Include="RoleMasterDetails\RoleMasterDetailsRequest.cs" />
+    <Compile Include="RoleMasterDetails\RoleMasterDetailsResponse.cs" />
+    <Compile Include="RoleMasterDetails\RoleMasterDetails.cs" />
+    <Compile Include="RoleMaster\RoleMasterRequest.cs" />
+    <Compile Include="RoleMaster\RoleMasterResponse.cs" />
+    <Compile Include="RoleMaster\RoleMaster.cs" />
+    <Compile Include="RoleModule\RoleModuleRequest.cs" />
+    <Compile Include="RoleModule\RoleModuleResponse.cs" />
+    <Compile Include="RoleModule\RoleModule.cs" />
+    <Compile Include="RegionMaster\RegionMaster.cs" />
+    <Compile Include="RegionMaster\RegionMasterRequest.cs" />
+    <Compile Include="PaymentGetWay\SagePayRequest.cs" />
+    <Compile Include="SiteSettings\SiteSettingResponse.cs" />
+    <Compile Include="SiteSettings\SiteSettings.cs" />
+    <Compile Include="SiteSettings\SiteSettingsRequest.cs" />
+    <Compile Include="SubscriptionMaster\SubscriptionMaster.cs" />
+    <Compile Include="SubscriptionMaster\SubscriptionMasterResponse.cs" />
+    <Compile Include="SubscriptionMaster\SubscriptionMasterRequest.cs" />
+    <Compile Include="SystemUsers\LoginUser.cs" />
+    <Compile Include="SystemUsers\SystemUsers.cs" />
+    <Compile Include="SystemUsers\SystemUsersRequest.cs" />
+    <Compile Include="SystemUsers\SystemUsersResponse.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HSBM.Common\HSBM.Common.csproj">
+      <Project>{3abec989-8d0b-4843-8461-0e1059c802df}</Project>
+      <Name>HSBM.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

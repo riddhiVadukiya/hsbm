@@ -1,0 +1,52 @@
+﻿@model IEnumerable<HSBM.EntityModel.AccountSummary.AccountSummaryResponse>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Outstanding</h2>
+<div ng-controller="AccountSummaryController">
+
+    <table id="Outstanding" class="table table-bordered table-striped table-responsive row-border hover bordered">
+        <thead>
+            <tr>
+                <th>Supplier</th>
+                <th>Total Bookings</th>
+                <th>Outstanding</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div ng-if="!OutstandingSummaryList.length" class="empty-grid">No records found</div>
+</div>
+
+<div class="clearfix"></div>
+<div class="bordered margin-top5"></div>
+
+<h2>Account Summary</h2>
+<div ng-controller="AccountSummaryController">
+
+    <table id="Summary" class="table table-bordered table-striped table-responsive row-border hover bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>User</th>
+                <th>Description</th>
+                <th>Transaction Number</th>
+                <th>Reference Number</th>
+                <th>Amount</th>
+                <th>Markup</th>
+                <th>SupplierCode</th>
+                <th>Supplier</th>
+                <th>Date</th>
+                <th>Order Type</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div ng-if="!AccountSummaryList.length" class="empty-grid">No records found</div>
+</div>
+
+
+

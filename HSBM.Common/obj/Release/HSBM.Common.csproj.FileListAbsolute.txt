@@ -1,0 +1,52 @@
+D:\FarmStay\HSBM.Common\bin\Release\HSBM.Common.dll
+D:\FarmStay\HSBM.Common\bin\Release\HSBM.Common.pdb
+D:\FarmStay\HSBM.Common\bin\Release\Less.dll
+D:\FarmStay\HSBM.Common\bin\Release\log4net.dll
+D:\FarmStay\HSBM.Common\bin\Release\Microsoft.WindowsAzure.Configuration.dll
+D:\FarmStay\HSBM.Common\bin\Release\Newtonsoft.Json.dll
+D:\FarmStay\HSBM.Common\bin\Release\Ninject.dll
+D:\FarmStay\HSBM.Common\bin\Release\Ninject.Extensions.Conventions.dll
+D:\FarmStay\HSBM.Common\bin\Release\Ninject.Web.Common.dll
+D:\FarmStay\HSBM.Common\bin\Release\PushSharp.Amazon.dll
+D:\FarmStay\HSBM.Common\bin\Release\PushSharp.Apple.dll
+D:\FarmStay\HSBM.Common\bin\Release\PushSharp.Blackberry.dll
+D:\FarmStay\HSBM.Common\bin\Release\PushSharp.Core.dll
+D:\FarmStay\HSBM.Common\bin\Release\PushSharp.Firefox.dll
+D:\FarmStay\HSBM.Common\bin\Release\PushSharp.Google.dll
+D:\FarmStay\HSBM.Common\bin\Release\PushSharp.Windows.dll
+D:\FarmStay\HSBM.Common\bin\Release\Less.pdb
+D:\FarmStay\HSBM.Common\bin\Release\log4net.xml
+D:\FarmStay\HSBM.Common\bin\Release\Microsoft.WindowsAzure.Configuration.xml
+D:\FarmStay\HSBM.Common\bin\Release\Newtonsoft.Json.xml
+D:\FarmStay\HSBM.Common\bin\Release\Ninject.xml
+D:\FarmStay\HSBM.Common\bin\Release\Ninject.Extensions.Conventions.xml
+D:\FarmStay\HSBM.Common\bin\Release\Ninject.Web.Common.xml
+D:\FarmStay\HSBM.Common\obj\Release\HSBM.Common.dll
+D:\FarmStay\HSBM.Common\obj\Release\HSBM.Common.pdb
+D:\FarmStay\HSBM.Common\obj\Release\HSBM.Common.csproj.CoreCompileInputs.cache
+D:\FarmStay\HSBM.Common\obj\Release\HSBM.Common.csproj.CopyComplete
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\HSBM.Common.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\HSBM.Common.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Less.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\log4net.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Microsoft.WindowsAzure.Configuration.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Newtonsoft.Json.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Ninject.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Ninject.Extensions.Conventions.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Ninject.Web.Common.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\PushSharp.Amazon.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\PushSharp.Apple.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\PushSharp.Blackberry.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\PushSharp.Core.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\PushSharp.Firefox.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\PushSharp.Google.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\PushSharp.Windows.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Less.pdb
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\log4net.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Microsoft.WindowsAzure.Configuration.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Newtonsoft.Json.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Ninject.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Ninject.Extensions.Conventions.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\bin\Release\Ninject.Web.Common.xml
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\obj\Release\HSBM.Common.dll
+D:\FarmStay Main Folder\FarmStay\HSBM.Common\obj\Release\HSBM.Common.pdb

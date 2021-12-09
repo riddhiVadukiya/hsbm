@@ -1,0 +1,72 @@
+
+.bx-container{
+	position: relative;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:auto;
+	z-index:0;
+}
+.bx-container img{
+	top:0px;
+	left:0px;
+	width:100%;
+	z-index: 101;
+	display:none;
+    width: 100% !important;
+    height: 475px !important;
+    
+    object-fit: cover;
+}
+.bx-canvas{
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+}
+.bx-thumbs{
+    position: absolute;
+z-index: 100;
+bottom: 20px;
+left: 0;
+margin-left: 0;
+width: 100%;
+text-align: center;
+}
+.bx-thumbs a{
+    float: none;
+    display: inline-block !important;
+    width: 95px;
+    height: 95px;
+    border: 3px solid rgba(255,255,255,0.5);
+    overflow: hidden;
+    margin:0 10px;
+    position: relative;
+    outline: none;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity: 0.8;
+	box-shadow: 
+        0px 0px 3px rgba(0,0,0,0.6),
+        0px 0px 0px 40px rgba(0,0,0,0.3) inset;
+    -webkit-transition: all 0.4s ease-in-out;
+	-moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	-ms-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
+}
+.bx-thumbs a:hover{
+    opacity: 1.0;
+    box-shadow: 
+        0px 0px 3px rgba(0,0,0,0.6),
+        0px 0px 0px 0px rgba(0,0,0,0.1) inset;
+}
+.bx-thumbs a.bx-thumbs-current{
+    opacity: 1.0;
+    border-color: #fff;
+    box-shadow: 0px 0px 3px rgba(0,0,0,0.6);
+    width: 110px;
+height: 110px;
+top: 7px;
+}

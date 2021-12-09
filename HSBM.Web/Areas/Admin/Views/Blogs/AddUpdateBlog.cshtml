@@ -1,0 +1,164 @@
+﻿@model HSBM.EntityModel.Blogs.Blogs
+
+@*<script src="~/Areas/Admin/Content/JS/ng-tags-input.min.js"></script>*@
+<link href="~/Areas/Admin/Content/CSS/ng-tags-input.min.css" rel="stylesheet" />
+
+@{
+    if (Model.Id > 0)
+    {
+        ViewBag.Title = "Update Blog";
+    }
+    else
+    {
+        ViewBag.Title = "Add Blog";
+    }
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    <script>
+
+        $(document).ready(function () {
+            tinymce.init({ selector: '#Description', height: 500 });
+        });
+    </script>
+
+}
+
+<div class="main-wrapper">
+    <h3>@ViewBag.Title</h3>
+
+    @using (Html.BeginForm("AddUpdateBlog", "Blogs", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+    <div ng-controller="AddUpdateBlogsController" class="inner-content">
+        @*<h4>BlogPageMaster</h4>
+            <hr />*@
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.Image)
+        @* <input type="hidden" id="CategoriesWithName" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.CategoriesWithName)">*@
+        @*@Html.HiddenFor(model => model.Categories)*@
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+                    <span class="required-field ">*</span> 
+                    @Html.TextBoxFor(model => model.Title, new { @class = "form-control " })
+                    @Html.ValidationMessageFor(model => model.Title)
+                    <span class="required-field ">@ViewBag.Message</span> 
+                    
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Image</label>
+                    <span class="required-field ">*</span> 
+                    <div class="upload-btn">
+                        <input type="file" name="file" id="file" />
+                        <button class="btn btn-default">Choose Images</button>                        
+                    @Html.ValidationMessageFor(model => model.Image)
+                    </div>
+                    @*<span class="required-field ">@ViewBag.MessageImage</span>*@                     
+                    <img id="blogImage" src="@(Model.Image == null ? "/Images/No_image.jpg" : MvcApplication.BlogImagePath + Model.Image)" class="mt10 imgstyle" onerror="this.src='/images/no_image.jpg'" />
+                </div>
+            </div>
+        </div>
+
+            @*<div class="form-group mt10">
+                <label class="control-label col-md-2 col-sm-2 col-xs-12">Category</label>
+                <div class="col-md-10">
+                    <tags-input id="ddlCategory" ng-model="vm.categories" placeholder="Category" key-property="Id" add-from-autocomplete-only="true" display-property="Category" replace-spaces-with-dashes="false">
+                        <auto-complete source="vm.blogCategoryList"
+                                       display-property="Category"
+                                       key-property="Id"
+                                       load-on-empty="true"
+                                       load-on-focus="true"
+                                       load-on-down-arrow="true">
+                        </auto-complete>
+                    </tags-input>
+                </div>
+            </div>*@
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Description, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Description)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group discount-value">
+                    @Html.LabelFor(model => model.MetaTitle, new { @class = "control-label" })
+
+                    @Html.TextBoxFor(model => model.MetaTitle, new { maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.MetaTitle)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group discount-value">
+                    @Html.LabelFor(model => model.MetaKeyword, new { @class = "control-label" })
+
+                    @Html.TextAreaFor(model => model.MetaKeyword, new { maxlength = "255" })
+                    @Html.ValidationMessageFor(model => model.MetaKeyword)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group discount-value">
+                    @Html.LabelFor(model => model.MetaDescription, new { @class = "control-label" })
+
+                    @Html.TextAreaFor(model => model.MetaDescription, new { maxlength = "255" })
+                    @Html.ValidationMessageFor(model => model.MetaDescription)
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    @*<div class="form-group checkbox">
+                        @Html.LabelFor(model => model.IsPopulerPost, new { @class = "control-label" })
+                        @Html.EditorFor(model => model.IsPopulerPost, new { @class = "form-control" })
+                    </div>*@
+                    @*@Html.CheckBox("IsPopulerPost", true)*@
+                    @Html.CheckBoxFor(m => m.IsPopulerPost)
+                    @Html.LabelFor(model => model.IsPopulerPost, new { @class = "control-label" })
+                    
+                    <div class="form-group checkbox">
+                        @*<input type="checkbox" id="IsPopulerPost" />
+                        <label for="IsPopularPost"><span></span>Is Popular Post</label>*@
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    @*<div class="form-group checkbox">
+                        @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
+                            @Html.EditorFor(model => model.IsActive, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IsActive)
+                    </div>*@
+                    @*<div class="form-group checkbox">
+                        <input type="checkbox" id="IsActive" />
+                        <label for="IsActive"><span></span>Is Active</label>
+                    </div>*@
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="buttongroup">
+                    <input type="submit" value="Save" class="btn green-btn" />
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn black-btn" })
+                </div>
+            </div>
+        </div>
+
+    }
+
+</div>

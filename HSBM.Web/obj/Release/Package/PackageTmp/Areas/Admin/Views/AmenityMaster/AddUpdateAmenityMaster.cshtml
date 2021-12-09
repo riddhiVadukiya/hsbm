@@ -1,0 +1,140 @@
+﻿@model HSBM.EntityModel.AmenityMaster.AmenityMaster
+
+@{
+    if (Model.Id > 0)
+    {
+        ViewBag.Title = "Update Amenity";
+    }
+    else
+    {
+        ViewBag.Title = "Add Amenity";
+    }
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+}
+
+<script>
+
+    $(document).ready(function () {
+        $("#amenityFile").change(function () {
+            ValidateSingleInput(this);
+            readURL(this);
+        });
+    });
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#amenityImage').attr('src', e.target.result);
+                $('#ImageUrl').val(e.target.result);
+                ImageUrl
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    var _validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+    function ValidateSingleInput(oInput) {
+        if (oInput.type == "file") {
+            var sFileName = oInput.value;
+            if (sFileName.length > 0) {
+                var blnValid = false;
+                for (var j = 0; j < _validFileExtensions.length; j++) {
+                    var sCurExtension = _validFileExtensions[j];
+                    if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                        blnValid = true;
+                        break;
+                    }
+                }
+
+                if (!blnValid) {
+                    toastr["error"]("Sorry, " + sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() + " is invalid, allowed extensions are: " + _validFileExtensions.join(", "), "Error")
+                    oInput.value = "";
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+</script>
+
+
+
+<div class="main-wrapper">
+    <h3>@ViewBag.Title</h3>
+    @using (Html.BeginForm("AddOrUpdateAmenityMaster", "AmenityMaster", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="inner-content">
+
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.CreatedBy)
+            @Html.HiddenFor(model => model.CreatedDate)
+            @Html.HiddenFor(model => model.UpdatedBy)
+            @Html.HiddenFor(model => model.UpdatedDate)
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AmenityName, new { @class = "control-label" })
+                        <span class="required-field ">*</span>
+                        @Html.TextBoxFor(model => model.AmenityName)
+                        @Html.ValidationMessageFor(model => model.AmenityName)
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group checkbox">
+                        @Html.CheckBoxFor(model => model.IsActive)
+                        @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
+                        @Html.ValidationMessageFor(model => model.IsActive)
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ImageUrl, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.ImageUrl, new { @style = "display:none" })
+                        <span class="required-field ">*</span>
+                        @Html.ValidationMessageFor(model => model.ImageUrl)
+                        <div class="upload-btn">
+                            <input type="file" id="amenityFile" name="amenityFile" accept="image/*" />
+                            <button class="btn btn-default">Choose Icon</button>
+                        </div>
+                        @if (Model.Id > 0 && !String.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            if (Model.ImageUrl != null && !String.IsNullOrEmpty(Model.ImageUrl) && Model.ImageUrl.Contains("data:image"))
+                            {
+                                <img id="amenityImage" src="@Model.ImageUrl" alt="your image" class="mt10 imgstyle amenity-img" />
+                            }
+                            else
+                            {
+                                <img id="amenityImage" src="@MvcApplication.AmenityImagePath/@Model.ImageUrl" alt="your image" class="mt10 imgstyle amenity-img"  />
+                            }
+                        }
+                        else
+                        {
+                            <img id="amenityImage" src="~/Images/placeholder.jpg" class="placeholder-img" alt="Image" />
+                        }
+
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="buttongroup">
+                <input type="submit" value="Save" class="btn green-btn" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn black-btn" })
+            </div>
+
+
+        </div>
+    }
+
+</div>

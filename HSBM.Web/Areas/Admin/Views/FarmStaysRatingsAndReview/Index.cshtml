@@ -1,0 +1,154 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Rating And Review";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script>
+    angular.module('app').controller('FarmStaysRatingsAndReviewController', ['$scope', '$compile', function ($scope, $compile) {
+        var TableName = "RatingsAndReview";
+        $scope.Search = {};
+        function BindFarmStaysRatingsAndReviewGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+
+            var Columns = [
+                        { data: 'Id', bVisible: false },
+                        { data: 'FarmStyasName' },
+                         { data: 'ReviewBy' },
+                          { data: 'strReviewDate' },
+                           { data: 'ApprovedBy' },
+                            { data: 'strApprovedDate' },
+                        {
+                            bSortable: false,
+                            sClass: "action-cell",
+                            mRender: function (data, type, row, full) {
+                                var btn = "";
+                                 @if (SessionProxy.CheckModuleAccess(Module.Discounts, ModuleAccess.CanUpdate))
+                                {
+                                    @: btn += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/FarmStaysRatingsAndReview/ViewRatingsAndReviewDetail/" + row.Id + "')\" href='javascript:void(0);' title='View' class='glyphicon glyphicon-eye-open'> </a> &nbsp;"
+                                }
+                                @if (SessionProxy.CheckModuleAccess(Module.FarmStaysRatingsReviews, ModuleAccess.CanView))
+                                    {
+                                        @: if (!row.IsApproved) { btn += "<a onclick=\"angular.element(this).scope().AprroveAndUnapprove('" + row.Id + "',true)\" href='javascript:void(0);' title='Approve' class='glyphicon glyphicon-ok colorlightgray'></a>"; } else { btn += "<a onclick=\"angular.element(this).scope().AprroveAndUnapprove('" + row.Id + "',false)\" href='javascript:void(0);' title='UnApprove' class='glyphicon glyphicon-ok'></a>"; }
+                                   }
+                                return btn;
+                            }
+                        }
+            ];
+            BindSearchGridData(TableName, Columns, '/Admin/FarmStaysRatingsAndReview/GetAllFarmStaysRatingsAndReviewBySearchRequest', $('[ng-controller="FarmStaysRatingsAndReviewController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+        }
+
+        $scope.SearchData = function () {
+            $scope.Search.FarmStyasId = $("#ddlFrontFarmStays").val();
+            BindFarmStaysRatingsAndReviewGrid();
+        };
+        $scope.ResetData = function () {
+            $("#ddlFrontFarmStays").val('');
+            $scope.Search = {};
+            BindFarmStaysRatingsAndReviewGrid();
+        };
+
+        $scope.AprroveAndUnapprove = function (index, flag) {
+
+
+            var msg = 'Are you sure you want to approve the Ratings And Review?';
+
+            if (!flag) {
+                msg = 'Are you sure you want to unapprove the Ratings And Review?';
+            }
+
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+            $.confirm({
+                title: "Please confirm",
+                content: msg,
+
+                buttons: {
+                    confirm: function () {
+
+                        $.ajax({
+                            url: '/Admin/FarmStaysRatingsAndReview/AprroveAndUnapproveRatingsAndReview',
+                            type: 'POST',
+                            data: {
+                                '__RequestVerificationToken': token,
+                                Id: index
+                            },
+                            success: function (result) {
+                                SaveOnArchive({}, TableName, flag, false);
+                                var localdata = GettLocalStorageData(TableName);
+                                BindFarmStaysRatingsAndReviewGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+
+                                if (flag)
+                                    toastr["success"]("Ratings & Review has been approved successfully.", "Success");
+                                else
+                                    toastr["success"]("Ratings & Review has been unapproved successfully.", "Success");
+                            },
+                            error: function (ex) {
+
+                                toastr["error"]("Somthing went wrong!", "Error")
+                            }
+                        });
+
+                    },
+                    cancel: function () {
+                        return;
+                    }
+                }
+            });
+
+        }
+        $scope.SetLocalStorage = function (url) {
+            SetLocalStorageData({}, TableName);
+            window.location = url;
+        }
+        var localdata = GettLocalStorageData(TableName);
+        if (localdata != null) {
+            BindFarmStaysRatingsAndReviewGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+        } else {
+            BindFarmStaysRatingsAndReviewGrid();
+        }
+
+    }]);
+</script>
+
+<div class="main-wrapper">
+    <h3>Ratings & Reviews </h3>
+    <div ng-controller="FarmStaysRatingsAndReviewController" class="inner-content filter-button-set">
+       
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <label>Farm / Home Stays</label>
+                    @Html.DropDownList("ddlFrontFarmStays", ViewBag.FrontFarmStays as IEnumerable<SelectListItem>, "Select Farm / Home Stays", new { id = "ddlFrontFarmStays", @class = "form-control" })
+                </div>
+            </div>
+          
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="buttongroup">
+                    <input type="button" ng-click="SearchData()" value="Search" class="btn green-btn" />
+                    <input type="button" ng-click="ResetData()" value="Reset" class="btn black-btn" />
+                </div>
+            </div>
+        </div>
+
+        <div class="ln_solid"></div>
+       <div class="grid-btn-set">
+             <table id="RatingsAndReview" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                 <thead>
+                     <tr>
+                         <th>Id</th>
+                         <th>Farm/Home Stay</th>
+                         <th>Review By</th>
+                         <th>Review Date</th>
+                         <th>Approved/Unapproved By</th>
+                         <th>Approved/Unapproved Date</th>
+                         <th>Action</th>
+                     </tr>
+                 </thead>
+                 <tbody></tbody>
+             </table>
+             <div id="RatingsAndReview_NoRecordFound" class="empty-grid">No records found</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,328 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Playfair+Display:700" rel="stylesheet">
+    @*<link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-datepicker3.css" />
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/responsive.css">*@
+
+    @Styles.Render("~/Content/NewTheme/css")
+    @Scripts.Render("~/bundles/NewTheme/js")
+    @*@Scripts.Render("~/bundles/frontjquery")*@
+    @Scripts.Render("~/bundles/frontEndScripts")
+    <!-- GOOGLE FONT -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,600,400,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+
+    <link id="colorreplace" rel="stylesheet" type="text/css" href="~/Content/css/colors/blue.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">*@
+
+
+
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBLxdK0Jtez3dx2Myo-78HcEsX0BuOeoms"></script>
+    @*<script src="~/signalr/hubs"></script>*@
+
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+
+    <script>
+        //DO NOT REMOVE EVER Comman date formate
+        var DefaultDateFormat = '@Html.Raw(HSBM.Common.Utils.Helper.DefaultDateFormat())'
+        var DefaultDateFormatsForDatePicker = '@Html.Raw(HSBM.Common.Utils.Helper.DefaultDateFormatsForDatePicker())'
+
+        $(document).ready(function () {
+
+            var CURRENT_URL = window.location.href.split('#')[0].split('?')[0];
+            var $SIDEBAR_MENU = $('#navbar-nav-menu');
+
+            $SIDEBAR_MENU.find('a').filter(function () {
+                return this.href == CURRENT_URL;
+            }).addClass('active');
+        });
+
+        function AddActiveClass(id) {
+            $('.nav-item a').removeClass('active');
+            $('#' + id).addClass('active');
+            // alert(a);
+        }
+    </script>
+
+    <script>
+        
+        angular.module('FrontApp').run(function ($rootScope) {
+            $rootScope.Currencysymbols = '';
+        });
+
+        angular.module('FrontApp').controller('CurrencyController', ['$scope', '$compile', '$cookies', '$rootScope', function ($scope, $compile, $cookies, $rootScope) {
+            
+            $scope.CurrencyList =
+            [{ code: 'USD', name:'United States Dollar', symbols: '$' },
+             { code: 'INR', name: 'Indian Rupee', symbols: '₹' },
+             { code: 'AED', name: 'United Arab Emirates Dirham', symbols: 'AED' },
+             { code: 'EUR', name: 'Euro ', symbols: '€' },
+             { code: 'GBP', name: 'Pound sterling', symbols: '£' },
+             { code: 'AUD', name: 'Australian Dollar', symbols: 'AUD' },
+             { code: 'ZAR', name: 'South African Rand', symbols: 'R' }];
+
+            $scope.SelectedCurrency = $cookies.get('Currency');
+            $rootScope.Currencysymbols = $.map($scope.CurrencyList, function (cl) { if (cl.code == $scope.SelectedCurrency) return cl.symbols; })[0];
+            
+            if (typeof ($scope.SelectedCurrency) == 'undefined') {
+                //    $cookies.put('Currency', 'USD');
+                //    $scope.SelectedCurrency = 'USD';
+                alert('DefaultCurrency not getting');
+            }
+
+            $scope.updateCurrency = function (obj) {
+                $cookies.put('Currency', obj.code);
+                location.reload();
+            };
+        }]);
+
+        
+
+    </script>
+
+
+
+</head>
+<body ng-app="FrontApp">
+
+    <nav class="navbar navbar-expand-md" id="mainNav">
+        <a class="navbar-brand" href="/"><img src="~/Content/NewTheme/images/logo.svg" alt="Farmstays"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul id="navbar-nav-menu" class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" id="Home" href="/" onclick="AddActiveClass('Home')">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="Farmstays" href="@Url.Action("Index", "Farmstays")" onclick="AddActiveClass('Farmstays')">Farmstays</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="Packages" href="@Url.Action("Index", "Packages")" onclick="AddActiveClass('Packages')">Packages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="Blogs" href="@Url.Action("Index", "Blogs")">Blogs</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/page/@HSBM.Common.Enums.CMSPages.AboutUs" class="nav-link" id="AboutUs">@(((HSBM.EntityModel.CMSPageMaster.CMSPageMaster)(HSBM.Web.Models.LayoutModels.GetCMSPageByIdForFront((int)HSBM.Common.Enums.CMSPages.AboutUs))).Name)</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/page/@HSBM.Common.Enums.CMSPages.FAQs" class="nav-link" id="FAQs">@(((HSBM.EntityModel.CMSPageMaster.CMSPageMaster)(HSBM.Web.Models.LayoutModels.GetCMSPageByIdForFront((int)HSBM.Common.Enums.CMSPages.FAQs))).Name)</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/page/@HSBM.Common.Enums.CMSPages.PrivacyPolicy" class="nav-link" id="PrivacyPolicy">@(((HSBM.EntityModel.CMSPageMaster.CMSPageMaster)(HSBM.Web.Models.LayoutModels.GetCMSPageByIdForFront((int)HSBM.Common.Enums.CMSPages.PrivacyPolicy))).Name)</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/page/@HSBM.Common.Enums.CMSPages.TermsAndConditions" class="nav-link" id="TermsAndConditions">@(((HSBM.EntityModel.CMSPageMaster.CMSPageMaster)(HSBM.Web.Models.LayoutModels.GetCMSPageByIdForFront((int)HSBM.Common.Enums.CMSPages.TermsAndConditions))).Name)</a>
+                </li>
+            </ul>
+
+            <div class="header-right">
+                <div class="currency">
+                    
+                    <div class="dropdown" ng-controller="CurrencyController">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-bind="SelectedCurrency"></button>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+
+                            <a ng-repeat="cl in CurrencyList" ng-click="updateCurrency(cl)" class=" dropdown-item {{SelectedCurrency == cl.code?'active':''}}" href="JavaScript:;" ng-bind="cl.code+' - '+cl.name"></a>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="user-dd">
+                    <div class="dropdown">
+                        @if (SessionProxy.CustomerDetails != null && SessionProxy.CustomerDetails.Email != null && SessionProxy.CustomerDetails.Password != null && SessionProxy.CustomerDetails.UserType == (int)UserTypes.Customer)
+                        {
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@SessionProxy.CustomerDetails.FirstName @SessionProxy.CustomerDetails.LastName</button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="@Url.Action("Profile", "Customer")">My Account</a>
+                                <a class="dropdown-item" href="@Url.Action("ChangePassword", "Customer")">Change Password</a>
+                                <a class="dropdown-item" href="@Url.Action("Index", "Orders")">Order History</a>
+                                <a class="dropdown-item" href="@Url.Action("LogOut", "Customer")">Logout</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <a href="#" data-toggle="modal" data-target="#loginModal">Login</a>
+                            @*<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="@Url.Action("Login", "Customer")">Login</a>
+                                    <a class="dropdown-item" href="@Url.Action("CustomerRegister", "Customer")">Register</a>
+                                </div>*@
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="center-main-box">
+        @RenderBody()
+
+        <div id="SignupModal" class="modal fade" role="dialog">
+            @Html.Action("PartialSignup", "Customer")
+        </div>
+        <div id="loginModal" class="modal fade" role="dialog">
+            @Html.Action("PartialLogin", "Customer")
+        </div>
+        <div id="ForgotPassword" class="modal fade" role="dialog">
+            @Html.Action("PartialForgotPassword", "Customer")
+        </div>
+    </div>
+    <footer>
+        <div class="footer-top">
+            <div class="row">
+                <div class="col-sm ftr-logo"><img src="~/Content/NewTheme/images/logo.svg" alt="Farmstays"></div>
+                <div class="col-sm">
+                    <h3>Address</h3>
+                    <p>
+                        Himalayan Farmstay, Old Road, Sheynam, <br>
+                        Leh Ladakh, Jammu and Kashmir 194101
+                    </p>
+                </div>
+                <div class="col-sm" ng-controller="CommonController">
+                    <h3>Newsletter</h3>
+                    @*<div class="footer-nws" ng-controller="CommonController">
+                            <input type="text" class="form-control" placeholder="Email address">
+                            <input type="submit" value="Send" class="btn">
+                        </div>*@
+                    <div class="footer-nws">
+                        <form name="subForm" class="ng-pristine ng-valid ng-submitted" novalidate>
+                            @*<input placeholder="Email address" ng-model="SubscribeEmail" class="form-control" validate-email name="SubscribeEmail" type="email"
+                                ng-class="{ 'has-error' : subForm.SubscribeEmail.$error.email && !subForm.SubscribeEmail.$pristine}" />*@
+                            <input ng-model="SubscribeEmail" class="form-control" ng-pattern="/^[^\s]+[^\s]+\.[^\s]{2,}$/" placeholder="Email address" name="SubscribeEmail" required ng-blur="IsError=true" ng-keydown="IsError=false" />
+
+                            <span style="color:Red" ng-show="subForm.SubscribeEmail.$dirty && subForm.SubscribeEmail.$error.pattern  && IsError">Please Enter Valid Email</span>
+                            <label ng-bind="SubscribeMessage"></label>
+                            <button  ng-click="  (subForm.$invalid ? IsError=true: SendSubscribeRequest())" class="form-control">Subscribe</button>
+
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <h3>Follow Us</h3>
+                    <div class="ftr-socials">
+                        <a target="_blank" href="@(((HSBM.EntityModel.SiteSettings.SiteSettings)(HSBM.Web.Models.LayoutModels.GetSiteSettingById((int)HSBM.Common.Enums.SiteSettingEnum.FacebookURL))).Value)"><img src="~/Content/NewTheme/images/facebook-ic.png" alt=""></a>
+                        <a target="_blank" href="@(((HSBM.EntityModel.SiteSettings.SiteSettings)(HSBM.Web.Models.LayoutModels.GetSiteSettingById((int)HSBM.Common.Enums.SiteSettingEnum.YoutubeURL))).Value)"><img src="~/Content/NewTheme/images/youtube-ic.png" alt=""></a>
+                        <a target="_blank" href="@(((HSBM.EntityModel.SiteSettings.SiteSettings)(HSBM.Web.Models.LayoutModels.GetSiteSettingById((int)HSBM.Common.Enums.SiteSettingEnum.TwitterURL))).Value) "><img src="~/Content/NewTheme/images/twitter-ic.png" alt=""></a>
+                        @*<a target="_blank" href="@(((HSBM.EntityModel.SiteSettings.SiteSettings)(HSBM.Web.Models.LayoutModels.GetSiteSettingById((int)HSBM.Common.Enums.SiteSettingEnum.GooglePlus))).Value) "><img src="~/Content/NewTheme/images/google-plus-ic.png" alt=""></a>*@
+                        <a target="_blank" href="@(((HSBM.EntityModel.SiteSettings.SiteSettings)(HSBM.Web.Models.LayoutModels.GetSiteSettingById((int)HSBM.Common.Enums.SiteSettingEnum.PinterestURL))).Value) "><img src="~/Content/NewTheme/images/pintrest-ic.png" alt=""></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="footer-bottom">
+                    <div class="col-sm ftr-links">
+                        <a href="/">Home</a>
+                        <a href="@Url.Action("Index", "Farmstays")">Farmstays</a>
+                        <a href="@Url.Action("Index", "Packages")">Packages</a>
+                        <a href="@Url.Action("Index", "Blogs")">Blogs</a>
+                        <a href="/page/@HSBM.Common.Enums.CMSPages.AboutUs">@(((HSBM.EntityModel.CMSPageMaster.CMSPageMaster)(HSBM.Web.Models.LayoutModels.GetCMSPageByIdForFront((int)HSBM.Common.Enums.CMSPages.AboutUs))).Name)</a>
+                        <a href="/page/@HSBM.Common.Enums.CMSPages.FAQs">@(((HSBM.EntityModel.CMSPageMaster.CMSPageMaster)(HSBM.Web.Models.LayoutModels.GetCMSPageByIdForFront((int)HSBM.Common.Enums.CMSPages.FAQs))).Name)</a>
+                        <a href="/page/@HSBM.Common.Enums.CMSPages.PrivacyPolicy">@(((HSBM.EntityModel.CMSPageMaster.CMSPageMaster)(HSBM.Web.Models.LayoutModels.GetCMSPageByIdForFront((int)HSBM.Common.Enums.CMSPages.PrivacyPolicy))).Name)</a>
+                        <a href="/page/@HSBM.Common.Enums.CMSPages.TermsAndConditions">@(((HSBM.EntityModel.CMSPageMaster.CMSPageMaster)(HSBM.Web.Models.LayoutModels.GetCMSPageByIdForFront((int)HSBM.Common.Enums.CMSPages.TermsAndConditions))).Name)</a>
+                    </div>
+                    <div id="share-buttons" class="pull-right">
+                        @*http://www.sharelinkgenerator.com/*@
+                        <!-- Facebook -->
+                        <a href="http://www.facebook.com/sharer.php?u=@HttpUtility.UrlEncode(Request.Url.AbsoluteUri)" target="_blank">
+                            <img src="~/Content/NewTheme/Images/Socialicon/facebook.png" alt="Facebook" />
+                        </a>
+                        <!-- Google+ -->
+                        <a href="https://plus.google.com/share?url=@HttpUtility.UrlEncode(Request.Url.AbsoluteUri)" target="_blank">
+                            <img src="~/Content/NewTheme/Images/Socialicon/google.png" alt="Google" />
+                        </a>
+                        <!-- LinkedIn -->
+                        <a href="https://www.linkedin.com/shareArticle?mini=true&url=@HttpUtility.UrlEncode(Request.Url.AbsoluteUri)&title=Himalayan%20Farmstay&summary=&source=" target="_blank">
+                            <img src="~/Content/NewTheme/Images/Socialicon/linkedin.png" alt="LinkedIn" />
+                        </a>
+                        <!-- Twitter -->
+                        <a href="https://twitter.com/home?status=@HttpUtility.UrlEncode(Request.Url.AbsoluteUri)" target="_blank">
+                            <img src="~/Content/NewTheme/Images/Socialicon/twitter.png" alt="Twitter" />
+                        </a>
+                        <!-- Email -->
+                        <a href="mailto:?&subject=Himalayan Farmstay&body=@HttpUtility.UrlEncode("Hi,I%20found%20this%20website%20and%20thought%20you%20might%20like%20it%20"+ Request.Url.AbsoluteUri)">
+                            <img src="~/Content/NewTheme/Images/Socialicon/email.png" alt="Twitter" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="copyright-text">
+                    <div class="ftr-copyright">Copyright © @System.DateTime.Now.Year <span><a href="/">Himalayan Farmstays</a></span>. All Rights Reserved.</div>
+                </div>
+            </div>
+        </div>
+        <div class="top-to-botm-arrow" id="top-to-botm-arrow" ></div>
+    </footer>
+    
+    <div class="WaitScreen">
+    </div>
+    <script type="text/javascript">
+
+        $body = $("body");
+
+        $(document).on({
+            ajaxStart: function () { $body.addClass("loading"); },
+            ajaxStop: function () { $body.removeClass("loading"); }
+        });
+
+        $(document).ready(function () {
+            //  $('#top-to-botm-arrow').fadeOut();
+            // Back top on the page
+            $(window).scroll(function () {
+                var winH = $(window).height();
+                if ($(this).scrollTop() > winH) {
+                    $('#top-to-botm-arrow').fadeIn();
+                } else {
+                    $('#top-to-botm-arrow').fadeOut();
+                }
+            });
+            $('#top-to-botm-arrow').click(function () {
+                $('#top-to-botm-arrow').tooltip('hide');
+                $('body,html').animate({
+                    scrollTop: 0
+                }, 800);
+                return false;
+            });
+            $('#top-to-botm-arrow').tooltip('show');
+        });
+
+    </script>
+
+    <script>
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= 300) {
+                $('.overview-slider-teb').addClass('fixed-header');
+            }
+            else {
+                $('.overview-slider-teb').removeClass('fixed-header');
+            }
+        });
+    </script>
+
+
+
+   
+
+
+</body>
+</html>

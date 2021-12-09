@@ -1,0 +1,347 @@
+﻿@model HSBM.EntityModel.SystemUsers.SystemUsers
+
+@*<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBLxdK0Jtez3dx2Myo-78HcEsX0BuOeoms"></script>*@
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://apis.google.com/js/api:client.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#CountryMasterID").change(function () {
+            $.post('/Customer/GetRegionList', { Id: $('#CountryMasterID').val() }, function (data) {
+                var options = $("#RegionMasterID");
+                options.find('option').remove();
+
+                $("#CityMasterID").find('option').remove();
+                $("#CityMasterID").append($("<option />").val('0').text('Select'));
+
+                $.each(data, function () {
+                    options.append($("<option />").val(this.Value).text(this.Text));
+                });
+            })
+        });
+
+        $("#RegionMasterID").change(function () {
+            $.post('/Customer/GetCityList', { Id: $('#RegionMasterID').val() }, function (data) {
+                var options = $("#CityMasterID");
+                options.find('option').remove();
+                $.each(data, function () {
+                    options.append($("<option />").val(this.Value).text(this.Text));
+                });
+            })
+        });
+
+    });
+</script>
+<!-- Signup Modal -->
+    <div id="mdlSignup" class="modal-dialog">
+        <div class="center-box">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" onclick="javascript:window.location.reload()"><img src="~/Images/modal-close.png" alt="" /></button>
+                    <h4 class="modal-title">We are <span>Himalayan Farmstays</span></h4>
+                    <p>Please Signup to your Account to book Farmstays <br> Already A Member?<a href="#" onclick="javascript: return ShowLoginPopup();">Sign In</a></p>
+                </div>
+                <div class="modal-body">
+                    @*@using (Html.BeginForm("CustomerRegister", "Customer", FormMethod.Post))
+                    {*@
+                    <form id="frmSignUpPopup">
+                        @Html.AntiForgeryToken()
+                        <label>@ViewBag.AlreadyExist</label>
+                        <div id="dvSignUpErrorMsg" class="error-message">@ViewBag.AlreadyExist</div>
+                        <div id="dvSignUpSuccessMsg" class="success-message text-center"></div>
+                        <div class="social-link-box">
+                            <div id="FBloginBtn_Signup" class="fb-btn">
+                                <a class="fb-button social-button social-regi register-fb" href="JavaScript:;"><span>Sign up with Facebook</span></a>
+                            </div>
+                            <div id="customBtn_Signup" class="google-btn">
+                                <a class="gplus-button social-button social-regi register-gl" href="JavaScript:;"><span>Sign up with Google</span></a>
+                            </div>
+                        </div>
+                        <div class="divider-or">
+                            <span>OR</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", placeholder = "First Name" })
+                                    @Html.ValidationMessageFor(model => model.FirstName)
+                                    @*<input type="text" class="form-control" placeholder="First Name" />*@
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @*<input type="text" class="form-control" placeholder="Last Name" />*@
+                                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", placeholder = "Last Name" })
+                                    @Html.ValidationMessageFor(model => model.LastName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Email" })
+                            @Html.ValidationMessageFor(model => model.Email)
+                            @*<input type="email" class="form-control" placeholder="Email" />*@
+                        </div>
+                        <div class="form-group">
+                            @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Password" })
+                            @Html.ValidationMessageFor(model => model.Password)
+                            @*<input type="password" class="form-control" placeholder="Pasword" />*@
+                        </div>
+                        <div class="form-group">
+                            @*<input type="number" class="form-control" placeholder="Mobile" />*@
+                            @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", placeholder = "Mobile" })
+                            @Html.ValidationMessageFor(model => model.Mobile)
+                        </div>
+
+                        @*<button class="btn btn-primary btn-lg btn-block">Signup</button>*@
+                        <input type="submit" value="Signup" class="btn btn-primary btn-lg" onclick="javascript: return validateSignupPopup();" />
+                        @*@Html.ActionLink("Cancel", "Login", null, new { @class = "btn btn-default btn-lg" })*@
+                        <input type="button" value="Cancel" class="btn btn-default btn-lg" data-dismiss="modal" />
+                    @*}*@
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Signup Modal End -->
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+<script>
+    var _email, _password, _rememberMe, _firstName, _lastName, _gender;
+
+    function validateSignupPopup(IsSocial) {
+        var isValid = true;
+        isValid = $("#frmSignUpPopup").valid();
+        if (isValid || IsSocial) {
+            var _data;
+            if (IsSocial)
+                _data = { FirstName: _firstName, LastName: _lastName, Email: _email, Password: _password, Mobile: null, IsSocialMedia: true };
+            else
+                _data = { FirstName: $("#mdlSignup #FirstName").val(), LastName: $("#mdlSignup #LastName").val(), Email: $("#mdlSignup #Email").val(), Password: $("#mdlSignup #Password").val(), Mobile: $("#mdlSignup #Mobile").val() };
+
+            $.ajax({
+                url: '/Customer/JsonSaveSignUp',
+                type: 'GET',
+                cache: false,
+                datatype: "json",
+                data: _data,
+                success: function (data) {
+                    if (data.Success) {
+                        alert(JSON.stringify(data))
+                        $('#SignupModal').modal('hide');
+                        $("#mdlSignup #Email").val();
+                        if (IsSocial)
+                            window.location = "/Customer/ThankYou?UserId=" + data.Data;
+                        else
+                            window.location = "/Customer/ThankYou";
+                    }
+                    else {
+
+                        $("#dvSignUpSuccessMsg").html('');
+                        $("#dvSignUpSuccessMsg").hide();
+                        $("#dvSignUpErrorMsg").html(data.Message);
+                        $("#dvSignUpErrorMsg").show();
+                        return false;
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                    $("#dvSignUpSuccessMsg").html('');
+                    $("#dvSignUpSuccessMsg").hide();
+                    $("#dvSignUpErrorMsg").html(data.Message);
+                    $("#dvSignUpErrorMsg").show();
+                    return false;
+                }
+            });
+        }
+        else {
+            return false;
+        }
+    }
+    function validateLoginPopup(IsSocial) {
+        var isValid = true;
+        isValid = $("#frmLogin").valid();
+        if (isValid) {
+            var _data;
+            if (IsSocial)
+                _data = { email: $("#mdllogin #UserName").val(), password: $("#mdllogin #Password").val(), rememberMe: $("#mdllogin #RememberMe").is(":checked") };
+            else
+                _data = { email: $("#mdllogin #UserName").val(), password: $("#mdllogin #Password").val(), rememberMe: $("#mdllogin #RememberMe").is(":checked") };
+
+            $.ajax({
+                url: '/Customer/JsonPartialLogin',
+                type: 'GET',
+                cache: false,
+                datatype: "json",
+                data: _data,
+                //data: { email: $("#UserName").val(), password: $("#Password").val() },
+                success: function (data) {
+
+                    if (data.Success) {
+                        $("#dvLoginErrorMsg").html("");
+                        $("#dvLoginErrorMsg").hide();
+                        $('#loginModal').modal('hide');
+
+                        //window.location.reload();
+                        //if (window.location.pathname == '/Blogs/Detail') {
+                        //    alert("1");
+                        //    //$("#btncommit").trigger('click');
+                        //}
+                        //else {
+                        //    window.location.reload();
+                        //}
+                        $.ajax({
+                            url: '/Blogs/AddBlogComment',
+                            type: 'POST',
+                            cache: false,
+                            data: { BlogId: $("#hdnBlogId").val(), Comment: $("#txtComment").val() },
+                            success: function (data) {
+
+                                if (data.Data == null) {
+                                    window.location.reload();
+                                }
+                                else {
+                                    return false;
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                return false;
+                            }
+                        });
+
+
+                    }
+                    else {
+
+                        $("#dvLoginErrorMsg").html(data.Message);
+                        $("#dvLoginErrorMsg").show();
+                        return false;
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    return false;
+                }
+            });
+
+        }
+        else {
+            return false;
+        }
+    }
+    function ShowSignupPopup() {
+        $('#loginModal').modal('hide');
+        $(document.body).addClass('modal-open');
+        setTimeout(function () {
+            $('#SignupModal').modal('show');
+        }, 400);
+    }
+
+    function ShowLoginPopup() {
+        $('#SignupModal').modal('hide');
+        $(document.body).addClass('modal-open');
+        setTimeout(function () {
+            $('#loginModal').modal('show');
+        }, 400);
+    }
+
+    //Social Media
+    function statusChangeCallback(response) {
+        if (response.status === 'connected') {
+            GetUserDetailFromFB();
+        }
+    }
+
+    function checkLoginState() {
+        FB.getLoginStatus(function (response) {
+            statusChangeCallback(response);
+        });
+    }
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=2027977923936866";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function GetUserDetailFromFB() {
+        FB.api('/me', { fields: 'last_name,first_name,email,gender' }, function (response) {
+            console.log(response);
+            _email = response.email;
+            _password = response.id;
+            _firstName = response.first_name;
+            _lastName = response.last_name;
+            _gender = response.gender;
+            validateSignupPopup(true);
+        });
+    }
+
+    document.getElementById('FBloginBtn_Signup').addEventListener('click', function () {
+        FB.login(function (response) {
+            if (response.authResponse) {
+                // ShowLoadingPanel();
+                checkLoginState();
+            }
+            else {
+                // HideLoadingPanel();
+            }
+        }, { scope: 'email,public_profile', return_scopes: true });
+    }, false);
+
+    function onSuccess(googleUser) {
+
+        var profile = googleUser.getBasicProfile();
+        _email = profile.U3;
+        _password = profile.Eea;
+        _firstName = profile.ofa;
+        _lastName = profile.wea;
+        validateSignupPopup(true);
+    }
+    var startApp = function () {
+        gapi.load('auth2', function () {
+            // Retrieve the singleton for the GoogleAuth library and set up the client.
+            auth2 = gapi.auth2.init({
+                client_id: '179380182113-ip8vcqoscaru6l35so614e7e0rkf5o8d.apps.googleusercontent.com',
+                cookiepolicy: 'single_host_origin',
+                // Request scopes in addition to 'profile' and 'email'
+                //scope: 'additional_scope'
+            });
+            attachSignin(document.getElementById('customBtn_Signup'));
+        });
+    };
+
+    var startAppSignIn = function () {
+        gapi.load('auth2', function () {
+            // Retrieve the singleton for the GoogleAuth library and set up the client.
+            auth2 = gapi.auth2.init({
+                client_id: '179380182113-ip8vcqoscaru6l35so614e7e0rkf5o8d.apps.googleusercontent.com',
+                cookiepolicy: 'single_host_origin',
+                // Request scopes in addition to 'profile' and 'email'
+                //scope: 'additional_scope'
+            });
+            attachSignin(document.getElementById('customBtn'));
+        });
+    };
+
+    function attachSignin(element) {
+        auth2.attachClickHandler(element, {},
+            function (googleUser) {
+                // ShowLoadingPanel()
+                onSuccess(googleUser)
+            }, function (error) {
+                alert("Error in login please try again.");
+            });
+    }
+
+    startApp();
+    startAppSignIn();
+
+    //End Social Media
+</script>
+
+
+

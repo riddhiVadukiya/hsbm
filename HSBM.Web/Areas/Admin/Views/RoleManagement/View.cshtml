@@ -1,0 +1,73 @@
+﻿@model HSBM.EntityModel.RoleMaster.RoleMaster
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>View</h2>
+
+<div>
+    <h4>RoleMaster</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RoleName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RoleName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Isdefault)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Isdefault)
+        </dd>
+
+    </dl>
+
+    <table class="table">
+        <tr>
+            <th>#</th>
+            <th>Module Name</th>
+            <th>CanAdd</th>
+            <th>CanUpdate</th>
+            <th>CanDelete</th>
+            <th>CanView</th>
+        </tr>
+
+        @if (Model != null && Model.RoleMasterDetails != null)
+        {
+            for (int i = 0; i < Model.RoleMasterDetails.Count; i++)
+            {
+                <tr>
+                    <td>@Html.Label((i + 1).ToString())</td>
+                    <td>
+                        @Html.Label(Model.RoleMasterDetails[i].RoleModule.ModuleName)
+                    </td>
+                    <td> @Html.Label(Model.RoleMasterDetails[i].CanAdd.ToString())</td>
+                    <td> @Html.Label(Model.RoleMasterDetails[i].CanUpdate.ToString())</td>
+                    <td> @Html.Label(Model.RoleMasterDetails[i].CanDelete.ToString())</td>
+                    <td> @Html.Label(Model.RoleMasterDetails[i].CanView.ToString())</td>
+                </tr>
+            }
+        }
+
+    </table>
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" }) |
+    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+</p>

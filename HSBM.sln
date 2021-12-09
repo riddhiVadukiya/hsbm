@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSBM.EntityModel", "HSBM.EntityModel\HSBM.EntityModel.csproj", "{03A04524-8D33-40CB-87CD-D34BE42BDF7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSBM.Repository", "HSBM.Repository\HSBM.Repository.csproj", "{1A2CF5A3-076A-46BC-8EE6-764A05C82807}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSBM.Service", "HSBM.Service\HSBM.Service.csproj", "{AB5BA621-5B45-4602-AE67-2D9A217800CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSBM.Common", "HSBM.Common\HSBM.Common.csproj", "{3ABEC989-8D0B-4843-8461-0E1059C802DF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1614FA6C-EA39-4CD5-9A7E-33211ACF17AD}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSBM.Web", "HSBM.Web\HSBM.Web.csproj", "{D5CBA671-3727-4D07-BEF9-3D8643DEA26A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSBM.WindowsService", "HSBM.WindowsService\HSBM.WindowsService.csproj", "{2BA57568-907F-4E1F-8801-46A253E6C23A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03A04524-8D33-40CB-87CD-D34BE42BDF7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03A04524-8D33-40CB-87CD-D34BE42BDF7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03A04524-8D33-40CB-87CD-D34BE42BDF7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03A04524-8D33-40CB-87CD-D34BE42BDF7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A2CF5A3-076A-46BC-8EE6-764A05C82807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A2CF5A3-076A-46BC-8EE6-764A05C82807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A2CF5A3-076A-46BC-8EE6-764A05C82807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A2CF5A3-076A-46BC-8EE6-764A05C82807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB5BA621-5B45-4602-AE67-2D9A217800CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB5BA621-5B45-4602-AE67-2D9A217800CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB5BA621-5B45-4602-AE67-2D9A217800CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB5BA621-5B45-4602-AE67-2D9A217800CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ABEC989-8D0B-4843-8461-0E1059C802DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ABEC989-8D0B-4843-8461-0E1059C802DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ABEC989-8D0B-4843-8461-0E1059C802DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ABEC989-8D0B-4843-8461-0E1059C802DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5CBA671-3727-4D07-BEF9-3D8643DEA26A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5CBA671-3727-4D07-BEF9-3D8643DEA26A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5CBA671-3727-4D07-BEF9-3D8643DEA26A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5CBA671-3727-4D07-BEF9-3D8643DEA26A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BA57568-907F-4E1F-8801-46A253E6C23A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BA57568-907F-4E1F-8801-46A253E6C23A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BA57568-907F-4E1F-8801-46A253E6C23A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BA57568-907F-4E1F-8801-46A253E6C23A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

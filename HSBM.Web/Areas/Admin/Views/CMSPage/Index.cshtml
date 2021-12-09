@@ -1,0 +1,84 @@
+﻿@model IEnumerable<HSBM.EntityModel.CMSPageMaster.CMSPageMaster>
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-wrapper">
+    <h3>Site Pages</h3>
+
+    <div ng-controller="CMSPageMasterController" class="inner-content">
+        <script>
+
+            function BindCMSPageMasterGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+                var Columns = [
+                            { data: 'Id', bVisible: false },
+                            { data: 'Name' },
+                            { data: 'Title' },
+                            //{
+                            //    bSortable: false,
+                            //    sClass: "action-cell",
+                            //    mRender: function (data, type, row, full) {
+                            //        if (!row.IsActive) {
+                            //            return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>ACTIVE</button></div>";
+                            //        }
+                            //        else {
+                            //            return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>ACTIVE</button></div>";
+                            //        }
+                            //    }
+                            //},
+                            {
+                                @if (SessionProxy.CheckModuleAccess(Module.CMSPages, ModuleAccess.CanUpdate))
+                                {
+                                @: bVisible: true,
+                                }
+                                else
+                                {
+                                @: bVisible: false,
+                                }
+                                bSortable: false,
+                                sClass: "action-cell",
+                                mRender: function (data, type, row, full) {
+
+                                    var btn = '';
+
+                                    @if (SessionProxy.CheckModuleAccess(Module.CMSPages, ModuleAccess.CanUpdate))
+                                    {
+                                        @: btn = "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/CMSPage/UpdateCMSPage/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-pencil'> </a>";
+                                    }
+
+                                    return btn;
+                                    // | <a onclick=\"angular.element(this).scope().Delete('/Admin/CMSPage/DeleteCMSPage/" + row.Id + "')\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>
+                                }
+                            }
+                ];
+                BindSearchGridData('CMSPageMaster', Columns, '/Admin/CMSPage/GetAllCMSPageMasterBySearchRequest', $('[ng-controller="CMSPageMasterController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+            }
+
+        </script>
+        @*@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+            {
+                @Html.AntiForgeryToken()
+            }*@
+
+        @*<p>
+                @Html.ActionLink("Add CMS Page", "AddCMSPage", null, new { @class = "btn btn-primary pull-right" })
+            </p>*@
+
+        <table id="CMSPageMaster" class="table table-bordered table-striped table-responsive row-border hover bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Page Name</th>
+                    <th>Page Title</th>
+                    @*<th>Status</th>*@
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="CMSPageMaster_NoRecordFound" class="empty-grid">No records found</div>
+    </div>
+</div>

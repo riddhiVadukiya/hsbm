@@ -1,0 +1,174 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Discounts";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script>
+    angular.module('app').controller('DiscountMasterController', ['$scope', '$compile', function ($scope, $compile) {
+        var TableName = "DiscountMaster";
+        $scope.Search = {};
+        function BindDiscountMasterGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+            var Columns = [
+                        { data: 'Id', bVisible: false },
+                        { data: 'Name' },
+                        { data: 'StartDate' },
+                        { data: 'EndDate' },
+                        {
+                            bSortable: false,
+                            mRender: function (data, type, row, full) {
+
+                                if (row.IsPercentage) {
+                                    return row.DiscountValue + ' %';
+                                }
+                                else {
+                                    return '₹ ' + row.DiscountValue;
+                                }
+                            }
+                        },
+                        {
+                            @if (SessionProxy.CheckModuleAccess(Module.Discounts, ModuleAccess.CanUpdate) ||
+                             SessionProxy.CheckModuleAccess(Module.Discounts, ModuleAccess.CanDelete))
+                            {
+                            @: bVisible: true,
+                                                                                    }
+                            else
+                            {
+                            @: bVisible: false,
+                                                                                    }
+                            bSortable: false,
+                            sClass: "action-cell",
+                            mRender: function (data, type, row, full) {
+                                var btn = "";
+                                @if (SessionProxy.CheckModuleAccess(Module.Discounts, ModuleAccess.CanUpdate))
+                                {
+                                    @: btn += "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/Discount/UpdateDiscount/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-pencil'> </a> &nbsp;"
+                                                                                                                                }
+                                @if (SessionProxy.CheckModuleAccess(Module.Discounts, ModuleAccess.CanDelete))
+                                {
+                                    @: btn += "<a onclick=\"angular.element(this).scope().DeleteDiscount('" + full.row + "')\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>"
+                                                                                                                                }
+                                return btn;
+                            }
+                        }
+            ];
+            BindSearchGridData('DiscountMaster', Columns, '/Admin/Discount/GetAllDiscountBySearchRequest', $scope.Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+        }
+        $scope.Search = {}
+
+        $scope.SearchData = function () {
+            BindDiscountMasterGrid();
+        };
+        $scope.ResetData = function () {
+            $scope.Search = {};
+            BindDiscountMasterGrid();
+        };
+        var localdata = GettLocalStorageData(TableName);
+        if (localdata != null) {
+            BindDiscountMasterGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+        } else {
+            BindDiscountMasterGrid();
+        }
+
+        $scope.SetLocalStorage = function (url) {
+            SetLocalStorageData({}, TableName);
+            window.location = url;
+        }
+
+        $scope.DeleteDiscount = function (index) {
+
+
+            var msg = 'Are you sure you want to delete the Discount?';
+
+
+            $.confirm({
+                title: "Please confirm",
+                content: msg,
+
+                buttons: {
+                    confirm: function () {
+
+                        var TableObj = angular.copy($("#DiscountMaster").dataTable()._fnGetDataMaster()[parseInt(index)]);
+                        var form = $('#__AjaxAntiForgeryForm');
+                        var token = $('input[name="__RequestVerificationToken"]', form).val();
+                        $.ajax({
+                            url: '/Admin/Discount/DeleteDiscount/',
+                            type: 'POST',
+                            data: {
+                                '__RequestVerificationToken': token,
+                                id: TableObj.Id
+                            },
+                            success: function (result) {
+
+                                SaveOnArchive({}, TableName, false, false);
+                                var localdata = GettLocalStorageData(TableName);
+                                BindDiscountMasterGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+
+                                toastr["success"]("Discount has been deleted successfully.", "Success")
+                            },
+                            error: function (ex) {
+
+                                toastr["error"]("Somthing went wrong!", "Error")
+                            }
+                        });
+
+                    },
+                    cancel: function () {
+                        return;
+                    }
+                }
+            });
+        }
+
+    }]);
+</script>
+
+<div class="main-wrapper">
+    <h3>Discounts</h3>
+    <div ng-controller="DiscountMasterController" class="inner-content filter-button-set">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Discount Name</label>
+                    <input type="text" ng-model="Search.Name" class="form-control" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="Search.IsPreviousDiscounts" name="cc" ng-model="Search.IsPreviousDiscounts" />
+                    <label for="Search.IsPreviousDiscounts"><span></span>Include Previous Discounts</label>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="buttongroup">
+                    <input type="button" ng-click="SearchData()" value="Search" class="btn green-btn" />
+                    <input type="button" ng-click="ResetData()" value="Reset" class="btn black-btn" />
+                </div>
+            </div>
+        </div>
+        <div class="ln_solid"></div>
+        @if (SessionProxy.CheckModuleAccess(Module.Discounts, ModuleAccess.CanAdd))
+        {
+            <div class="buttongroup pos-rel">
+                @Html.ActionLink("Add Discount", "AddDiscount", null, new { @class = "btn green-btn" })
+            </div>
+        }
+        <div class="grid-btn-set">
+            <table id="DiscountMaster" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Discount Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Discount Value</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="DiscountMaster_NoRecordFound" class="empty-grid">No records found</div>
+        </div>
+        </div>
+</div>

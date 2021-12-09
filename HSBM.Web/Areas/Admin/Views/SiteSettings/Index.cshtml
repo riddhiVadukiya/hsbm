@@ -1,0 +1,119 @@
+﻿@model IEnumerable<HSBM.EntityModel.SiteSettings.SiteSettings>
+@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+    @{
+        ViewBag.Title = "Index";
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+
+<div class="main-wrapper">
+    <h3>Manage Settings</h3>
+
+    <div ng-controller="SiteSettingController" class="inner-content">
+        <script>
+            function BindSiteSettingGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+                var Columns = [
+                            { data: 'Id', bVisible: false },
+                            { data: 'Name' },
+                            { data: 'Value' },
+                            //{
+                            //    bSortable: false,
+                            //    sClass: "action-cell",
+                            //    mRender: function (data, type, row, full) {
+                            //        if (!row.IsActive) {
+                            //            return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>ACTIVE</button></div>";
+                            //        }
+                            //        else {
+                            //            return "<div class='btn-group' id='toggle_event_editing_" + full.row + "'><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-default unlocked_inactive'>INACTIVE</button><button type='button' onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" class='btn btn-info locked_active'>ACTIVE</button></div>";
+                            //        }
+                            //    }
+                            //},
+                            {
+                                @if (SessionProxy.CheckModuleAccess(Module.SiteSettings, ModuleAccess.CanUpdate))                                        
+                                {
+                                @: bVisible: true,
+                                }
+                                else
+                                {
+                                @: bVisible: false,
+                                }
+                                bSortable: false,
+                                sClass: "action-cell",
+                                mRender: function (data, type, row, full) {
+
+                                    var btn = '';
+
+                                    @if (SessionProxy.CheckModuleAccess(Module.SiteSettings, ModuleAccess.CanUpdate))
+                                    {
+                                     @: btn = "<a onclick=\"angular.element(this).scope().SetLocalStorage('/Admin/SiteSettings/UpdateSiteSetting/" + row.Id + "')\" href='javascript:void(0);' title='Edit' class='glyphicon glyphicon-pencil'> </a>";
+                                    }
+                                    
+                                    return btn;
+                                    //| <a onclick=\"angular.element(this).scope().ActiveAndInactive('" + full.row + "')\" href='javascript:void(0);' title='Delete' class='glyphicon glyphicon-trash'></a>";
+                                }
+                            }
+                ];
+                BindSearchGridData('SiteSetting', Columns, '/Admin/SiteSettings/GetAllSiteSettingBySearchRequest', $('[ng-controller="SiteSettingController"]').scope().Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+            }
+        </script>
+        @*@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+            {
+                @Html.AntiForgeryToken()
+            }*@
+
+        @*<p>
+                @Html.ActionLink("Add Site Setting", "AddSiteSetting", null, new { @class = "btn btn-primary pull-right" })
+            </p>*@
+
+        <table id="SiteSetting" class="table table-bordered table-striped table-responsive row-border hover bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Setting Name</th>
+                    <th>Setting Value</th>
+                    @*<th>Status</th>*@
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="SiteSetting_NoRecordFound" class="empty-grid">No records found</div>
+    </div>
+    </div>
+    @*<p>
+            @Html.ActionLink("Create New", "AddSiteSetting")
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Value)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsActive)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "UpdateSiteSetting", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "DeleteSiteSetting", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+
+        </table>*@

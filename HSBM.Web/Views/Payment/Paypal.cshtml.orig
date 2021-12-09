@@ -1,0 +1,38 @@
+﻿@model NBA.EntityModel.PaymentGetWay.PaypalPaymentRequest
+
+@{
+    ViewBag.Title = "Paypal";
+    Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml";
+}
+
+<h2>Paypal</h2>
+
+<form method="post" id="frmPaypal" name="return" action="@Model.FormUrl">
+
+    @*@Html.HiddenFor(t => t.currency_code)
+    @Html.HiddenFor(t => t.business)
+    @Html.HiddenFor(t => t.amount)
+<<<<<<< local
+    @Html.HiddenFor(t => t.return_url, new { name = "return" })
+    @Html.HiddenFor(t => t.item_name)*@
+   
+    <input type="hidden" id="currency_code" value="@Model.currency_code" />
+    <input type="hidden" id="business" value="@Model.business" />
+    <input type="hidden" id="amount" value="@Model.amount" />
+    <input type="hidden" id="returnUrl" name="return" value="@Model.return_url" />
+    <input type="hidden" id="item_name" value="@Model.item_name" />
+    <input type="hidden" id="cmd" value="@Model.cmd" />
+    <input type="hidden" id="item_name" value="@Model.item_name" />
+    <input type="hidden" id="currency_code" value="@Model.currency_code" />
+=======
+    @Html.HiddenFor(t => t.return_url)
+    @Html.HiddenFor(t => t.item_name)
+    @Html.HiddenFor(t => t.cmd)
+>>>>>>> other
+
+    <input id="btnSubmit" type="image" name="submit" style="display: none;" />
+</form>
+
+<script type="text/javascript">
+    document.getElementById("btnSubmit").click()
+</script>

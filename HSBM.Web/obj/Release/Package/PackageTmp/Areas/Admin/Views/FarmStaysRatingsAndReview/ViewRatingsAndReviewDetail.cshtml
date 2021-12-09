@@ -1,0 +1,120 @@
+﻿@model HSBM.EntityModel.FarmStays.FarmStaysRatingsAndReviewResponse
+@{
+    ViewBag.Title = "View Ratings And Review Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@*<script src="~/Areas/Admin/Content/JS/bootstrap.min.js"></script>
+<link href="~/Areas/Admin/Content/CSS/bootstrap.min.css" rel="stylesheet" />*@
+<link href="~/Areas/Admin/Content/CSS/star-rating.css" rel="stylesheet" />
+<script src="~/Areas/Admin/Content/JS/star-rating.js"></script>
+<script>        
+    $(document).ready(function () {
+
+        //$("#frmAddReview").keypress(function (e) {
+        //    if (e.which == 13) {
+        //        $("#frmAddReview").submit();
+        //    }
+        //});        
+        $("#ReviewTitle").val("");
+        $('#rating-input').rating({            
+            value: 0,
+            min: 0,
+            max: 5,
+            step: 1,
+            size: 'sm',
+            showClear: false,
+        });
+    });
+</script>
+
+@Html.AntiForgeryToken()
+
+<div class="main-wrapper">
+    <h3> Ratings & Review Detail</h3>
+    @*<h4>Customer Detail</h4>
+        <hr />*@
+
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="inner-content boldLabel">
+
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FarmStyasName, new { @class = "control-label " })
+                    <br />
+                    <label>@Model.FarmStyasName</label>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ReviewBy, new { @class = "control-label bold" })
+                    <br />
+                    <label>@Model.ReviewBy</label>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ReviewDate, new { @class = "control-label" })
+                    <br />
+                    <label>@Model.strReviewDate</label>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Reviews, new { @class = "control-label" })
+                    <br /><label>@Model.Reviews</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Location, new { @class = "control-label" })
+                    <input id="rating-input" value="@Model.Location" type="number" class="rating" min=0 max=5 step=0.5 data-size="sm" disabled="disabled">
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Cleanliness, new { @class = "control-label" })
+                    <input id="rating-input" value="@Model.Cleanliness" type="number" class="rating" min=0 max=5 step=0.5 data-size="sm" disabled="disabled">
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ValueForMoney, new { @class = "control-label" })
+                    <input id="rating-input" value="@Model.ValueForMoney" type="number" class="rating" min=0 max=5 step=0.5 data-size="sm" disabled="disabled">
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Hospitality, new { @class = "control-label" })
+                    <input id="rating-input" value="@Model.Hospitality" type="number" class="rating" min=0 max=5 step=0.5 data-size="sm" disabled="disabled">
+                </div>
+                @*<div class="form-group">
+                        @Html.LabelFor(m => m.Ratings)
+                        <input id="rating-input" value="@Model.Ratings" type="number" class="rating" min=0 max=5 step=0.5 data-size="sm" disabled="disabled">
+                    </div>*@
+                @*<div class="star-rating">
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            if (Model.Ratings <= i) {
+                            <span class="fa fa-star-o" data-rating="1"></span>
+                            }
+                            else
+                            {
+                                <span class="fa fa-star" data-rating="1"></span>
+                            }
+                        }
+                        <input type="hidden" name="whatever1" class="rating-value" value="0">
+                    </div>*@
+            </div>
+
+        </div>
+
+        <div class="buttongroup">
+            @Html.ActionLink("Back", "Index", null, new { @class = "btn black-btn" })
+        </div>
+
+    </div>
+</div>

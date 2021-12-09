@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+        
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/Content/admincss")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/footer-js")  
+    @Scripts.Render("~/bundles/adminScripts")
+    
+    @if (ViewBag.ToastrMSG != null)
+    {
+        <script>
+            $(document).ready(function () {
+                toastr["@Html.Raw(ViewBag.ToastrMSG.Type)"]("@Html.Raw(ViewBag.ToastrMSG.Message)", "@Html.Raw(ViewBag.ToastrMSG.ErrorTitle)")
+            });
+        </script>
+    }
+
+</head>
+
+<body class="login">
+    <div>
+        <a class="hiddenanchor" id="signup"></a>
+        <a class="hiddenanchor" id="signin"></a>
+        @RenderBody()
+        
+                
+    </div>           
+               
+</body>
+
+</html>

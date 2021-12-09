@@ -1,0 +1,175 @@
+﻿@model object
+@{
+    ViewBag.Title = "HotelCheckOut";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div ng-controller="HotelBookingController">
+    <section class="checkout-section-demo" ng-init="SetHotelBookingInfo(@Newtonsoft.Json.JsonConvert.SerializeObject(Model))">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="checkout-page__top">
+                        <div class="title">
+                            <h1 class="text-uppercase">HOTEL CHECKOUT</h1>
+                        </div>
+                        @*<span class="phone">Support Call: +1-888-8765-1234</span>*@
+                    </div>
+                </div>
+
+                <div class="checkout-page__content col-md-8">
+                    <div class="cart-footer yourcart-content">
+                        <div class="content-title">
+                            <h2><i class="awe-icon awe-icon-user"></i>Occupant Detail</h2>
+                        </div>
+                        <form role="form" class="ng-pristine ng-valid ng-submitted" name="Form.PassengerDetail" novalidate>
+                            <div class="shipping-handling" ng-repeat="room in HotelBookingInfo.Rooms">
+                                <h5 class="roomtitle">ROOM {{$index + 1}}</h5><br />
+                                <div class="shipping-handling" ng-repeat="passenger in room.PassengerDetail">
+                                    <h5 class="title mt10">{{ passenger.Type == 'A' ? 'Adult' : 'Child' }} {{$index == 0 ? '(Lead Customer)' : ''}}</h5>
+                                    <div class="check-shipping-rate">
+
+                                        
+
+                                        <div class="form-row form-postal">
+                                            <h4>Title <span class="font-redBold">*</span></h4>
+                                            @*{{ passenger.Title == '' || passenger.Title == null || passenger.Title == undefined }}*@
+                                            <select id="Title"
+                                                    ng-options="type.Value as type.Key for type in TitleSource"
+                                                    ng-model="passenger.Title"
+                                                    ng-init="passenger.Title =  (passenger.Title == '' || passenger.Title == null || passenger.Title == undefined) ? 'MR' : passenger.Title"
+                                                    class="w100per"
+                                                    required></select>
+                                        </div>
+                                        <div class="form-row form-postal">
+                                            <h4>First Name <span class="font-redBold">*</span></h4>
+                                            <input type="text" name="FirstName" ng-model="passenger.FirstName" required>
+                                        </div>
+                                        <div class="form-row form-postal">
+                                            <h4>Last Name <span class="font-redBold">*</span></h4>
+                                            <input type="text" name="LastName" ng-model="passenger.LastName" required>
+                                        </div>
+                                        
+                                        <div class="form-row form-postal">
+                                            <h4>Contact Number</h4>
+                                            <input type="text" alphanumericcharacters-only ng-model="passenger.ContactNumber">
+                                        </div>
+                                        <div class="form-row form-postal">
+                                            <h4>DOB</h4>
+                                            <input type="text" class="awe-calendar" ng-model="passenger.DOB" readonly="readonly" />
+                                        </div>
+                                        <div class="form-row form-postal">
+                                            <h4>Email</h4>
+                                            <input type="text" validate-email ng-model="passenger.Email">
+                                        </div>
+                                        
+                                        
+                                        @*<div class="form-row form-postal">
+                                            <h4>{{ passenger.AdultChild == 'A' ? 'Gender' : 'Age' }} <span ng-if="passenger.AdultChild == 'C'" style="color:red;font-weight:bold;">*</span></h4>
+                                            <select ng-if="passenger.AdultChild == 'A'" id="Destination"
+                                                    ng-options="type.Value as type.Key for type in PassengerTypeSource"
+                                                    ng-model="passenger.PassengerType"
+                                                    ng-disabled="BookingSuccessResponse.BookingStatus"
+                                                    ng-init="passenger.PassengerType =  (passenger.PassengerType == '' || passenger.PassengerType == null || passenger.PassengerType == undefined) ? 'Male' : passenger.PassengerType"></select>
+
+                                            <select ng-if="passenger.AdultChild == 'C'" id="msdrpdd25" ng-model="passenger.Age"
+                                                    ng-disabled="BookingSuccessResponse.BookingStatus" ng-init="passenger.Age = (passenger.Age == null || passenger.Age == undefined || passenger.Age == 0) ? '' : passenger.Age.toString()" required>
+                                                <option value="">--</option>
+                                                <option value="0">&lt; 1</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+
+                                        </div>*@                                        
+                                    </div>
+                                </div>
+                                
+                            </div>                            
+                            @*<div class="order-total">
+                                <h4 class="title">Order total</h4>
+                                <span class="amount" ng-bind="'$ '+ (HotelBookingInfo.TotalPrice | number)"></span>
+                            </div>*@
+                            <div class="cart-submit taleft ml-7">
+                                <input type="submit" value="Book Hotel" class="checkout" ng-disabled="Form.PassengerDetail.$invalid" ng-click="ConfirmBooking()">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="booking-info col-md-4">
+                    <h4 ng-bind="HotelBookingInfo.HotelInfo.HotelName"></h4>
+                    <div class="hotel-star">
+                        <i class="fa fa-star" ng-repeat="star in range(HotelBookingInfo.HotelInfo.Stars) track by $index"></i>
+                    </div>
+                    <div class="col-md-6 product-address pl0 greyborder">
+                        <span ng-bind="HotelBookingInfo.HotelInfo.AddressLine1" ng-if="HotelBookingInfo.HotelInfo.AddressLine1 != null"></span>
+                        <span ng-bind="HotelBookingInfo.HotelInfo.AddressLine2" ng-if="HotelBookingInfo.HotelInfo.AddressLine2 != null"></span>
+                        <span ng-bind="HotelBookingInfo.HotelInfo.AddressLine3" ng-if="HotelBookingInfo.HotelInfo.AddressLine3 != null"></span>
+                        <div><span ng-bind="HotelBookingInfo.HotelInfo.City" ng-if="HotelBookingInfo.HotelInfo.City != null"></span></div>
+                    </div>
+                    <div class="col-md-6 product-address">
+                        <div class="product-email" ng-bind="HotelBookingInfo.HotelInfo.Phone" ng-if="HotelBookingInfo.HotelInfo.Phone!=null && HotelBookingInfo.HotelInfo.Phone!=''">
+                            <i class="fa fa-phone"></i>
+                            <a href="javascript:;" ng-bind="HotelBookingInfo.HotelInfo.Phone"></a>
+                        </div>
+
+                        <div class="product-email" ng-bind="HotelBookingInfo.HotelInfo.Fax" ng-if="HotelBookingInfo.HotelInfo.Fax!=null && HotelBookingInfo.HotelInfo.Fax!=''">
+                            <i class="fa fa-fax"></i>
+                            <a href="javascript:;" ng-bind="HotelBookingInfo.HotelInfo.Fax"></a>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr />
+                    <div class="col-md-6 mt5">
+                        <div><b>Room Type</b></div>
+                        <div><span ng-bind="HotelBookingInfo.Rooms[0].RoomType"></span></div>
+                    </div>
+                    <div class="col-md-6 mt5">
+                        <b>Meal Type</b>
+                        <div><span ng-bind="HotelBookingInfo.Rooms[0].RoomClass"></span></div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr />
+
+                    <div class="col-md-6 mt5">
+                        <div><b>Check In</b></div>
+                        <div><span ng-bind="HotelBookingInfo.HotelInfo.StrCheckIn | date : 'dd-MM-yyyy'"></span></div>
+                    </div>
+                    <div class="col-md-6 mt5">
+                        <b>Check Out</b>
+                        <div><span ng-bind="HotelBookingInfo.HotelInfo.StrCheckOut | date : 'dd-MM-yyyy'"></span></div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr />
+
+                    <div class="mt5"></div>
+                    <div class="col-md-3 mt10" ng-repeat="room in HotelBookingInfo.Rooms" ng-class="{'greyborder': $index < HotelBookingInfo.Rooms.length-1, 'pl0' : $index == 0}">
+                        <div><b>Room {{$index + 1}}:</b></div>
+                        <div>{{room.Adult}} Adult</div>
+                        <div ng-if="room.Child > 0">{{room.Child}} Child</div>
+                    </div>
+                    <div class="clearfix"></div>
+                                        
+                    <div class="price">
+                        <em>Total for this booking</em>
+                        <span class="amount" ng-bind="'@HSBM.Web.Helpers.SessionProxy.BaseCurrency '+ (HotelBookingInfo.TotalPrice | number)"></span>
+                    </div>                    
+                </div>
+
+          
+
+            </div>
+        </div>
+    </section>
+
+</div>
+

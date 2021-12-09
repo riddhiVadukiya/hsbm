@@ -1,0 +1,85 @@
+﻿@model HSBM.EntityModel.SystemUsers.SystemUsers
+@using HSBM.Common.Utils;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="main-wrapper">
+    <h3>Customer Detail</h3>
+    @*<h4>Customer Detail</h4>
+        <hr />*@
+
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="inner-content">
+
+        <div class="row">
+            @*<div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserName, new { @class = "control-label" })
+
+                    @Html.TextBoxFor(model => model.UserName, new { @readonly = "true" })
+                </div>
+            </div>*@
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.FullName, new { @readonly = "true" })
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Email, new { @readonly = "true" })
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Mobile, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Mobile, new { @readonly = "true" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @*<div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Telephone, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Telephone, new { @readonly = "true" })
+                </div>
+            </div>*@
+            
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Gender, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Gender, new { @readonly = "true" })
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FullAddress, new { @class = "control-label", title = "Address" })
+                    @Html.TextBoxFor(model => model.FullAddress, new { @readonly = "true" })
+                </div>
+            </div>
+        </div>
+       @* <div class="row">
+
+    <div class="col-xs-12 col-sm-4 col-md-4">
+          <div class="form-group">
+              @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
+              @Html.DisplayFor(model => model.IsActive)
+          </div>
+      </div>
+        </div>*@
+<!--        <div class="ln_solid"></div>-->
+        <div class="buttongroup">
+            @Html.ActionLink("Back", "Index", null, new { @class = "btn black-btn" })
+        </div>
+
+    </div>
+</div>

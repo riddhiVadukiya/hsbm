@@ -1,0 +1,195 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+        <ul class="nav side-menu">
+            <li>
+                <a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> <span class="menutext">Dashboard</span> </a>
+            </li>
+            @if (SessionProxy.CheckAssingedModule(Module.Amenity) || SessionProxy.CheckAssingedModule(Module.Banners) || SessionProxy.CheckAssingedModule(Module.Category) || SessionProxy.CheckAssingedModule(Module.MultiCurrency))
+            {
+                <li>
+                    <a><i class="fa fa-magic"></i> <span class="menutext">Masters</span> <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+
+                        @if (SessionProxy.CheckAssingedModule(Module.Amenity))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "AmenityMaster")">Amenities</a>
+                                <a style="display:none" href="@Url.Action("AddAmenityMaster", "AmenityMaster")">Amenities</a>
+                                <a style="display:none" href="@Url.Action("UpdateAmenityMaster", "AmenityMaster")">Amenities</a>
+                                <a style="display:none" href="@Url.Action("AddOrUpdateAmenityMaster", "AmenityMaster")">Amenities</a>
+                            </li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.Banners))
+                        {
+                            <li> <a href="@Url.Action("Index", "Banner")">Banners</a> </li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.Category))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "CategoryMaster")">Categories</a>
+                                <a style="display:none" href="@Url.Action("AddCategoryMaster", "CategoryMaster")">Categories</a>
+                                <a style="display:none" href="@Url.Action("UpdateCategoryMaster", "CategoryMaster")">Categories</a>
+                                <a style="display:none" href="@Url.Action("AddOrUpdateCategoryMaster", "CategoryMaster")">Categories</a>
+                            </li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.MultiCurrency))
+                        {
+                            <li> <a href="@Url.Action("Index", "Currency")">Currency</a> </li>
+                        }
+                    </ul>
+                </li>
+            }
+            @if (SessionProxy.CheckAssingedModule(Module.Orders))
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Orders")"><i class="fa fa-tag"></i> <span class="menutext">Orders</span></a>
+                    @*<a style="display:none" href="@Url.Action("AddDiscount", "Discount")"><i class="fa fa-tag"></i> Discount </a>
+                        <a style="display:none" href="@Url.Action("UpdateDiscount", "Discount")"><i class="fa fa-tag"></i> Discount </a>
+                        <a style="display:none" href="@Url.Action("AddOrUpdateDiscountMaster", "Discount")"><i class="fa fa-tag"></i> Discount </a>*@
+                </li>
+            }
+            @if (SessionProxy.CheckAssingedModule(Module.FarmStays) || SessionProxy.CheckAssingedModule(Module.Inventory) || SessionProxy.CheckAssingedModule(Module.FarmStaysRatingsReviews))
+            {
+                <li>
+                    <a><i class="fa fa-book"></i> <span class="menutext">Farm/Home Stays</span> <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        @if (SessionProxy.CheckAssingedModule(Module.FarmStays))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "FarmStays")">Farm/Home Stays</a>
+                                <a style="display:none" href="@Url.Action("AddFarmStays", "FarmStays")">Farm/Home Stays</a>
+                                <a style="display:none" href="@Url.Action("UpdateFarmStays", "FarmStays")">Farm/Home Stays</a>
+                            </li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.Inventory))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "Inventory")">Inventory</a>
+                                <a style="display:none" href="@Url.Action("Book", "Inventory")">Inventory</a>
+                            </li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.FarmStaysRatingsReviews))
+                        {
+                            <li> <a href="@Url.Action("Index", "FarmStaysRatingsAndReview")">Ratings & Reviews</a> </li>
+                        }
+                    </ul>
+                </li>
+            }
+            @if (SessionProxy.CheckAssingedModule(Module.Discounts))
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Discount")"><i class="fa fa-tag"></i> <span class="menutext">Discounts</span> </a>
+                    <a style="display:none" href="@Url.Action("AddDiscount", "Discount")"><i class="fa fa-tag"></i> <span class="menutext">Discount</span> </a>
+                    <a style="display:none" href="@Url.Action("UpdateDiscount", "Discount")"><i class="fa fa-tag"></i> <span class="menutext">Discount</span> </a>
+                    <a style="display:none" href="@Url.Action("AddOrUpdateDiscountMaster", "Discount")"><i class="fa fa-tag"></i> <span class="menutext">Discount</span> </a>
+                </li>
+            }
+            @if (SessionProxy.CheckAssingedModule(Module.AccountStatement) || SessionProxy.CheckAssingedModule(Module.Outstanding))
+            {
+                <li>
+                    <a><i class="fa fa-bar-chart"> </i> <span class="menutext">Account Summary</span> <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        @if (SessionProxy.CheckAssingedModule(Module.AccountStatement))
+                        {
+                            <li><a href="@Url.Action("Index", "AccountStatement")">Account Statement</a></li>
+                            <li><a href="@Url.Action("History", "AccountStatement")">Account Statement History</a></li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.Outstanding))
+                        {
+                            <li><a href="@Url.Action("Index", "Outstanding")">Outstanding</a></li>
+                            <li><a href="@Url.Action("History", "Outstanding")">Outstanding History</a></li>
+                        }
+
+                    </ul>
+                </li>
+            }
+            @if (SessionProxy.CheckAssingedModule(Module.Subscribers) || SessionProxy.CheckAssingedModule(Module.Customers) || SessionProxy.CheckAssingedModule(Module.SystemUsers) || SessionProxy.CheckAssingedModule(Module.Roles))
+            {
+                <li>
+                    <a><i class="fa fa-user"></i> <span class="menutext">Users</span> <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        @if (SessionProxy.CheckAssingedModule(Module.SystemUsers))
+                        {
+                            <li>
+                                <a href="@Url.Action("Subuser", "Account")">System Users</a>
+                                <a style="display:none" href="@Url.Action("AddSubuser", "Account")">System Users</a>
+                                <a style="display:none" href="@Url.Action("UpdateSubuser", "Account")">System Users</a>
+                                <a style="display:none" href="@Url.Action("AddUpdateSubUser", "Account")">System Users</a>
+                            </li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.Roles))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "RoleManagement")">Roles</a>
+                                <a style="display:none" href="@Url.Action("Add", "RoleManagement")">Roles</a>
+                                <a style="display:none" href="@Url.Action("Edit", "RoleManagement")">Roles</a>
+                                <a style="display:none" href="@Url.Action("AddUpdateRole", "RoleManagement")">Roles</a>
+                            </li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.Subscribers))
+                        {
+                            <li> <a href="@Url.Action("Index", "Subscription")">Subscribers</a> </li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.Customers))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "Customer")">Customers</a>
+                                <a style="display:none" href="@Url.Action("ViewCustomerDetail", "Customer")">Customers</a>
+                            </li>
+                        }
+
+
+                    </ul>
+                </li>
+            }
+            @if (SessionProxy.CheckAssingedModule(Module.EmailTemplates))
+            {
+                <li>
+                    <a href="@Url.Action("Index", "EmailTemplates")"><i class="fa fa-tag"></i> <span class="menutext">Email Templates</span> </a>
+                    <a style="display:none" href="@Url.Action("UpdateEmailTemplates", "EmailTemplates")"><i class="fa fa-tag"></i> Email Templates </a>
+                    <a style="display:none" href="@Url.Action("AddUpdateEmailTemplates", "EmailTemplates")"><i class="fa fa-tag"></i> Email Templates </a>
+                </li>
+            }
+            @if (SessionProxy.CheckAssingedModule(Module.SiteSettings) || SessionProxy.CheckAssingedModule(Module.CMSPages))
+            {
+                <li>
+                    <a><i class="fa fa-book"></i> <span class="menutext">Site Information</span> <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+
+                        @if (SessionProxy.CheckAssingedModule(Module.SiteSettings))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "SiteSettings")">Manage Settings</a>
+                                <a style="display:none" href="@Url.Action("UpdateSiteSetting", "SiteSettings")">Manage Settings</a>
+                                <a style="display:none" href="@Url.Action("AddUpdateSiteSetting", "SiteSettings")">Manage Settings</a>
+                            </li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.CMSPages))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "CMSPage")">Site Pages</a>
+                                <a style="display:none" href="@Url.Action("AddCMSPage", "CMSPage")">Site Pages</a>
+                                <a style="display:none" href="@Url.Action("AddUpdateCMSPage", "CMSPage")">Site Pages</a>
+                            </li>
+                        }
+                        @if (SessionProxy.CheckAssingedModule(Module.Blogs))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "Blogs")">Blogs</a>
+                                <a style="display:none" href="@Url.Action("AddBlog", "Blogs")">Blogs</a>
+                                <a style="display:none" href="@Url.Action("UpdateBlog", "Blogs")">Blogs</a>
+                                <a style="display:none" href="@Url.Action("AddUpdateBlog", "Blogs")">Blogs</a>
+
+                                <a style="display:none" href="@Url.Action("Comments", "Blogs")">Blog>Blogs</a>
+                                <a style="display:none" href="@Url.Action("GetBlogCommentsById", "Blogs")">Blogs</a>
+
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

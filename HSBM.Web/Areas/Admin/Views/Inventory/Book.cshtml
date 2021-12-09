@@ -1,0 +1,303 @@
+﻿@model HSBM.Web.Areas.Admin.Models.CheckAvailabilityRequest
+@{
+    ViewBag.Title = "Inventory";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script>
+
+    angular.module('app').controller('InventoryMasterController', ['$scope', '$compile', function ($scope, $compile) {
+
+        var TableName = "Booking";
+        $scope.Search = {};
+
+        $scope.Search.FarmStaysId = @Html.Raw(Model.FarmStaysId + ";")
+
+            function BindUpCommingOrderGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+                var Columns = [
+                              { data: 'Id', bVisible: false },
+                            { data: 'OrderNo' },
+                           { data: 'CheckInDate' },
+                            { data: 'CheckOutDate' },
+                            { data: 'NoOfPeople' },
+                            {
+                                bSortable: false,
+                                sClass: "action-cell",
+                                mRender: function (data, type, row, full) {
+                                    return "<a class=\"glyphicon glyphicon-eye-open\" target=\"_Blanck\" title=\"View Order\" href=\"/Admin/Orders/ViewOrderDetail/" + row.Id + "\"></a>";
+                                }
+                            }
+                ];
+                BindSearchGridData('Inventory', Columns, '/Admin/Inventory/GetAllUpCommingOrder', $scope.Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+            }
+
+
+        BindUpCommingOrderGrid();
+
+        //function BindInventoryMasterGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+        //    var Columns = [
+        //                { data: 'Id', bVisible: false },
+        //                { data: 'StartDate' },
+        //                { data: 'EndDate' },
+        //                { data: 'NumberOfProperty' },
+        //                {
+        //                    bSortable: false,
+        //                    mRender: function (data, type, row, full) {
+        //                        if (row.OrderId == null) {
+        //                            return "";
+        //                        } else {
+        //                            return row.OrderId + row.OrderNo;
+        //                        }
+        //                    }
+        //                },
+        //                {
+        //                    bSortable: false,
+        //                    sClass: "action-cell",
+        //                    mRender: function (data, type, row, full) {
+        //                        if (row.BookingGroupId == null) {
+        //                            return "<button class=\"btn green-btn\" onclick=\"angular.element(this).scope().CancelOnlineBooking('" + row.Id + "')\">Cancel</button>";
+        //                        } else {
+        //                            return "<button class=\"btn green-btn\" onclick=\"angular.element(this).scope().CancelOnsiteBooking('" + row.BookingGroupId + "')\">Cancel</button>";
+        //                        }
+
+        //                    }
+        //                }
+        //    ];
+        //    BindSearchGridData('Booking', Columns, '/Admin/Inventory/GetAllInventoryBySearchRequest', $scope.Search, initialStart, initialLength, initialSortCol, initialSortType, function () { });
+
+        //    $scope.CancelOnsiteBooking = function (id) {
+        //        var msg = 'Are you sure you want to delete the Booking?';
+        //        $.confirm({
+        //            title: "Please confirm",
+        //            content: msg,
+        //            buttons: {
+        //                confirm: function () {
+        //                    var form = $('#__AjaxAntiForgeryForm');
+        //                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+        //                    $.ajax({
+        //                        url: '/Admin/Inventory/DeleteInventory/',
+        //                        type: 'POST',
+        //                        data: {
+        //                            '__RequestVerificationToken': token,
+        //                            id: id
+        //                        },
+        //                        success: function (result) {
+        //                            SaveOnArchive({}, TableName, false, true);
+        //                            var localdata = GettLocalStorageData(TableName);
+        //                            BindInventoryMasterGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+        //                            toastr["success"]("Booking has been deleted successfully.", "Success")
+        //                        },
+        //                        error: function (ex) {
+        //                            toastr["error"]("Somthing went wrong!", "Error")
+        //                        }
+        //                    });
+
+        //                },
+        //                cancel: function () {
+        //                    return;
+        //                }
+        //            }
+        //        });
+
+        //    };
+        //    $scope.CancelOnlineBooking = function (id) {
+        //        alert('Remaining development...');
+        //    };
+        //}
+
+        //var localdata = GettLocalStorageData(TableName);
+        //if (localdata != null) {
+        //    BindInventoryMasterGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+        //} else {
+        //    BindInventoryMasterGrid();
+        //}
+
+        $scope.ResetData = function () {
+            $('#StartDate').val('');
+            $('#EndDate').val('');
+            $('#NumberOfProperty').val('');
+        }
+
+        $scope.ListofInventoryAvailable = [];
+
+        $scope.CheckAvailability = function () {
+
+            var $form = $('#frmCheckAvailability');
+            if ($form.valid()) {
+                $.ajax({
+                    url: '/Admin/Inventory/GetInventoryAvailableByDate',
+                    type: 'POST',
+                    data: {
+                        StartDate: $('#StartDate').val(),
+                        EndDate: $('#EndDate').val(),
+                        FarmStaysId: $('#FarmStaysId').val()
+                    },
+                    success: function (result) {                        
+                        $scope.ListofInventoryAvailable = result;
+                        $scope.$digest();
+                    },
+                    error: function (ex) {
+                        toastr["error"]("Somthing went wrong!", "Error")
+                    }
+                });
+            }
+        };
+
+
+    }]);
+
+    $(document).ready(function () {
+        $.validator.addMethod('date',
+                    function (value, element) {
+                        if (this.optional(element)) {
+                            return true;
+                        }
+                        var ok = true;
+                        try {
+                            $.datepicker.parseDate(DefaultDateFormatsForDatePicker, value);
+                        }
+                        catch (err) {
+                            ok = false;
+                        }
+                        return ok;
+                    });
+
+     //   $('.hasDatepicker').datepicker().attr("autocomplete", "off");
+        $('#StartDate').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker,
+            minDate: new Date(),
+
+            onSelect: function (date) {
+                var dt2 = $('#EndDate');
+                var startDate = $(this).datepicker('getDate');
+                var minDate = $(this).datepicker('getDate');
+                dt2.datepicker('setDate', minDate);
+                if (startDate != null) {
+                    startDate.setDate(startDate.getDate() + 30);
+                    //sets dt2 maxDate to the last day of 30 days window
+                    //dt2.datepicker('option', 'maxDate', startDate);
+                    dt2.datepicker('option', 'minDate', minDate);
+                    // $(this).datepicker('option', 'minDate', minDate);
+                }
+            }
+        });//.attr("autocomplete", "off")//.attr('readonly', 'readonly');
+
+        $('#EndDate').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'],
+            dateFormat: DefaultDateFormatsForDatePicker
+        });
+        
+            //$(".hasDatepicker").datepicker().attr("autocomplete", "off");
+    });
+</script>
+<div class="main-wrapper">
+    <div class="title-block">
+        <h3>Inventory</h3>
+        <div class="buttongroup">
+            @Html.ActionLink("Back", "Index", null, new { @class = "btn black-btn" })
+        </div>
+    </div>
+    
+    <div class="inner-content" ng-controller="InventoryMasterController">
+        <form id="frmCheckAvailability">
+            @Html.HiddenFor(t => t.FarmStaysId)
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <h3 class="control-label">Farm/Home Stay: @Model.FarmStaysName</h3>
+                    </div>
+                </div>
+                </div>
+            <h3>Upcoming Orders</h3>
+            <table id="Inventory" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Order No.</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>No. of People</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="Inventory_NoRecordFound" class="empty-grid">No records found</div>
+
+            <h3>Check Availability</h3>
+            <div class="row availability-box">
+                <div class="col-xs-12 col-sm-5 col-md-5">
+                    <div class="form-group">
+                        <label class="control-label">Start Date</label>
+                        @Html.EditorFor(model => model.StartDate, new { @class = "form-control"  })
+                        @Html.ValidationMessageFor(model => model.StartDate)
+
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-5 col-md-5">
+                    <div class="form-group">
+                        <label class="control-label">End Date</label>
+                        @Html.EditorFor(model => model.EndDate)
+                        @Html.ValidationMessageFor(model => model.EndDate)
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-2 col-md-2">
+                    <div class="buttongroup inventory-book-btn">
+                        <input type="button" value="Check Availability" ng-click="CheckAvailability()" class=" btn green-btn" />
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+        <div class="ln_solid"></div>
+        
+        <div ng-repeat="(key, value) in ListofInventoryAvailable | groupBy:'BookDate'">
+            <table class="table table-bordered table-striped table-responsive row-border hover bordered">
+                <thead>
+                    <tr>
+                        <th colspan="5"><h4>{{ key }}</h4></th>
+                    </tr>
+                    <tr>
+                        <th>Room Name</th>
+                        <th>Price</th>
+                        <th>Max Person</th>
+                        <th>Booked</th>
+                        <th>Available</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="obj in value">
+                        <td>{{ obj.RoomName }}</td>
+                        <td>{{obj.Price}}</td>
+                        <td>{{ obj.MaxPerson }}</td>
+                        <td>{{ obj.Booked }}</td>
+                        <td>{{ obj.Available }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        @*<div class="ln_solid"></div>
+
+            <table id="Booking" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Booking Property</th>
+                        <th>Order No</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="Booking_NoRecordFound" class="empty-grid">No records found</div>*@
+    </div>
+</div>

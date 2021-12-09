@@ -1,0 +1,17 @@
+﻿@model HSBM.EntityModel.Sabre.SoapWorkflowVM
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml";
+}
+<div ng-controller="SearchRoomsController">
+    <!-- SEARCH TABS -->
+    @*<section>
+        <div class="container">*@
+    <div class="awe-search-tabs tabs" ng-init="initSabremodel('@Newtonsoft.Json.JsonConvert.SerializeObject(Model)')">
+        {{sabreModel}}
+    </div>
+    <!-- END / SEARCH TABS -->
+
+</div>
+

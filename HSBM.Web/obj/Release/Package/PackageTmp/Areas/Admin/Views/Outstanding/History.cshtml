@@ -1,0 +1,306 @@
+﻿@using HSBM.Web.Helpers
+@using HSBM.Common.Enums;
+@{
+    ViewBag.Title = "Outstanding History";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+
+    $(document).ready(function () {
+
+        var d = new Date();
+        $('#FarmstyaId').val('');
+        $('#startMonth').val(d.getMonth());
+        $('#startYear').val(d.getFullYear() - 1);
+        $('#endMonth').val(d.getMonth() + 1);
+        $('#endYear').val(d.getFullYear());
+
+        $("#startMonth").change(function () { DateValidation(); });
+        $("#startYear").change(function () { DateValidation(); });
+        $("#endMonth").change(function () { DateValidation(); });
+        $("#endYear").change(function () { DateValidation(); });
+
+
+        function DateValidation() {
+
+            var startMonth = $('#startMonth').val();
+            var startYear = $('#startYear').val();
+            var endMonth = $('#endMonth').val();
+            var endYear = $('#endYear').val();
+
+            if (parseInt(startYear + startMonth) > parseInt(endYear + endMonth)) {
+                $('#endMonth').val(startMonth);
+                $('#endYear').val(startYear);
+            }
+
+        }
+
+    });
+
+    angular.module('app').controller('OutstandingHistoryController', ['$scope', '$compile', '$rootScope', function ($scope, $compile, $rootScope) {
+        var TableName = "OutstandingHistory";
+
+        $scope.SetSearchFromLocalStorage = function (localdata) {
+            if (typeof (localdata) != 'undefined') { }
+        }
+
+        $scope.Search = {
+
+        }
+
+        $scope.PrepareDataForLocalStorage = function () {
+
+            $scope.Search.FarmstyaId = $('#FarmstyaId').val();
+            $scope.Search.startMonth = $('#startMonth').val();
+            $scope.Search.startYear = $('#startYear').val();
+            $scope.Search.endMonth = $('#endMonth').val();
+            $scope.Search.endYear = $('#endYear').val();
+        }
+
+        $scope.SearchData = function () {
+            $scope.PrepareDataForLocalStorage();
+            BindOutstandingGrid();
+        };
+
+        $scope.ResetData = function () {
+            var d = new Date();
+            $scope.Search = {};
+            $('#FarmstyaId').val('');
+            $('#startMonth').val(d.getMonth());
+            $('#startYear').val(d.getFullYear() - 1);
+            $('#endMonth').val(d.getMonth() + 1);
+            $('#endYear').val(d.getFullYear());
+            $scope.PrepareDataForLocalStorage();
+            BindOutstandingGrid();
+        };
+
+        function BindOutstandingGrid(initialStart, initialLength, initialSortCol, initialSortType) {
+
+            var Columns = [
+                        { data: 'Farmstaysid', bVisible: false },
+                        { data: 'FarmstaysName' },
+                        { data: 'BookingMonthandYear', bSortable: false },
+                        { data: 'TotalBooking' },
+                        {
+                            mRender: function (data, type, row, full) {
+                                return $rootScope.Currencysymbols + convertToPrice(row.TotalOutstanding);
+                            }
+                        },
+                        {
+                            bSortable: false,
+                            mRender: function (data, type, row, full) {
+                                if (row.IsCleared) {
+                                    return "<a onclick=\"angular.element(this).scope().changePaymentStatus(" + row.Farmstaysid + "," + row.BookingYear + "," + row.BookingMonth + "," + false + "," + row.OutstandingId + ")\" href='javascript:void(0);' title='Cleared' class='glyphicon'>Cleared</a>";
+                                } else {
+                                    return "<a onclick=\"angular.element(this).scope().changePaymentStatus(" + row.Farmstaysid + "," + row.BookingYear + "," + row.BookingMonth + "," + true + "," + row.OutstandingId + ")\" href='javascript:void(0);' title='Pending' class='glyphicon'>Pending</a>";
+                                }
+                            }
+                        },
+                        {
+                            bSortable: false,
+                            sClass: "action-cell",
+                            mRender: function (data, type, row, full) {
+                                return "<a target='_blank' href='/Admin/Orders?farmstaysid=" + row.Farmstaysid + "' title='View' class='glyphicon glyphicon-eye-open'></a>";
+                            }
+                        }
+            ];
+            BindSearchGridData('OutstandingHistory', Columns, '/Admin/Outstanding/GetOutstandingHistoryBySearchRequest', $scope.Search, initialStart, initialLength, initialSortCol, initialSortType, function () {
+                if ($("#OutstandingHistory").dataTable().fnGetData().length == 0) {
+                    $('#OutstandingHistory_NoRecordFoundButton').hide();
+                } else {
+                    $('#OutstandingHistory_NoRecordFoundButton').show();
+                }
+
+            });
+        }
+
+        $(document).ready(function () {
+
+            $scope.PrepareDataForLocalStorage();
+            var localdata = GettLocalStorageData(TableName);
+            if (localdata != null) {
+                BindOutstandingGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+            } else {
+
+                BindOutstandingGrid();
+            }
+        });
+
+        $scope.SetLocalStorage = function (url) {
+            SetLocalStorageData($scope.Search, TableName);
+            window.location = url;
+        }
+
+        $scope.changePaymentStatus = function (Farmstaysid, BookingYear, BookingMonth, Status, OutstandingId) {
+
+            var msg = '';
+
+            if (Status) {
+                msg = 'Are you sure you want to Clear the Outstanding?';
+            } else {
+                msg = 'Are you sure you want to Pending the Outstanding?';
+            }
+
+            $.confirm({
+                title: "Please confirm",
+                content: msg,
+                buttons: {
+                    confirm: function () {
+
+                        $.ajax({
+                            url: '/Admin/Outstanding/OutstandingUpdate/',
+                            type: 'POST',
+                            data: {
+
+                                Farmstaysid: Farmstaysid,
+                                BookingYear: BookingYear,
+                                BookingMonth: BookingMonth,
+                                Status: Status,
+                                OutstandingId: OutstandingId
+                            },
+                            success: function (result) {
+
+                                SaveOnArchive({}, TableName, false, true);
+                                var localdata = GettLocalStorageData(TableName);
+                                BindOutstandingGrid(localdata.InitialStart, localdata.InitialLen, localdata.InitialOrderIndex, localdata.InitialOrderType);
+
+                                toastr["success"]("Outstanding has been updated successfully.", "Success")
+                            },
+                            error: function (ex) {
+
+                                toastr["error"]("Somthing went wrong!", "Error")
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        return;
+                    }
+                }
+            });
+        };
+
+    }]);
+</script>
+
+
+
+<div class="main-wrapper OutstandingHistory">
+    <h3>Outstanding History</h3>
+    <div ng-controller="OutstandingHistoryController" class="inner-content filter-button-set">
+        @using (Html.BeginForm("Export", "Outstanding", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Farm/Home Stay</label>
+                        <input type="text" class="form-control" ng-model="Search.FarmStaysName" id="FarmStaysName" name="FarmStaysName" />
+                        @*<select ng-model="Search.FarmstyaId" id="FarmstyaId" name="Search.FarmstyaId" class="form-control">
+                            <option value="">Select Farm/Home Stays</option>
+                            @foreach (var item in (IEnumerable<SelectListItem>)ViewBag.FrontFarmStays)
+                            {
+                                <option value="@Html.Raw(item.Value)">@Html.Raw(item.Text)</option>
+                            }
+                        </select>*@
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group padd-right-left">
+                        <div class="col-sm-12">
+                            <label class="control-label">Start Month/Year</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <select ng-model="Search.startMonth" id="startMonth" name="Search.startMonth" class="form-control">
+                                    <option value="" selected hidden />
+                                    @for (int i = 1; i <= 12; i++)
+                                    {
+                                        <option value="@Html.Raw(i)">@Html.Raw(new DateTime(2010, i, 1).ToString("MMMM"))</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <select ng-model="Search.startYear" id="startYear" name="Search.startYear" class="form-control">
+                                    <option value="" selected hidden />
+                                    @for (int i = 2001; i <= (DateTime.Now.Year + 1); i++)
+                                    {
+                                        <option value="@Html.Raw(i)">@Html.Raw(i)</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group padd-right-left">
+                        <div class="col-sm-12">
+                            <label class="control-label">End Month/Year</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <select ng-model="Search.endMonth" id="endMonth" name="Search.endMonth" class="form-control">
+                                    <option value="" selected hidden />
+                                    @for (int i = 1; i <= 12; i++)
+                                    {
+                                        <option value="@Html.Raw(i)">@Html.Raw(new DateTime(2010, i, 1).ToString("MMMM"))</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <select ng-model="Search.endYear" id="endYear" name="Search.endYear" class="form-control">
+                                    <option value="" selected hidden />
+                                    @for (int i = 2001; i <= (DateTime.Now.Year + 1); i++)
+                                    {
+                                        <option value="@Html.Raw(i)">@Html.Raw(i)</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="buttongroup">
+                        <input type="button" ng-click="SearchData()" value="Search" class="btn green-btn" />
+                        <input type="button" ng-click="ResetData()" value="Reset" class="btn black-btn" />
+                    </div>
+                </div>
+            </div>
+            <div class="grid-btn-set">
+                <div class="ln_solid"></div>
+                <div id="OutstandingHistory_NoRecordFoundButton" class="buttongroup" style="margin:0px;">
+                    <input type="submit" name="btnExport" value="Export" class="btn green-btn pull-right" />
+                    @*<input type="button" name="btnExport" ng-click="Export()" value="Export" class="btn green-btn pull-right" />*@
+                    <div class="pull-right">
+                        <div class="form-group">
+
+                            <select id="ExportTypeExcel"
+                                    name="ExportTypeExcel"
+                                    @*ng-model="Search.ExportTypeExcel"*@
+                                    required>
+                                <option selected value="0">CSV</option>
+                                <option value="1">Excel</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <table id="OutstandingHistory" class="table table-bordered table-striped table-responsive row-border hover bordered">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Farm/Home Stays</th>
+                            <th>Month/Year</th>
+                            <th>Total Bookings</th>
+                            <th>Outstanding</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div id="OutstandingHistory_NoRecordFound" class="empty-grid">No records found</div>
+            </div>
+        }
+    </div>
+</div>
